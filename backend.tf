@@ -1,0 +1,1 @@
+# configuarcion del bucket s3
