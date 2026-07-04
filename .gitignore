@@ -1,5 +1,9 @@
 
 .terraform/
+.build/
+__pycache__/
+*.py[cod]
+Modulos/Productos/productos_lambda.zip
 *.tfstate
 *.tfstate.backup
 *.tfvars
