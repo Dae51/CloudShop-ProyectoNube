@@ -6,30 +6,37 @@ locals {
     create_product = {
       method      = "POST"
       resource_id = aws_api_gateway_resource.productos.id
+      source_path = "productos"
     }
     list_products = {
       method      = "GET"
       resource_id = aws_api_gateway_resource.productos.id
+      source_path = "productos"
     }
     get_product = {
       method      = "GET"
       resource_id = aws_api_gateway_resource.product.id
+      source_path = "productos/*"
     }
     update_product = {
       method      = "PUT"
       resource_id = aws_api_gateway_resource.product.id
+      source_path = "productos/*"
     }
     delete_product = {
       method      = "DELETE"
       resource_id = aws_api_gateway_resource.product.id
+      source_path = "productos/*"
     }
     update_inventory = {
       method      = "PATCH"
       resource_id = aws_api_gateway_resource.inventario.id
+      source_path = "productos/*/inventario"
     }
     list_store_products = {
       method      = "GET"
       resource_id = aws_api_gateway_resource.store_products.id
+      source_path = "tiendas/*/productos"
     }
   }
 }
@@ -204,47 +211,38 @@ resource "aws_lambda_function" "products" {
   }
 }
 
-resource "aws_api_gateway_rest_api" "products" {
-  name        = "productos-api"
-  description = "API del módulo de gestión de productos"
-
-  endpoint_configuration {
-    types = ["REGIONAL"]
-  }
-}
-
 resource "aws_api_gateway_resource" "productos" {
-  rest_api_id = aws_api_gateway_rest_api.products.id
-  parent_id   = aws_api_gateway_rest_api.products.root_resource_id
+  rest_api_id = var.rest_api_id
+  parent_id   = var.root_resource_id
   path_part   = "productos"
 }
 
 resource "aws_api_gateway_resource" "product" {
-  rest_api_id = aws_api_gateway_rest_api.products.id
+  rest_api_id = var.rest_api_id
   parent_id   = aws_api_gateway_resource.productos.id
   path_part   = "{productId}"
 }
 
 resource "aws_api_gateway_resource" "inventario" {
-  rest_api_id = aws_api_gateway_rest_api.products.id
+  rest_api_id = var.rest_api_id
   parent_id   = aws_api_gateway_resource.product.id
   path_part   = "inventario"
 }
 
 resource "aws_api_gateway_resource" "tiendas" {
-  rest_api_id = aws_api_gateway_rest_api.products.id
-  parent_id   = aws_api_gateway_rest_api.products.root_resource_id
+  rest_api_id = var.rest_api_id
+  parent_id   = var.root_resource_id
   path_part   = "tiendas"
 }
 
 resource "aws_api_gateway_resource" "store" {
-  rest_api_id = aws_api_gateway_rest_api.products.id
+  rest_api_id = var.rest_api_id
   parent_id   = aws_api_gateway_resource.tiendas.id
   path_part   = "{storeId}"
 }
 
 resource "aws_api_gateway_resource" "store_products" {
-  rest_api_id = aws_api_gateway_rest_api.products.id
+  rest_api_id = var.rest_api_id
   parent_id   = aws_api_gateway_resource.store.id
   path_part   = "productos"
 }
@@ -252,7 +250,7 @@ resource "aws_api_gateway_resource" "store_products" {
 resource "aws_api_gateway_method" "products" {
   for_each = local.routes
 
-  rest_api_id   = aws_api_gateway_rest_api.products.id
+  rest_api_id   = var.rest_api_id
   resource_id   = each.value.resource_id
   http_method   = each.value.method
   authorization = "AWS_IAM"
@@ -261,7 +259,7 @@ resource "aws_api_gateway_method" "products" {
 resource "aws_api_gateway_integration" "products" {
   for_each = local.routes
 
-  rest_api_id             = aws_api_gateway_rest_api.products.id
+  rest_api_id             = var.rest_api_id
   resource_id             = each.value.resource_id
   http_method             = aws_api_gateway_method.products[each.key].http_method
   integration_http_method = "POST"
@@ -270,46 +268,13 @@ resource "aws_api_gateway_integration" "products" {
 }
 
 resource "aws_lambda_permission" "api_gateway" {
-  statement_id  = "AllowProductsApiGatewayInvocation"
+  for_each = local.routes
+
+  statement_id  = "AllowSharedApi-${each.key}"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.products.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_rest_api.products.execution_arn}/${var.stage_name}/*/*"
-}
-
-resource "aws_api_gateway_deployment" "products" {
-  rest_api_id = aws_api_gateway_rest_api.products.id
-
-  triggers = {
-    redeployment = sha1(jsonencode({
-      resources = [
-        aws_api_gateway_resource.productos.id,
-        aws_api_gateway_resource.product.id,
-        aws_api_gateway_resource.inventario.id,
-        aws_api_gateway_resource.tiendas.id,
-        aws_api_gateway_resource.store.id,
-        aws_api_gateway_resource.store_products.id
-      ]
-      methods      = [for method in aws_api_gateway_method.products : method.id]
-      integrations = [for integration in aws_api_gateway_integration.products : integration.id]
-    }))
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
-  depends_on = [aws_api_gateway_integration.products]
-}
-
-resource "aws_api_gateway_stage" "products" {
-  deployment_id = aws_api_gateway_deployment.products.id
-  rest_api_id   = aws_api_gateway_rest_api.products.id
-  stage_name    = var.stage_name
-
-  tags = {
-    Module = "Productos"
-  }
+  source_arn    = "${var.execution_arn}/${var.stage_name}/${each.value.method}/${each.value.source_path}"
 }
 
 resource "aws_iam_policy" "products_api_administrador" {
@@ -322,13 +287,13 @@ resource "aws_iam_policy" "products_api_administrador" {
       Effect = "Allow"
       Action = "execute-api:Invoke"
       Resource = [
-        "${aws_api_gateway_rest_api.products.execution_arn}/${var.stage_name}/POST/productos",
-        "${aws_api_gateway_rest_api.products.execution_arn}/${var.stage_name}/GET/productos",
-        "${aws_api_gateway_rest_api.products.execution_arn}/${var.stage_name}/GET/productos/*",
-        "${aws_api_gateway_rest_api.products.execution_arn}/${var.stage_name}/PUT/productos/*",
-        "${aws_api_gateway_rest_api.products.execution_arn}/${var.stage_name}/PATCH/productos/*/inventario",
-        "${aws_api_gateway_rest_api.products.execution_arn}/${var.stage_name}/DELETE/productos/*",
-        "${aws_api_gateway_rest_api.products.execution_arn}/${var.stage_name}/GET/tiendas/*/productos"
+        "${var.execution_arn}/${var.stage_name}/POST/productos",
+        "${var.execution_arn}/${var.stage_name}/GET/productos",
+        "${var.execution_arn}/${var.stage_name}/GET/productos/*",
+        "${var.execution_arn}/${var.stage_name}/PUT/productos/*",
+        "${var.execution_arn}/${var.stage_name}/PATCH/productos/*/inventario",
+        "${var.execution_arn}/${var.stage_name}/DELETE/productos/*",
+        "${var.execution_arn}/${var.stage_name}/GET/tiendas/*/productos"
       ]
     }]
   })
@@ -344,10 +309,10 @@ resource "aws_iam_policy" "products_api_operador" {
       Effect = "Allow"
       Action = "execute-api:Invoke"
       Resource = [
-        "${aws_api_gateway_rest_api.products.execution_arn}/${var.stage_name}/GET/productos",
-        "${aws_api_gateway_rest_api.products.execution_arn}/${var.stage_name}/GET/productos/*",
-        "${aws_api_gateway_rest_api.products.execution_arn}/${var.stage_name}/PATCH/productos/*/inventario",
-        "${aws_api_gateway_rest_api.products.execution_arn}/${var.stage_name}/GET/tiendas/*/productos"
+        "${var.execution_arn}/${var.stage_name}/GET/productos",
+        "${var.execution_arn}/${var.stage_name}/GET/productos/*",
+        "${var.execution_arn}/${var.stage_name}/PATCH/productos/*/inventario",
+        "${var.execution_arn}/${var.stage_name}/GET/tiendas/*/productos"
       ]
     }]
   })
@@ -363,9 +328,9 @@ resource "aws_iam_policy" "products_api_cliente" {
       Effect = "Allow"
       Action = "execute-api:Invoke"
       Resource = [
-        "${aws_api_gateway_rest_api.products.execution_arn}/${var.stage_name}/GET/productos",
-        "${aws_api_gateway_rest_api.products.execution_arn}/${var.stage_name}/GET/productos/*",
-        "${aws_api_gateway_rest_api.products.execution_arn}/${var.stage_name}/GET/tiendas/*/productos"
+        "${var.execution_arn}/${var.stage_name}/GET/productos",
+        "${var.execution_arn}/${var.stage_name}/GET/productos/*",
+        "${var.execution_arn}/${var.stage_name}/GET/tiendas/*/productos"
       ]
     }]
   })

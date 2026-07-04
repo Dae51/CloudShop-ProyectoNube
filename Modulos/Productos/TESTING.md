@@ -16,12 +16,13 @@ auditoría de eliminación e inventario.
 ## Evidencia contra AWS
 
 La API usa autorización `AWS_IAM`; las llamadas deben ir firmadas con SigV4.
-Configure `API_URL` con el output `productos_api_url` y use credenciales de un
-rol que tenga adjunta la política generada para Administrador, Operador o
-Cliente. Un cliente como `awscurl` permite firmar las solicitudes:
+Configure `API_URL` con el output compartido `cloudshop_api_url` y use
+credenciales de un rol que tenga adjunta la política generada para
+Administrador, Operador o Cliente. Un cliente como `awscurl` permite firmar las
+solicitudes:
 
 ```bash
-export API_URL="https://API_ID.execute-api.REGION.amazonaws.com/dev"
+export API_URL="$(terraform output -raw cloudshop_api_url)"
 
 # Administrador: crear (esperado 201)
 awscurl --service execute-api --region REGION -X POST \

@@ -1,8 +1,10 @@
 # Módulo 2 - Gestión de Productos
 
-Este módulo crea una API REST regional protegida con `AWS_IAM`, una Lambda de
-Python, las tablas DynamoDB `Products` y `ProductAudit`, el log group de
-CloudWatch y políticas IAM de mínimo privilegio.
+Este módulo registra sus rutas en la API REST regional compartida de CloudShop.
+La raíz del proyecto crea API Gateway, el deployment y el stage; Productos
+recibe `rest_api_id`, `root_resource_id`, `execution_arn` y `stage_name`. El
+módulo conserva su Lambda de Python, las tablas DynamoDB `Products` y
+`ProductAudit`, el log group de CloudWatch y políticas IAM de mínimo privilegio.
 
 ## Autorización
 
@@ -36,5 +38,5 @@ consultas generales o por identificador.
 
 Las mutaciones y sus auditorías exitosas se escriben en una sola transacción de
 DynamoDB. Los intentos fallidos que llegan a la Lambda generan un registro con
-`resultado=FALLIDO`; solicitudes bloqueadas previamente por API Gateway se
-registran en los logs de ejecución de AWS, no en `ProductAudit`.
+`resultado=FALLIDO`. Una solicitud bloqueada previamente por API Gateway no
+invoca la Lambda y, por tanto, no crea un registro en `ProductAudit`.
