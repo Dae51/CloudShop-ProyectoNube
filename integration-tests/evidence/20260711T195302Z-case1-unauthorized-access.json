@@ -1,0 +1,42 @@
+{
+  "case": "Unauthorized Access",
+  "timestamp": "2026-07-11T19:53:02.423389Z",
+  "request": {
+    "method": "POST",
+    "path": "/productos",
+    "profile": "cloudshop-client"
+  },
+  "response": {
+    "status": 403,
+    "headers": {
+      "Date": "Sat, 11 Jul 2026 19:52:40 GMT",
+      "Content-Type": "application/json",
+      "Content-Length": "272",
+      "Connection": "close",
+      "x-amzn-RequestId": "b6a87426-0935-4d2c-986c-e9ce32490a30",
+      "x-amzn-ErrorType": "AccessDeniedException",
+      "x-amz-apigw-id": "AW3JYHxiCYcEfog="
+    },
+    "body": {
+      "Message": "User: arn:aws:iam::254932534754:user/cloudshop-client is not authorized to perform: execute-api:Invoke on resource: arn:aws:execute-api:us-east-2:********4754:10mjk3q1og/dev/POST/productos because no identity-based policy allows the execute-api:Invoke action"
+    }
+  },
+  "apiGatewayLogGroup": "API-Gateway-Execution-Logs_10mjk3q1og/dev",
+  "failedAuthorizationLogs": [
+    {
+      "logStreamName": "00c624a743d2a2af257af2ae94094d76",
+      "timestamp": 1783799560301,
+      "message": "(b6a87426-0935-4d2c-986c-e9ce32490a30) Extended Request Id: AW3JYHxiCYcEfog=",
+      "ingestionTime": 1783799580438,
+      "eventId": "39780059479523562513311430914445612087722079429817860096"
+    },
+    {
+      "logStreamName": "00c624a743d2a2af257af2ae94094d76",
+      "timestamp": 1783799560318,
+      "message": "(b6a87426-0935-4d2c-986c-e9ce32490a30) The client is not authorized to perform this operation.",
+      "ingestionTime": 1783799580438,
+      "eventId": "39780059479902675181686451507851719298357101575419527169"
+    }
+  ],
+  "passed": true
+}

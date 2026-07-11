@@ -1,0 +1,82 @@
+{
+  "region": "us-east-2",
+  "stageName": "dev",
+  "terraformDirectory": "../",
+  "profiles": {
+    "admin": "cloudshop-admin",
+    "unauthorized": "cloudshop-client"
+  },
+  "apiNames": {
+    "usuarios": "usuarios-api",
+    "productos": "productos-api",
+    "tiendas": "tiendas-api",
+    "compras": "compras-carrito-api",
+    "pedidos": "pedidos-api",
+    "reportes": "reportes-api"
+  },
+  "apiUrls": {
+    "usuarios": "",
+    "productos": "",
+    "tiendas": "",
+    "compras": "",
+    "pedidos": "",
+    "reportes": ""
+  },
+  "tables": {
+    "users": "Users",
+    "products": "Products",
+    "productAudit": "ProductAudit",
+    "stores": "Stores",
+    "cart": "CartItems",
+    "orders": "Orders",
+    "orderEventsAudit": "OrderEventsAudit"
+  },
+  "lambdas": {
+    "usuarios": "usuarios-lambda",
+    "productos": "productos-lambda",
+    "tiendas": "tiendas-lambda",
+    "compras": "compras-carrito-lambda",
+    "orders": "pedidos-lambda",
+    "inventory": "pedidos-inventario-consumer-lambda",
+    "audit": "pedidos-auditoria-consumer-lambda",
+    "email": "pedidos-correo-consumer-lambda",
+    "reportes": "reportes-lambda"
+  },
+  "logGroups": {
+    "usuarios": "/aws/lambda/usuarios-lambda",
+    "productos": "/aws/lambda/productos-lambda",
+    "tiendas": "/aws/lambda/tiendas-lambda",
+    "compras": "/aws/lambda/compras-carrito-lambda",
+    "orders": "/aws/lambda/pedidos-lambda",
+    "inventory": "/aws/lambda/pedidos-inventario-consumer-lambda",
+    "audit": "/aws/lambda/pedidos-auditoria-consumer-lambda",
+    "email": "/aws/lambda/pedidos-correo-consumer-lambda",
+    "reportes": "/aws/lambda/reportes-lambda"
+  },
+  "observability": {
+    "dashboardName": "cloudshop-observabilidad"
+  },
+  "testData": {
+    "product": {
+      "code": "FLOW-DEMO",
+      "name": "Producto Integracion",
+      "description": "Producto creado por la suite de integracion",
+      "category": "testing",
+      "price": "19.99",
+      "inventory": 5,
+      "storeId": "store-integration"
+    },
+    "order": {
+      "userId": "integration-user",
+      "customerEmail": "samuelmrn66@gmail.com",
+      "currency": "USD",
+      "shippingAddress": {
+        "line1": "CloudShop Integration Street",
+        "city": "San Salvador",
+        "country": "SV"
+      },
+      "items": []
+    }
+  }
+}
+

@@ -1,0 +1,10 @@
+{
+  "timestamp": "2026-07-11T20:12:30.119569Z",
+  "error": "Timed out waiting for inventory updated by EventBridge consumer. Last value: None",
+  "summary": [
+    {
+      "case": "case1",
+      "passed": true
+    }
+  ]
+}

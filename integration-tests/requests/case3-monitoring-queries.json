@@ -1,0 +1,20 @@
+{
+  "cloudWatchLogs": [
+    "/aws/lambda/pedidos-lambda",
+    "/aws/lambda/pedidos-inventario-consumer-lambda",
+    "/aws/lambda/pedidos-auditoria-consumer-lambda",
+    "/aws/lambda/pedidos-correo-consumer-lambda"
+  ],
+  "metrics": [
+    "AWS/Lambda Errors by FunctionName",
+    "AWS/ApiGateway Count by ApiName and Stage",
+    "AWS/ApiGateway 5XXError by ApiName and Stage",
+    "AWS/DynamoDB ReadThrottleEvents by TableName",
+    "AWS/DynamoDB WriteThrottleEvents by TableName"
+  ],
+  "expectedResponse": {
+    "dashboardExists": "cloudshop-observabilidad",
+    "alarmPrefix": "cloudshop"
+  }
+}
+

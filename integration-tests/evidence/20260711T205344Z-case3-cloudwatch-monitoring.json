@@ -1,0 +1,1377 @@
+{
+  "case": "CloudWatch Monitoring",
+  "timestamp": "2026-07-11T20:53:44.667711Z",
+  "lambdaLogs": [
+    {
+      "logStreamName": "2026/07/11/[$LATEST]2e65e54a490d463980d7621607d104c0",
+      "timestamp": 1783800649340,
+      "message": "INIT_START Runtime Version: python:3.9.v133\tRuntime Version ARN: arn:aws:lambda:us-east-2::runtime:b46f7bc0f3da8071d1b824471f2c69c8766b756b827eb0455d2118c622ae7bcf\n",
+      "ingestionTime": 1783800653231,
+      "eventId": "39780083765904812775902727646290079976345304349878386688"
+    },
+    {
+      "logStreamName": "2026/07/11/[$LATEST]2e65e54a490d463980d7621607d104c0",
+      "timestamp": 1783800649648,
+      "message": "[INFO]\t2026-07-11T20:10:49.648Z\t\tFound credentials in environment variables.\n",
+      "ingestionTime": 1783800653231,
+      "eventId": "39780083772773442297050159573883081204320999693720354817"
+    },
+    {
+      "logStreamName": "2026/07/11/[$LATEST]2e65e54a490d463980d7621607d104c0",
+      "timestamp": 1783800649796,
+      "message": "START RequestId: 05cf57ce-4e68-4f70-a9d6-ddec95bc9326 Version: $LATEST\n",
+      "ingestionTime": 1783800653231,
+      "eventId": "39780083776073952586432691798830367508672957196605456386"
+    },
+    {
+      "logStreamName": "2026/07/11/[$LATEST]2e65e54a490d463980d7621607d104c0",
+      "timestamp": 1783800649797,
+      "message": "[INFO]\t2026-07-11T20:10:49.797Z\t05cf57ce-4e68-4f70-a9d6-ddec95bc9326\t{\"event\": \"order_request\", \"requestId\": \"05cf57ce-4e68-4f70-a9d6-ddec95bc9326\", \"method\": \"POST\", \"resource\": \"/pedidos\"}\n",
+      "ingestionTime": 1783800653231,
+      "eventId": "39780083776096253331631222421971903226945605558111436803"
+    },
+    {
+      "logStreamName": "2026/07/11/[$LATEST]2e65e54a490d463980d7621607d104c0",
+      "timestamp": 1783800650030,
+      "message": "[INFO]\t2026-07-11T20:10:50.030Z\t05cf57ce-4e68-4f70-a9d6-ddec95bc9326\t{\"event\": \"order_created\", \"orderId\": \"0d5e46b2-cafd-4c59-a5b1-0498cf08e7d2\", \"userId\": \"integration-user\"}\n",
+      "ingestionTime": 1783800653231,
+      "eventId": "39780083781292326962888857613949725584472673789004873732"
+    },
+    {
+      "logStreamName": "2026/07/11/[$LATEST]2e65e54a490d463980d7621607d104c0",
+      "timestamp": 1783800650050,
+      "message": "END RequestId: 05cf57ce-4e68-4f70-a9d6-ddec95bc9326\n",
+      "ingestionTime": 1783800653231,
+      "eventId": "39780083781738341866859470076780439949925641019124482053"
+    },
+    {
+      "logStreamName": "2026/07/11/[$LATEST]2e65e54a490d463980d7621607d104c0",
+      "timestamp": 1783800650051,
+      "message": "REPORT RequestId: 05cf57ce-4e68-4f70-a9d6-ddec95bc9326\tDuration: 253.77 ms\tBilled Duration: 707 ms\tMemory Size: 256 MB\tMax Memory Used: 84 MB\tInit Duration: 452.85 ms\t\n",
+      "ingestionTime": 1783800653231,
+      "eventId": "39780083781760642612058000699921975668198289380630462470"
+    },
+    {
+      "logStreamName": "2026/07/11/[$LATEST]721d31a1a82a40208d8114d1ec0bebbd",
+      "timestamp": 1783802300789,
+      "message": "INIT_START Runtime Version: python:3.9.v133\tRuntime Version ARN: arn:aws:lambda:us-east-2::runtime:b46f7bc0f3da8071d1b824471f2c69c8766b756b827eb0455d2118c622ae7bcf\n",
+      "ingestionTime": 1783802301372,
+      "eventId": "39780120594448170144101786104790718055964155425127792640"
+    },
+    {
+      "logStreamName": "2026/07/11/[$LATEST]721d31a1a82a40208d8114d1ec0bebbd",
+      "timestamp": 1783802301084,
+      "message": "[INFO]\t2026-07-11T20:38:21.084Z\t\tFound credentials in environment variables.\n",
+      "ingestionTime": 1783802301372,
+      "eventId": "39780120601026889977668319931543754946395422069392015361"
+    },
+    {
+      "logStreamName": "2026/07/11/[$LATEST]721d31a1a82a40208d8114d1ec0bebbd",
+      "timestamp": 1783802301233,
+      "message": "START RequestId: 4a2ca93b-c8d9-40c0-a252-844125396c7f Version: $LATEST\n",
+      "ingestionTime": 1783802301372,
+      "eventId": "39780120604349701012249382779632576969020027933783097346"
+    },
+    {
+      "logStreamName": "2026/07/11/[$LATEST]721d31a1a82a40208d8114d1ec0bebbd",
+      "timestamp": 1783802301234,
+      "message": "[INFO]\t2026-07-11T20:38:21.234Z\t4a2ca93b-c8d9-40c0-a252-844125396c7f\t{\"event\": \"order_request\", \"requestId\": \"4a2ca93b-c8d9-40c0-a252-844125396c7f\", \"method\": \"POST\", \"resource\": \"/pedidos\"}\n",
+      "ingestionTime": 1783802301372,
+      "eventId": "39780120604372001757447913402774112687292676295289077763"
+    },
+    {
+      "logStreamName": "2026/07/11/[$LATEST]721d31a1a82a40208d8114d1ec0bebbd",
+      "timestamp": 1783802301487,
+      "message": "[INFO]\t2026-07-11T20:38:21.487Z\t4a2ca93b-c8d9-40c0-a252-844125396c7f\t{\"event\": \"order_created\", \"orderId\": \"11192a80-e223-4fdd-916c-38bf83852074\", \"userId\": \"integration-user\"}\n",
+      "ingestionTime": 1783802310503,
+      "eventId": "39780120610014090292676161068621204497073505283301441536"
+    },
+    {
+      "logStreamName": "2026/07/11/[$LATEST]721d31a1a82a40208d8114d1ec0bebbd",
+      "timestamp": 1783802301489,
+      "message": "END RequestId: 4a2ca93b-c8d9-40c0-a252-844125396c7f\n",
+      "ingestionTime": 1783802310503,
+      "eventId": "39780120610058691783073222314904275933618802006313402369"
+    },
+    {
+      "logStreamName": "2026/07/11/[$LATEST]721d31a1a82a40208d8114d1ec0bebbd",
+      "timestamp": 1783802301489,
+      "message": "REPORT RequestId: 4a2ca93b-c8d9-40c0-a252-844125396c7f\tDuration: 254.92 ms\tBilled Duration: 696 ms\tMemory Size: 256 MB\tMax Memory Used: 83 MB\tInit Duration: 440.59 ms\t\n",
+      "ingestionTime": 1783802310503,
+      "eventId": "39780120610058691783073222314904275933618802006313402370"
+    },
+    {
+      "logStreamName": "2026/07/11/[$LATEST]c1cde3000e8e4adf99ea298cb60b3215",
+      "timestamp": 1783802787171,
+      "message": "INIT_START Runtime Version: python:3.9.v133\tRuntime Version ARN: arn:aws:lambda:us-east-2::runtime:b46f7bc0f3da8071d1b824471f2c69c8766b756b827eb0455d2118c622ae7bcf\n",
+      "ingestionTime": 1783802794984,
+      "eventId": "39780131441129221295823331527956941786358929774118502400"
+    },
+    {
+      "logStreamName": "2026/07/11/[$LATEST]c1cde3000e8e4adf99ea298cb60b3215",
+      "timestamp": 1783802787488,
+      "message": "[INFO]\t2026-07-11T20:46:27.488Z\t\tFound credentials in environment variables.\n",
+      "ingestionTime": 1783802794984,
+      "eventId": "39780131448198557523757539063823764478788460371514294273"
+    },
+    {
+      "logStreamName": "2026/07/11/[$LATEST]c1cde3000e8e4adf99ea298cb60b3215",
+      "timestamp": 1783802787652,
+      "message": "START RequestId: e66d39cb-ea3a-4a4b-a569-03fc2d28b4a8 Version: $LATEST\n",
+      "ingestionTime": 1783802794984,
+      "eventId": "39780131451855879736316561259035622275502791658495082498"
+    },
+    {
+      "logStreamName": "2026/07/11/[$LATEST]c1cde3000e8e4adf99ea298cb60b3215",
+      "timestamp": 1783802787653,
+      "message": "[INFO]\t2026-07-11T20:46:27.653Z\te66d39cb-ea3a-4a4b-a569-03fc2d28b4a8\t{\"event\": \"order_request\", \"requestId\": \"e66d39cb-ea3a-4a4b-a569-03fc2d28b4a8\", \"method\": \"POST\", \"resource\": \"/pedidos\"}\n",
+      "ingestionTime": 1783802794984,
+      "eventId": "39780131451878180481515091882177157993775440020001062915"
+    },
+    {
+      "logStreamName": "2026/07/11/[$LATEST]c1cde3000e8e4adf99ea298cb60b3215",
+      "timestamp": 1783802787920,
+      "message": "[INFO]\t2026-07-11T20:46:27.920Z\te66d39cb-ea3a-4a4b-a569-03fc2d28b4a8\t{\"event\": \"order_created\", \"orderId\": \"6d041d19-f7e8-486f-b7ba-0fd295a81056\", \"userId\": \"integration-user\"}\n",
+      "ingestionTime": 1783802794984,
+      "eventId": "39780131457832479449522768260967194772572552542097833988"
+    },
+    {
+      "logStreamName": "2026/07/11/[$LATEST]c1cde3000e8e4adf99ea298cb60b3215",
+      "timestamp": 1783802787922,
+      "message": "END RequestId: e66d39cb-ea3a-4a4b-a569-03fc2d28b4a8\n",
+      "ingestionTime": 1783802794984,
+      "eventId": "39780131457877080939919829507250266209117849265109794821"
+    },
+    {
+      "logStreamName": "2026/07/11/[$LATEST]c1cde3000e8e4adf99ea298cb60b3215",
+      "timestamp": 1783802787922,
+      "message": "REPORT RequestId: e66d39cb-ea3a-4a4b-a569-03fc2d28b4a8\tDuration: 269.60 ms\tBilled Duration: 743 ms\tMemory Size: 256 MB\tMax Memory Used: 83 MB\tInit Duration: 472.92 ms\t\n",
+      "ingestionTime": 1783802794984,
+      "eventId": "39780131457877080939919829507250266209117849265109794822"
+    },
+    {
+      "logStreamName": "2026/07/11/[$LATEST]4e067164b1fc430f9fc1c21d791773eb",
+      "timestamp": 1783803134930,
+      "message": "INIT_START Runtime Version: python:3.9.v133\tRuntime Version ARN: arn:aws:lambda:us-east-2::runtime:b46f7bc0f3da8071d1b824471f2c69c8766b756b827eb0455d2118c622ae7bcf\n",
+      "ingestionTime": 1783803143281,
+      "eventId": "39780139196414070791634305026341925605286722080216317952"
+    },
+    {
+      "logStreamName": "2026/07/11/[$LATEST]4e067164b1fc430f9fc1c21d791773eb",
+      "timestamp": 1783803135218,
+      "message": "[INFO]\t2026-07-11T20:52:15.218Z\t\tFound credentials in environment variables.\n",
+      "ingestionTime": 1783803143281,
+      "eventId": "39780139202836685408811124491104212467809450193938677761"
+    },
+    {
+      "logStreamName": "2026/07/11/[$LATEST]4e067164b1fc430f9fc1c21d791773eb",
+      "timestamp": 1783803135373,
+      "message": "START RequestId: e64b96df-daad-4e4c-971b-761b65542c4e Version: $LATEST\n",
+      "ingestionTime": 1783803143281,
+      "eventId": "39780139206293300914583371078042248800069946227365642242"
+    },
+    {
+      "logStreamName": "2026/07/11/[$LATEST]4e067164b1fc430f9fc1c21d791773eb",
+      "timestamp": 1783803135374,
+      "message": "[INFO]\t2026-07-11T20:52:15.374Z\te64b96df-daad-4e4c-971b-761b65542c4e\t{\"event\": \"order_request\", \"requestId\": \"e64b96df-daad-4e4c-971b-761b65542c4e\", \"method\": \"POST\", \"resource\": \"/pedidos\"}\n",
+      "ingestionTime": 1783803143281,
+      "eventId": "39780139206315601659781901701183784518342594588871622659"
+    }
+  ],
+  "apiGatewayMetrics": {
+    "requests": {
+      "Label": "Count",
+      "Datapoints": [
+        {
+          "Timestamp": "2026-07-11T14:48:00-06:00",
+          "Sum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-07-11T14:43:00-06:00",
+          "Sum": 1.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-07-11T14:38:00-06:00",
+          "Sum": 1.0,
+          "Unit": "Count"
+        }
+      ]
+    },
+    "fiveXx": {
+      "Label": "5XXError",
+      "Datapoints": [
+        {
+          "Timestamp": "2026-07-11T14:48:00-06:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-07-11T14:43:00-06:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-07-11T14:38:00-06:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        }
+      ]
+    }
+  },
+  "errorMetrics": {
+    "lambdaErrors": {
+      "Label": "Errors",
+      "Datapoints": [
+        {
+          "Timestamp": "2026-07-11T14:48:00-06:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-07-11T14:43:00-06:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        },
+        {
+          "Timestamp": "2026-07-11T14:38:00-06:00",
+          "Sum": 0.0,
+          "Unit": "Count"
+        }
+      ]
+    }
+  },
+  "dashboardMetrics": {
+    "DashboardArn": "arn:aws:cloudwatch::254932534754:dashboard/cloudshop-observabilidad",
+    "DashboardBody": "{\"widgets\":[{\"height\":6,\"properties\":{\"metrics\":[[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"compras-carrito-lambda\"],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"pedidos-auditoria-consumer-lambda\"],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"pedidos-correo-consumer-lambda\"],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"pedidos-inventario-consumer-lambda\"],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"pedidos-lambda\"],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"productos-lambda\"],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"reportes-lambda\"],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"tiendas-lambda\"],[\"AWS/Lambda\",\"Invocations\",\"FunctionName\",\"usuarios-lambda\"]],\"period\":300,\"region\":\"us-east-2\",\"stacked\":false,\"stat\":\"Sum\",\"title\":\"Lambda Invocations\",\"view\":\"timeSeries\"},\"type\":\"metric\",\"width\":12,\"x\":0,\"y\":0},{\"height\":6,\"properties\":{\"metrics\":[[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"compras-carrito-lambda\"],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"pedidos-auditoria-consumer-lambda\"],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"pedidos-correo-consumer-lambda\"],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"pedidos-inventario-consumer-lambda\"],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"pedidos-lambda\"],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"productos-lambda\"],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"reportes-lambda\"],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"tiendas-lambda\"],[\"AWS/Lambda\",\"Errors\",\"FunctionName\",\"usuarios-lambda\"]],\"period\":300,\"region\":\"us-east-2\",\"stacked\":false,\"stat\":\"Sum\",\"title\":\"Lambda Errors\",\"view\":\"timeSeries\"},\"type\":\"metric\",\"width\":12,\"x\":12,\"y\":0},{\"height\":6,\"properties\":{\"metrics\":[[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"compras-carrito-lambda\"],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"pedidos-auditoria-consumer-lambda\"],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"pedidos-correo-consumer-lambda\"],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"pedidos-inventario-consumer-lambda\"],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"pedidos-lambda\"],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"productos-lambda\"],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"reportes-lambda\"],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"tiendas-lambda\"],[\"AWS/Lambda\",\"Duration\",\"FunctionName\",\"usuarios-lambda\"]],\"period\":300,\"region\":\"us-east-2\",\"stacked\":false,\"stat\":\"Average\",\"title\":\"Lambda Duration\",\"view\":\"timeSeries\"},\"type\":\"metric\",\"width\":24,\"x\":0,\"y\":6},{\"height\":6,\"properties\":{\"metrics\":[[\"AWS/ApiGateway\",\"Count\",\"ApiName\",\"usuarios-api\",\"Stage\",\"dev\"],[\"AWS/ApiGateway\",\"Count\",\"ApiName\",\"productos-api\",\"Stage\",\"dev\"],[\"AWS/ApiGateway\",\"Count\",\"ApiName\",\"tiendas-api\",\"Stage\",\"dev\"],[\"AWS/ApiGateway\",\"Count\",\"ApiName\",\"compras-carrito-api\",\"Stage\",\"dev\"],[\"AWS/ApiGateway\",\"Count\",\"ApiName\",\"pedidos-api\",\"Stage\",\"dev\"],[\"AWS/ApiGateway\",\"Count\",\"ApiName\",\"reportes-api\",\"Stage\",\"dev\"]],\"period\":300,\"region\":\"us-east-2\",\"stacked\":false,\"stat\":\"Sum\",\"title\":\"API Gateway Requests\",\"view\":\"timeSeries\"},\"type\":\"metric\",\"width\":12,\"x\":0,\"y\":12},{\"height\":6,\"properties\":{\"metrics\":[[\"AWS/ApiGateway\",\"4XXError\",\"ApiName\",\"usuarios-api\",\"Stage\",\"dev\"],[\"AWS/ApiGateway\",\"4XXError\",\"ApiName\",\"productos-api\",\"Stage\",\"dev\"],[\"AWS/ApiGateway\",\"4XXError\",\"ApiName\",\"tiendas-api\",\"Stage\",\"dev\"],[\"AWS/ApiGateway\",\"4XXError\",\"ApiName\",\"compras-carrito-api\",\"Stage\",\"dev\"],[\"AWS/ApiGateway\",\"4XXError\",\"ApiName\",\"pedidos-api\",\"Stage\",\"dev\"],[\"AWS/ApiGateway\",\"4XXError\",\"ApiName\",\"reportes-api\",\"Stage\",\"dev\"]],\"period\":300,\"region\":\"us-east-2\",\"stacked\":false,\"stat\":\"Sum\",\"title\":\"API Gateway 4XX Errors\",\"view\":\"timeSeries\"},\"type\":\"metric\",\"width\":12,\"x\":12,\"y\":12},{\"height\":6,\"properties\":{\"metrics\":[[\"AWS/ApiGateway\",\"5XXError\",\"ApiName\",\"usuarios-api\",\"Stage\",\"dev\"],[\"AWS/ApiGateway\",\"5XXError\",\"ApiName\",\"productos-api\",\"Stage\",\"dev\"],[\"AWS/ApiGateway\",\"5XXError\",\"ApiName\",\"tiendas-api\",\"Stage\",\"dev\"],[\"AWS/ApiGateway\",\"5XXError\",\"ApiName\",\"compras-carrito-api\",\"Stage\",\"dev\"],[\"AWS/ApiGateway\",\"5XXError\",\"ApiName\",\"pedidos-api\",\"Stage\",\"dev\"],[\"AWS/ApiGateway\",\"5XXError\",\"ApiName\",\"reportes-api\",\"Stage\",\"dev\"]],\"period\":300,\"region\":\"us-east-2\",\"stacked\":false,\"stat\":\"Sum\",\"title\":\"API Gateway 5XX Errors\",\"view\":\"timeSeries\"},\"type\":\"metric\",\"width\":12,\"x\":0,\"y\":18},{\"height\":6,\"properties\":{\"metrics\":[[\"AWS/ApiGateway\",\"Latency\",\"ApiName\",\"usuarios-api\",\"Stage\",\"dev\"],[\"AWS/ApiGateway\",\"Latency\",\"ApiName\",\"productos-api\",\"Stage\",\"dev\"],[\"AWS/ApiGateway\",\"Latency\",\"ApiName\",\"tiendas-api\",\"Stage\",\"dev\"],[\"AWS/ApiGateway\",\"Latency\",\"ApiName\",\"compras-carrito-api\",\"Stage\",\"dev\"],[\"AWS/ApiGateway\",\"Latency\",\"ApiName\",\"pedidos-api\",\"Stage\",\"dev\"],[\"AWS/ApiGateway\",\"Latency\",\"ApiName\",\"reportes-api\",\"Stage\",\"dev\"]],\"period\":300,\"region\":\"us-east-2\",\"stacked\":false,\"stat\":\"Average\",\"title\":\"API Latency\",\"view\":\"timeSeries\"},\"type\":\"metric\",\"width\":12,\"x\":12,\"y\":18},{\"height\":6,\"properties\":{\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"CartItems\"],[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"OrderEventsAudit\"],[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"Orders\"],[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"ProductAudit\"],[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"Products\"],[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"Stores\"],[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"UserAudit\"],[\"AWS/DynamoDB\",\"ConsumedReadCapacityUnits\",\"TableName\",\"Users\"]],\"period\":300,\"region\":\"us-east-2\",\"stacked\":false,\"stat\":\"Sum\",\"title\":\"DynamoDB Read Capacity\",\"view\":\"timeSeries\"},\"type\":\"metric\",\"width\":12,\"x\":0,\"y\":24},{\"height\":6,\"properties\":{\"metrics\":[[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"CartItems\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"OrderEventsAudit\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"Orders\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"ProductAudit\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"Products\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"Stores\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"UserAudit\"],[\"AWS/DynamoDB\",\"ConsumedWriteCapacityUnits\",\"TableName\",\"Users\"]],\"period\":300,\"region\":\"us-east-2\",\"stacked\":false,\"stat\":\"Sum\",\"title\":\"DynamoDB Write Capacity\",\"view\":\"timeSeries\"},\"type\":\"metric\",\"width\":12,\"x\":12,\"y\":24}]}",
+    "DashboardName": "cloudshop-observabilidad"
+  },
+  "alarmStatus": {
+    "MetricAlarms": [
+      {
+        "AlarmName": "cloudshop-api-compras-carrito-api-5xx",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-api-compras-carrito-api-5xx",
+        "AlarmDescription": "Errores 5XX en API Gateway compras-carrito-api",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:46.260000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:12:15.255+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:07:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:12:15.257000-06:00",
+        "MetricName": "5XXError",
+        "Namespace": "AWS/ApiGateway",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "Stage",
+            "Value": "dev"
+          },
+          {
+            "Name": "ApiName",
+            "Value": "compras-carrito-api"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:12:15.257000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-api-compras-carrito-api-high-latency",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-api-compras-carrito-api-high-latency",
+        "AlarmDescription": "Latencia alta en API Gateway compras-carrito-api",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:45.019000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 2 periods and 2 missing datapoints were treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:11:38.968+0000\",\"statistic\":\"Average\",\"period\":300,\"recentDatapoints\":[],\"threshold\":2000.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:06:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:11:38.969000-06:00",
+        "MetricName": "Latency",
+        "Namespace": "AWS/ApiGateway",
+        "Statistic": "Average",
+        "Dimensions": [
+          {
+            "Name": "ApiName",
+            "Value": "compras-carrito-api"
+          },
+          {
+            "Name": "Stage",
+            "Value": "dev"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 2,
+        "Threshold": 2000.0,
+        "ComparisonOperator": "GreaterThanThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:11:38.969000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-api-pedidos-api-5xx",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-api-pedidos-api-5xx",
+        "AlarmDescription": "Errores 5XX en API Gateway pedidos-api",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:46.222000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:11:58.686+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:06:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:11:58.687000-06:00",
+        "MetricName": "5XXError",
+        "Namespace": "AWS/ApiGateway",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "ApiName",
+            "Value": "pedidos-api"
+          },
+          {
+            "Name": "Stage",
+            "Value": "dev"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:11:58.687000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-api-pedidos-api-high-latency",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-api-pedidos-api-high-latency",
+        "AlarmDescription": "Latencia alta en API Gateway pedidos-api",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:45.477000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 2 periods and 2 missing datapoints were treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:11:26.807+0000\",\"statistic\":\"Average\",\"period\":300,\"recentDatapoints\":[],\"threshold\":2000.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:06:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:11:26.808000-06:00",
+        "MetricName": "Latency",
+        "Namespace": "AWS/ApiGateway",
+        "Statistic": "Average",
+        "Dimensions": [
+          {
+            "Name": "Stage",
+            "Value": "dev"
+          },
+          {
+            "Name": "ApiName",
+            "Value": "pedidos-api"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 2,
+        "Threshold": 2000.0,
+        "ComparisonOperator": "GreaterThanThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:11:26.808000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-api-productos-api-5xx",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-api-productos-api-5xx",
+        "AlarmDescription": "Errores 5XX en API Gateway productos-api",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:46.361000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:11:06.423+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:06:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:11:06.424000-06:00",
+        "MetricName": "5XXError",
+        "Namespace": "AWS/ApiGateway",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "ApiName",
+            "Value": "productos-api"
+          },
+          {
+            "Name": "Stage",
+            "Value": "dev"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:11:06.424000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-api-productos-api-high-latency",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-api-productos-api-high-latency",
+        "AlarmDescription": "Latencia alta en API Gateway productos-api",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:44.597000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 2 periods and 2 missing datapoints were treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:12:12.488+0000\",\"statistic\":\"Average\",\"period\":300,\"recentDatapoints\":[],\"threshold\":2000.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:07:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:12:12.491000-06:00",
+        "MetricName": "Latency",
+        "Namespace": "AWS/ApiGateway",
+        "Statistic": "Average",
+        "Dimensions": [
+          {
+            "Name": "Stage",
+            "Value": "dev"
+          },
+          {
+            "Name": "ApiName",
+            "Value": "productos-api"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 2,
+        "Threshold": 2000.0,
+        "ComparisonOperator": "GreaterThanThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:12:12.491000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-api-reportes-api-5xx",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-api-reportes-api-5xx",
+        "AlarmDescription": "Errores 5XX en API Gateway reportes-api",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:46.293000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:12:00.000+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:06:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:12:00.003000-06:00",
+        "MetricName": "5XXError",
+        "Namespace": "AWS/ApiGateway",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "Stage",
+            "Value": "dev"
+          },
+          {
+            "Name": "ApiName",
+            "Value": "reportes-api"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:12:00.003000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-api-reportes-api-high-latency",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-api-reportes-api-high-latency",
+        "AlarmDescription": "Latencia alta en API Gateway reportes-api",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:45.201000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 2 periods and 2 missing datapoints were treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:12:39.736+0000\",\"statistic\":\"Average\",\"period\":300,\"recentDatapoints\":[],\"threshold\":2000.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:07:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:12:39.739000-06:00",
+        "MetricName": "Latency",
+        "Namespace": "AWS/ApiGateway",
+        "Statistic": "Average",
+        "Dimensions": [
+          {
+            "Name": "ApiName",
+            "Value": "reportes-api"
+          },
+          {
+            "Name": "Stage",
+            "Value": "dev"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 2,
+        "Threshold": 2000.0,
+        "ComparisonOperator": "GreaterThanThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:12:39.739000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-api-tiendas-api-5xx",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-api-tiendas-api-5xx",
+        "AlarmDescription": "Errores 5XX en API Gateway tiendas-api",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:46.422000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:12:03.527+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:07:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:12:03.528000-06:00",
+        "MetricName": "5XXError",
+        "Namespace": "AWS/ApiGateway",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "Stage",
+            "Value": "dev"
+          },
+          {
+            "Name": "ApiName",
+            "Value": "tiendas-api"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:12:03.528000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-api-tiendas-api-high-latency",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-api-tiendas-api-high-latency",
+        "AlarmDescription": "Latencia alta en API Gateway tiendas-api",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:46.012000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 2 periods and 2 missing datapoints were treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:11:35.093+0000\",\"statistic\":\"Average\",\"period\":300,\"recentDatapoints\":[],\"threshold\":2000.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:06:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:11:35.094000-06:00",
+        "MetricName": "Latency",
+        "Namespace": "AWS/ApiGateway",
+        "Statistic": "Average",
+        "Dimensions": [
+          {
+            "Name": "ApiName",
+            "Value": "tiendas-api"
+          },
+          {
+            "Name": "Stage",
+            "Value": "dev"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 2,
+        "Threshold": 2000.0,
+        "ComparisonOperator": "GreaterThanThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:11:35.094000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-api-usuarios-api-5xx",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-api-usuarios-api-5xx",
+        "AlarmDescription": "Errores 5XX en API Gateway usuarios-api",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:45.896000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:11:45.685+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:06:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:11:45.686000-06:00",
+        "MetricName": "5XXError",
+        "Namespace": "AWS/ApiGateway",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "ApiName",
+            "Value": "usuarios-api"
+          },
+          {
+            "Name": "Stage",
+            "Value": "dev"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:11:45.686000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-api-usuarios-api-high-latency",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-api-usuarios-api-high-latency",
+        "AlarmDescription": "Latencia alta en API Gateway usuarios-api",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:45.598000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 2 periods and 2 missing datapoints were treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:12:11.609+0000\",\"statistic\":\"Average\",\"period\":300,\"recentDatapoints\":[],\"threshold\":2000.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:07:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:12:11.612000-06:00",
+        "MetricName": "Latency",
+        "Namespace": "AWS/ApiGateway",
+        "Statistic": "Average",
+        "Dimensions": [
+          {
+            "Name": "Stage",
+            "Value": "dev"
+          },
+          {
+            "Name": "ApiName",
+            "Value": "usuarios-api"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 2,
+        "Threshold": 2000.0,
+        "ComparisonOperator": "GreaterThanThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:12:11.612000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-dynamodb-CartItems-read-throttles",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-dynamodb-CartItems-read-throttles",
+        "AlarmDescription": "Throttling de lectura en DynamoDB CartItems",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:13.846000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:11:37.345+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:05:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:11:37.347000-06:00",
+        "MetricName": "ReadThrottleEvents",
+        "Namespace": "AWS/DynamoDB",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": "CartItems"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:11:37.347000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-dynamodb-CartItems-write-throttles",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-dynamodb-CartItems-write-throttles",
+        "AlarmDescription": "Throttling de escritura en DynamoDB CartItems",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:13.063000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:11:00.463+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:05:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:11:00.464000-06:00",
+        "MetricName": "WriteThrottleEvents",
+        "Namespace": "AWS/DynamoDB",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": "CartItems"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:11:00.464000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-dynamodb-OrderEventsAudit-read-throttles",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-dynamodb-OrderEventsAudit-read-throttles",
+        "AlarmDescription": "Throttling de lectura en DynamoDB OrderEventsAudit",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:13.876000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:10:37.545+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:04:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:10:37.547000-06:00",
+        "MetricName": "ReadThrottleEvents",
+        "Namespace": "AWS/DynamoDB",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": "OrderEventsAudit"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:10:37.547000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-dynamodb-OrderEventsAudit-write-throttles",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-dynamodb-OrderEventsAudit-write-throttles",
+        "AlarmDescription": "Throttling de escritura en DynamoDB OrderEventsAudit",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:13.020000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:11:13.506+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:05:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:11:13.507000-06:00",
+        "MetricName": "WriteThrottleEvents",
+        "Namespace": "AWS/DynamoDB",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": "OrderEventsAudit"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:11:13.507000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-dynamodb-Orders-read-throttles",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-dynamodb-Orders-read-throttles",
+        "AlarmDescription": "Throttling de lectura en DynamoDB Orders",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:12.504000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:10:49.749+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:04:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:10:49.752000-06:00",
+        "MetricName": "ReadThrottleEvents",
+        "Namespace": "AWS/DynamoDB",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": "Orders"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:10:49.752000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-dynamodb-Orders-write-throttles",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-dynamodb-Orders-write-throttles",
+        "AlarmDescription": "Throttling de escritura en DynamoDB Orders",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:13.792000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:11:48.351+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:05:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:11:48.354000-06:00",
+        "MetricName": "WriteThrottleEvents",
+        "Namespace": "AWS/DynamoDB",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": "Orders"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:11:48.354000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-dynamodb-ProductAudit-read-throttles",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-dynamodb-ProductAudit-read-throttles",
+        "AlarmDescription": "Throttling de lectura en DynamoDB ProductAudit",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:13.468000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:11:54.443+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:05:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:11:54.445000-06:00",
+        "MetricName": "ReadThrottleEvents",
+        "Namespace": "AWS/DynamoDB",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": "ProductAudit"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:11:54.445000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-dynamodb-ProductAudit-write-throttles",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-dynamodb-ProductAudit-write-throttles",
+        "AlarmDescription": "Throttling de escritura en DynamoDB ProductAudit",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:12.461000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:10:54.764+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:04:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:10:54.766000-06:00",
+        "MetricName": "WriteThrottleEvents",
+        "Namespace": "AWS/DynamoDB",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": "ProductAudit"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:10:54.766000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-dynamodb-Products-read-throttles",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-dynamodb-Products-read-throttles",
+        "AlarmDescription": "Throttling de lectura en DynamoDB Products",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:13.041000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:10:34.897+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:04:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:10:34.900000-06:00",
+        "MetricName": "ReadThrottleEvents",
+        "Namespace": "AWS/DynamoDB",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": "Products"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:10:34.900000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-dynamodb-Products-write-throttles",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-dynamodb-Products-write-throttles",
+        "AlarmDescription": "Throttling de escritura en DynamoDB Products",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:13.376000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:11:47.829+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:05:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:11:47.830000-06:00",
+        "MetricName": "WriteThrottleEvents",
+        "Namespace": "AWS/DynamoDB",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": "Products"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:11:47.830000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-dynamodb-Stores-read-throttles",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-dynamodb-Stores-read-throttles",
+        "AlarmDescription": "Throttling de lectura en DynamoDB Stores",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:13.924000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:10:58.084+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:04:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:10:58.086000-06:00",
+        "MetricName": "ReadThrottleEvents",
+        "Namespace": "AWS/DynamoDB",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": "Stores"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:10:58.086000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-dynamodb-Stores-write-throttles",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-dynamodb-Stores-write-throttles",
+        "AlarmDescription": "Throttling de escritura en DynamoDB Stores",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:12.476000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:11:44.647+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:05:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:11:44.648000-06:00",
+        "MetricName": "WriteThrottleEvents",
+        "Namespace": "AWS/DynamoDB",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": "Stores"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:11:44.648000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-dynamodb-UserAudit-read-throttles",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-dynamodb-UserAudit-read-throttles",
+        "AlarmDescription": "Throttling de lectura en DynamoDB UserAudit",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:13.413000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:11:06.867+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:05:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:11:06.870000-06:00",
+        "MetricName": "ReadThrottleEvents",
+        "Namespace": "AWS/DynamoDB",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": "UserAudit"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:11:06.870000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-dynamodb-UserAudit-write-throttles",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-dynamodb-UserAudit-write-throttles",
+        "AlarmDescription": "Throttling de escritura en DynamoDB UserAudit",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:12.609000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:11:40.122+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:05:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:11:40.125000-06:00",
+        "MetricName": "WriteThrottleEvents",
+        "Namespace": "AWS/DynamoDB",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": "UserAudit"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:11:40.125000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-dynamodb-Users-read-throttles",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-dynamodb-Users-read-throttles",
+        "AlarmDescription": "Throttling de lectura en DynamoDB Users",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:13.501000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:11:06.076+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:05:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:11:06.077000-06:00",
+        "MetricName": "ReadThrottleEvents",
+        "Namespace": "AWS/DynamoDB",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": "Users"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:11:06.077000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-dynamodb-Users-write-throttles",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-dynamodb-Users-write-throttles",
+        "AlarmDescription": "Throttling de escritura en DynamoDB Users",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:12.963000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:11:39.224+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:05:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:11:39.226000-06:00",
+        "MetricName": "WriteThrottleEvents",
+        "Namespace": "AWS/DynamoDB",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "TableName",
+            "Value": "Users"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:11:39.226000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-lambda-compras-carrito-lambda-errors",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-lambda-compras-carrito-lambda-errors",
+        "AlarmDescription": "Errores en Lambda compras-carrito-lambda",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:43.036000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:11:47.709+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:06:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:11:47.711000-06:00",
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": "compras-carrito-lambda"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:11:47.711000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-lambda-pedidos-auditoria-consumer-lambda-errors",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-lambda-pedidos-auditoria-consumer-lambda-errors",
+        "AlarmDescription": "Errores en Lambda pedidos-auditoria-consumer-lambda",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:43.178000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:11:39.467+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:06:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:11:39.469000-06:00",
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": "pedidos-auditoria-consumer-lambda"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:11:39.469000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-lambda-pedidos-correo-consumer-lambda-errors",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-lambda-pedidos-correo-consumer-lambda-errors",
+        "AlarmDescription": "Errores en Lambda pedidos-correo-consumer-lambda",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:43.115000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "ALARM",
+        "StateReason": "Threshold Crossed: 1 datapoint [1.0 (11/07/26 20:34:00)] was greater than or equal to the threshold (1.0).",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T20:39:18.479+0000\",\"startDate\":\"2026-07-11T20:34:00.000+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[1.0],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T20:34:00.000+0000\",\"sampleCount\":1.0,\"value\":1.0}]}",
+        "StateUpdatedTimestamp": "2026-07-11T14:39:18.482000-06:00",
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": "pedidos-correo-consumer-lambda"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T14:39:18.482000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-lambda-pedidos-inventario-consumer-lambda-errors",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-lambda-pedidos-inventario-consumer-lambda-errors",
+        "AlarmDescription": "Errores en Lambda pedidos-inventario-consumer-lambda",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:43.142000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: 1 datapoint [0.0 (11/07/26 20:42:00)] was not greater than or equal to the threshold (1.0).",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T20:47:33.067+0000\",\"startDate\":\"2026-07-11T20:42:00.000+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[0.0],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T20:42:00.000+0000\",\"sampleCount\":1.0,\"value\":0.0}]}",
+        "StateUpdatedTimestamp": "2026-07-11T14:47:33.071000-06:00",
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": "pedidos-inventario-consumer-lambda"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T14:47:33.071000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-lambda-pedidos-lambda-errors",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-lambda-pedidos-lambda-errors",
+        "AlarmDescription": "Errores en Lambda pedidos-lambda",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:43.180000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:11:37.943+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:06:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:11:37.945000-06:00",
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": "pedidos-lambda"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:11:37.945000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-lambda-productos-lambda-errors",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-lambda-productos-lambda-errors",
+        "AlarmDescription": "Errores en Lambda productos-lambda",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:43.212000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:11:55.968+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:06:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:11:55.969000-06:00",
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": "productos-lambda"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:11:55.969000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-lambda-reportes-lambda-errors",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-lambda-reportes-lambda-errors",
+        "AlarmDescription": "Errores en Lambda reportes-lambda",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:43.508000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:11:42.102+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:06:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:11:42.105000-06:00",
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": "reportes-lambda"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:11:42.105000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-lambda-tiendas-lambda-errors",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-lambda-tiendas-lambda-errors",
+        "AlarmDescription": "Errores en Lambda tiendas-lambda",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:43.189000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:11:27.923+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:06:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:11:27.925000-06:00",
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": "tiendas-lambda"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:11:27.925000-06:00"
+      },
+      {
+        "AlarmName": "cloudshop-lambda-usuarios-lambda-errors",
+        "AlarmArn": "arn:aws:cloudwatch:us-east-2:254932534754:alarm:cloudshop-lambda-usuarios-lambda-errors",
+        "AlarmDescription": "Errores en Lambda usuarios-lambda",
+        "AlarmConfigurationUpdatedTimestamp": "2026-07-11T13:10:42.890000-06:00",
+        "ActionsEnabled": true,
+        "OKActions": [],
+        "AlarmActions": [],
+        "InsufficientDataActions": [],
+        "StateValue": "OK",
+        "StateReason": "Threshold Crossed: no datapoints were received for 1 period and 1 missing datapoint was treated as [NonBreaching].",
+        "StateReasonData": "{\"version\":\"1.0\",\"queryDate\":\"2026-07-11T19:11:54.529+0000\",\"statistic\":\"Sum\",\"period\":300,\"recentDatapoints\":[],\"threshold\":1.0,\"evaluatedDatapoints\":[{\"timestamp\":\"2026-07-11T19:06:00.000+0000\"}]}",
+        "StateUpdatedTimestamp": "2026-07-11T13:11:54.530000-06:00",
+        "MetricName": "Errors",
+        "Namespace": "AWS/Lambda",
+        "Statistic": "Sum",
+        "Dimensions": [
+          {
+            "Name": "FunctionName",
+            "Value": "usuarios-lambda"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Threshold": 1.0,
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "StateTransitionedTimestamp": "2026-07-11T13:11:54.530000-06:00"
+      }
+    ],
+    "CompositeAlarms": []
+  },
+  "passed": true
+}

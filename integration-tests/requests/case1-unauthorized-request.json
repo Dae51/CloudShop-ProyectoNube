@@ -1,0 +1,19 @@
+{
+  "method": "POST",
+  "urlFromConfig": "apiUrls.productos + /productos",
+  "signedWithProfile": "profiles.unauthorized",
+  "body": {
+    "code": "UNAUTH-DEMO",
+    "name": "Producto no autorizado",
+    "description": "Este request debe ser bloqueado por IAM/API Gateway",
+    "category": "security",
+    "price": "9.99",
+    "inventory": 1,
+    "storeId": "store-integration"
+  },
+  "expectedResponse": {
+    "statusCode": 403,
+    "reason": "The unauthorized principal must not have execute-api:Invoke permission for POST /productos."
+  }
+}
+

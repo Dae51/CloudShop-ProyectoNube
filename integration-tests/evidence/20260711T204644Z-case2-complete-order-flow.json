@@ -1,0 +1,262 @@
+{
+  "case": "Complete Order Flow",
+  "timestamp": "2026-07-11T20:46:44.377036Z",
+  "productCreationResponse": {
+    "status": 201,
+    "headers": {
+      "Date": "Sat, 11 Jul 2026 20:46:26 GMT",
+      "Content-Type": "application/json",
+      "Content-Length": "379",
+      "Connection": "close",
+      "x-amzn-RequestId": "3ead7791-db0c-4902-b30a-cea63f0cb05c",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token,Accept",
+      "x-amz-apigw-id": "AW_BYG6mCYcEicg=",
+      "Cache-Control": "no-store",
+      "Access-Control-Allow-Methods": "GET,POST,PUT,PATCH,DELETE,OPTIONS",
+      "X-Amzn-Trace-Id": "Root=1-6a52aba1-1ca0d2e545719b102d1f6502;Parent=4676b735324631be;Sampled=0;Lineage=1:f5e62ecd:0"
+    },
+    "body": {
+      "data": {
+        "productId": "4246420b-a564-42a3-899f-7416629a294c",
+        "code": "FLOW-1783802785",
+        "name": "Producto Integracion",
+        "description": "Producto creado por la suite de integracion",
+        "category": "testing",
+        "price": 19.99,
+        "inventory": 5,
+        "storeId": "store-integration",
+        "status": "ACTIVE",
+        "createdAt": "2026-07-11T20:46:26.526742Z",
+        "updatedAt": "2026-07-11T20:46:26.526742Z"
+      }
+    }
+  },
+  "orderCreationResponse": {
+    "status": 201,
+    "headers": {
+      "Date": "Sat, 11 Jul 2026 20:46:27 GMT",
+      "Content-Type": "application/json",
+      "Content-Length": "644",
+      "Connection": "close",
+      "x-amzn-RequestId": "8caf25e4-a2f4-493f-a032-3c24d7e827e8",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token,Accept",
+      "x-amz-apigw-id": "AW_BjERYiYcERsQ=",
+      "Cache-Control": "no-store",
+      "Access-Control-Allow-Methods": "GET,POST,PATCH,OPTIONS",
+      "X-Amzn-Trace-Id": "Root=1-6a52aba3-63b2c9b638384056390ec19a;Parent=3a4001511c8a18aa;Sampled=0;Lineage=1:b4106af2:0"
+    },
+    "body": {
+      "data": {
+        "orderId": "6d041d19-f7e8-486f-b7ba-0fd295a81056",
+        "userId": "integration-user",
+        "status": "PENDIENTE",
+        "items": [
+          {
+            "productId": "4246420b-a564-42a3-899f-7416629a294c",
+            "quantity": 1,
+            "unitPrice": 19.99,
+            "subtotal": 19.99,
+            "productName": "Producto Integracion",
+            "storeId": "store-integration"
+          }
+        ],
+        "total": 19.99,
+        "currency": "USD",
+        "createdAt": "2026-07-11T20:46:27.653269Z",
+        "updatedAt": "2026-07-11T20:46:27.653269Z",
+        "inventoryStatus": "PENDIENTE",
+        "eventPublicationStatus": "PUBLICADO",
+        "customerEmail": "samuelmrn66@gmail.com",
+        "shippingAddress": {
+          "line1": "CloudShop Integration Street",
+          "city": "San Salvador",
+          "country": "SV"
+        }
+      }
+    }
+  },
+  "orderDynamoDbItem": {
+    "inventoryStatus": {
+      "S": "DESCONTADO"
+    },
+    "eventPublicationStatus": {
+      "S": "PUBLICADO"
+    },
+    "orderId": {
+      "S": "6d041d19-f7e8-486f-b7ba-0fd295a81056"
+    },
+    "updatedAt": {
+      "S": "2026-07-11T20:46:28.657369Z"
+    },
+    "createdAt": {
+      "S": "2026-07-11T20:46:27.653269Z"
+    },
+    "total": {
+      "N": "19.99"
+    },
+    "shippingAddress": {
+      "M": {
+        "city": {
+          "S": "San Salvador"
+        },
+        "country": {
+          "S": "SV"
+        },
+        "line1": {
+          "S": "CloudShop Integration Street"
+        }
+      }
+    },
+    "status": {
+      "S": "PENDIENTE"
+    },
+    "userId": {
+      "S": "integration-user"
+    },
+    "currency": {
+      "S": "USD"
+    },
+    "items": {
+      "L": [
+        {
+          "M": {
+            "unitPrice": {
+              "N": "19.99"
+            },
+            "quantity": {
+              "N": "1"
+            },
+            "productId": {
+              "S": "4246420b-a564-42a3-899f-7416629a294c"
+            },
+            "storeId": {
+              "S": "store-integration"
+            },
+            "subtotal": {
+              "N": "19.99"
+            },
+            "productName": {
+              "S": "Producto Integracion"
+            }
+          }
+        }
+      ]
+    },
+    "customerEmail": {
+      "S": "samuelmrn66@gmail.com"
+    },
+    "inventoryProcessedAt": {
+      "S": "2026-07-11T20:46:28.657369Z"
+    }
+  },
+  "inventoryDynamoDbItem": {
+    "code": {
+      "S": "FLOW-1783802785"
+    },
+    "name": {
+      "S": "Producto Integracion"
+    },
+    "category": {
+      "S": "testing"
+    },
+    "updatedAt": {
+      "S": "2026-07-11T20:46:28.657369Z"
+    },
+    "description": {
+      "S": "Producto creado por la suite de integracion"
+    },
+    "storeId": {
+      "S": "store-integration"
+    },
+    "inventory": {
+      "N": "4"
+    },
+    "createdAt": {
+      "S": "2026-07-11T20:46:26.526742Z"
+    },
+    "price": {
+      "N": "19.99"
+    },
+    "productId": {
+      "S": "4246420b-a564-42a3-899f-7416629a294c"
+    },
+    "status": {
+      "S": "ACTIVE"
+    }
+  },
+  "eventBridgeEvidence": {
+    "orderEventPublicationStatus": {
+      "S": "PUBLICADO"
+    },
+    "auditRecordCount": 1
+  },
+  "auditRecords": [
+    {
+      "orderId": {
+        "S": "6d041d19-f7e8-486f-b7ba-0fd295a81056"
+      },
+      "detailType": {
+        "S": "PedidoCreado"
+      },
+      "eventPayload": {
+        "S": "{\"version\": \"0\", \"id\": \"b393e0d1-d8fa-4b46-9261-b051bf4b165e\", \"detail-type\": \"PedidoCreado\", \"source\": \"cloudshop.pedidos\", \"account\": \"254932534754\", \"time\": \"2026-07-11T20:46:27Z\", \"region\": \"us-east-2\", \"resources\": [], \"detail\": {\"orderId\": \"6d041d19-f7e8-486f-b7ba-0fd295a81056\", \"userId\": \"integration-user\", \"customerEmail\": \"samuelmrn66@gmail.com\", \"status\": \"PENDIENTE\", \"total\": 19.99, \"items\": [{\"productId\": \"4246420b-a564-42a3-899f-7416629a294c\", \"quantity\": 1, \"unitPrice\": 19.99, \"subtotal\": 19.99, \"productName\": \"Producto Integracion\", \"storeId\": \"store-integration\"}], \"createdAt\": \"2026-07-11T20:46:27.653269Z\"}}"
+      },
+      "receivedAt": {
+        "S": "2026-07-11T20:46:28.631937Z"
+      },
+      "eventTime": {
+        "S": "2026-07-11T20:46:27Z"
+      },
+      "source": {
+        "S": "cloudshop.pedidos"
+      },
+      "eventId": {
+        "S": "b393e0d1-d8fa-4b46-9261-b051bf4b165e"
+      }
+    }
+  ],
+  "sesNotificationEvidence": {
+    "emailLambdaLogFound": false,
+    "note": "SES delivery is evidenced by email Lambda success logs; mailbox delivery depends on SES identity and sandbox settings."
+  },
+  "executionLogs": {
+    "orders": [
+      {
+        "logStreamName": "2026/07/11/[$LATEST]c1cde3000e8e4adf99ea298cb60b3215",
+        "timestamp": 1783802787920,
+        "message": "[INFO]\t2026-07-11T20:46:27.920Z\te66d39cb-ea3a-4a4b-a569-03fc2d28b4a8\t{\"event\": \"order_created\", \"orderId\": \"6d041d19-f7e8-486f-b7ba-0fd295a81056\", \"userId\": \"integration-user\"}\n",
+        "ingestionTime": 1783802794984,
+        "eventId": "39780131457832479449522768260967194772572552542097833988"
+      }
+    ],
+    "inventory": [
+      {
+        "logStreamName": "2026/07/11/[$LATEST]2d9adf52943f4bb887135f54430b5a46",
+        "timestamp": 1783802788657,
+        "message": "[INFO]\t2026-07-11T20:46:28.657Z\t70b34485-2bf4-4c68-b76b-7b92b71491c8\t{\"event\": \"inventory_event_received\", \"requestId\": \"70b34485-2bf4-4c68-b76b-7b92b71491c8\", \"orderId\": \"6d041d19-f7e8-486f-b7ba-0fd295a81056\"}\n",
+        "ingestionTime": 1783802790809,
+        "eventId": "39780131474268128660839837511231845218608662473034825731"
+      },
+      {
+        "logStreamName": "2026/07/11/[$LATEST]2d9adf52943f4bb887135f54430b5a46",
+        "timestamp": 1783802788821,
+        "message": "[INFO]\t2026-07-11T20:46:28.821Z\t70b34485-2bf4-4c68-b76b-7b92b71491c8\t{\"event\": \"inventory_discounted\", \"orderId\": \"6d041d19-f7e8-486f-b7ba-0fd295a81056\", \"items\": 1}\n",
+        "ingestionTime": 1783802790809,
+        "eventId": "39780131477925450873398859706443703015322993760015613956"
+      }
+    ],
+    "audit": [
+      {
+        "logStreamName": "2026/07/11/[$LATEST]86fa5da003ce48569f28991f0fe2f517",
+        "timestamp": 1783802788882,
+        "message": "[INFO]\t2026-07-11T20:46:28.882Z\t7d871532-62e6-4f96-8112-e567f8d0f732\t{\"event\": \"order_event_audited\", \"orderId\": \"6d041d19-f7e8-486f-b7ba-0fd295a81056\", \"eventId\": \"b393e0d1-d8fa-4b46-9261-b051bf4b165e\"}\n",
+        "ingestionTime": 1783802792724,
+        "eventId": "39780131479285796330509227720392244514386609117095526403"
+      }
+    ],
+    "email": []
+  },
+  "passed": false
+}

@@ -1,0 +1,105 @@
+{
+  "case": "Unauthorized Access",
+  "timestamp": "2026-07-11T20:10:46.369843Z",
+  "request": {
+    "method": "POST",
+    "path": "/productos",
+    "profile": "cloudshop-client"
+  },
+  "response": {
+    "status": 403,
+    "headers": {
+      "Date": "Sat, 11 Jul 2026 20:10:38 GMT",
+      "Content-Type": "application/json",
+      "Content-Length": "272",
+      "Connection": "close",
+      "x-amzn-RequestId": "57285021-83e5-4a18-bd9d-c066a36c0936",
+      "x-amzn-ErrorType": "AccessDeniedException",
+      "x-amz-apigw-id": "AW5xzGSZCYcEETQ="
+    },
+    "body": {
+      "Message": "User: arn:aws:iam::254932534754:user/cloudshop-client is not authorized to perform: execute-api:Invoke on resource: arn:aws:execute-api:us-east-2:********4754:10mjk3q1og/dev/POST/productos because no identity-based policy allows the execute-api:Invoke action"
+    }
+  },
+  "apiGatewayLogGroup": "API-Gateway-Execution-Logs_10mjk3q1og/dev",
+  "failedAuthorizationLogs": [
+    {
+      "logStreamName": "00c624a743d2a2af257af2ae94094d76",
+      "timestamp": 1783799560301,
+      "message": "(b6a87426-0935-4d2c-986c-e9ce32490a30) Extended Request Id: AW3JYHxiCYcEfog=",
+      "ingestionTime": 1783799580438,
+      "eventId": "39780059479523562513311430914445612087722079429817860096"
+    },
+    {
+      "logStreamName": "00c624a743d2a2af257af2ae94094d76",
+      "timestamp": 1783799560318,
+      "message": "(b6a87426-0935-4d2c-986c-e9ce32490a30) The client is not authorized to perform this operation.",
+      "ingestionTime": 1783799580438,
+      "eventId": "39780059479902675181686451507851719298357101575419527169"
+    },
+    {
+      "logStreamName": "11f7a9feeace86cbb9650cbfcf0604ea",
+      "timestamp": 1783799584212,
+      "message": "(17cd871d-1445-4b32-9531-2f0a1052264b) Extended Request Id: AW3NHF_siYcEVRQ=",
+      "ingestionTime": 1783799604308,
+      "eventId": "39780060012756680955377160880563753575304110503702888448"
+    },
+    {
+      "logStreamName": "11f7a9feeace86cbb9650cbfcf0604ea",
+      "timestamp": 1783799584227,
+      "message": "(17cd871d-1445-4b32-9531-2f0a1052264b) Verifying Usage Plan for request: 17cd871d-1445-4b32-9531-2f0a1052264b. API Key:  API Stage: 10mjk3q1og/dev",
+      "ingestionTime": 1783799604308,
+      "eventId": "39780060013091192133355120227686789349393835926292594689"
+    },
+    {
+      "logStreamName": "11f7a9feeace86cbb9650cbfcf0604ea",
+      "timestamp": 1783799584229,
+      "message": "(17cd871d-1445-4b32-9531-2f0a1052264b) API Key  authorized because method 'POST /productos' does not require API Key. Request will not contribute to throttle or quota limits",
+      "ingestionTime": 1783799604308,
+      "eventId": "39780060013135793623752181473969860785939132649304555522"
+    },
+    {
+      "logStreamName": "11f7a9feeace86cbb9650cbfcf0604ea",
+      "timestamp": 1783799584229,
+      "message": "(17cd871d-1445-4b32-9531-2f0a1052264b) Usage Plan check succeeded for API Key  and API Stage 10mjk3q1og/dev",
+      "ingestionTime": 1783799604308,
+      "eventId": "39780060013135793623752181473969860785939132649304555523"
+    },
+    {
+      "logStreamName": "11f7a9feeace86cbb9650cbfcf0604ea",
+      "timestamp": 1783799584229,
+      "message": "(17cd871d-1445-4b32-9531-2f0a1052264b) Starting execution for request: 17cd871d-1445-4b32-9531-2f0a1052264b",
+      "ingestionTime": 1783799604308,
+      "eventId": "39780060013135793623752181473969860785939132649304555524"
+    },
+    {
+      "logStreamName": "11f7a9feeace86cbb9650cbfcf0604ea",
+      "timestamp": 1783799584229,
+      "message": "(17cd871d-1445-4b32-9531-2f0a1052264b) HTTP Method: POST, Resource Path: /productos",
+      "ingestionTime": 1783799604308,
+      "eventId": "39780060013135793623752181473969860785939132649304555525"
+    },
+    {
+      "logStreamName": "11f7a9feeace86cbb9650cbfcf0604ea",
+      "timestamp": 1783799584990,
+      "message": "(17cd871d-1445-4b32-9531-2f0a1052264b) Successfully completed execution",
+      "ingestionTime": 1783799604308,
+      "eventId": "39780060030106660719833985684678542391424535755355652102"
+    },
+    {
+      "logStreamName": "11f7a9feeace86cbb9650cbfcf0604ea",
+      "timestamp": 1783799584990,
+      "message": "(17cd871d-1445-4b32-9531-2f0a1052264b) Method completed with status: 201",
+      "ingestionTime": 1783799604308,
+      "eventId": "39780060030106660719833985684678542391424535755355652103"
+    },
+    {
+      "logStreamName": "11f7a9feeace86cbb9650cbfcf0604ea",
+      "timestamp": 1783799584990,
+      "message": "(17cd871d-1445-4b32-9531-2f0a1052264b) AWS Integration Endpoint RequestId : 161b3a9b-0328-407f-b5b7-dea26d686083",
+      "ingestionTime": 1783799604308,
+      "eventId": "39780060030106660719833985684678542391424535755355652104"
+    }
+  ],
+  "passed": true
+}

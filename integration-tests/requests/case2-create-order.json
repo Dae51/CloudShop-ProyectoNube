@@ -1,0 +1,33 @@
+{
+  "method": "POST",
+  "urlFromConfig": "apiUrls.pedidos + /pedidos",
+  "signedWithProfile": "profiles.admin",
+  "body": {
+    "userId": "integration-user",
+    "customerEmail": "verified-recipient@example.com",
+    "currency": "USD",
+    "shippingAddress": {
+      "line1": "CloudShop Integration Street",
+      "city": "San Salvador",
+      "country": "SV"
+    },
+    "items": [
+      {
+        "productId": "<productId from product creation>",
+        "productName": "Producto Integracion",
+        "storeId": "store-integration",
+        "quantity": 1,
+        "unitPrice": "19.99"
+      }
+    ]
+  },
+  "expectedResponse": {
+    "statusCode": 201,
+    "bodyShape": {
+      "data.orderId": "string",
+      "data.eventPublicationStatus": "PUBLICADO",
+      "data.inventoryStatus": "PENDIENTE"
+    }
+  }
+}
+

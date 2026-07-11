@@ -1,0 +1,23 @@
+{
+  "method": "POST",
+  "urlFromConfig": "apiUrls.productos + /productos",
+  "signedWithProfile": "profiles.admin",
+  "body": {
+    "code": "FLOW-DEMO",
+    "name": "Producto Integracion",
+    "description": "Producto creado para validar el flujo completo de pedidos",
+    "category": "testing",
+    "price": "19.99",
+    "inventory": 5,
+    "storeId": "store-integration"
+  },
+  "expectedResponse": {
+    "statusCode": 201,
+    "bodyShape": {
+      "data.productId": "string",
+      "data.inventory": 5,
+      "data.status": "ACTIVE"
+    }
+  }
+}
+

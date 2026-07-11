@@ -1,0 +1,18 @@
+[
+  {
+    "case": "case1",
+    "passed": true
+  },
+  {
+    "case": "case2",
+    "passed": true
+  },
+  {
+    "case": "case3",
+    "passed": true
+  },
+  {
+    "case": "case4",
+    "passed": true
+  }
+]
