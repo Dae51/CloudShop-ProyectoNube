@@ -1,0 +1,676 @@
+openapi: 3.1.0
+info:
+  title: CloudShop Enterprise API
+  version: 1.0.0
+  description: API REST protegida con AWS_IAM. Todos los errores incluyen correlationId.
+servers:
+  - url: https://{apiId}.execute-api.{region}.amazonaws.com/{stage}
+    variables:
+      apiId: { default: example }
+      region: { default: us-east-1 }
+      stage: { default: dev }
+security:
+  - sigv4: []
+tags:
+  - { name: Usuarios }
+  - { name: Productos }
+  - { name: Tiendas }
+  - { name: Carritos }
+  - { name: Pedidos }
+  - { name: Reportes }
+paths:
+  /usuarios:
+    get:
+      tags: [Usuarios]
+      summary: Lista usuarios
+      x-cloudshop-roles: [ADMINISTRADOR]
+      responses:
+        "200": { $ref: "#/components/responses/UserList" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+  /usuarios/{userId}:
+    parameters:
+      - $ref: "#/components/parameters/UserId"
+    get:
+      tags: [Usuarios]
+      summary: Consulta usuario (Administrador o propietario)
+      x-cloudshop-roles: [ADMINISTRADOR, OPERADOR, CLIENTE]
+      responses:
+        "200":
+          description: Usuario
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/UserEnvelope" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "404": { $ref: "#/components/responses/NotFound" }
+    put:
+      tags: [Usuarios]
+      summary: Actualiza nombre (Administrador o propietario)
+      x-cloudshop-roles: [ADMINISTRADOR, OPERADOR, CLIENTE]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/UpdateUser" }
+      responses:
+        "200":
+          description: Usuario actualizado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/UserEnvelope" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    delete:
+      tags: [Usuarios]
+      summary: Desactiva usuario
+      x-cloudshop-roles: [ADMINISTRADOR]
+      responses:
+        "200":
+          description: Usuario inactivo
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/UserEnvelope" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+  /usuarios/{userId}/rol:
+    parameters:
+      - $ref: "#/components/parameters/UserId"
+    patch:
+      tags: [Usuarios]
+      summary: Asigna rol mediante flujo administrativo
+      x-cloudshop-roles: [ADMINISTRADOR]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [role]
+              properties:
+                role: { $ref: "#/components/schemas/Role" }
+      responses:
+        "200":
+          description: Rol actualizado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/UserEnvelope" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+  /productos:
+    get:
+      tags: [Productos]
+      summary: Catálogo autenticado
+      x-cloudshop-roles: [ADMINISTRADOR, OPERADOR, CLIENTE]
+      responses:
+        "200":
+          description: Productos
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: "#/components/schemas/Product" }
+                  nextToken: { type: string }
+    post:
+      tags: [Productos]
+      summary: Crea producto
+      x-cloudshop-roles: [ADMINISTRADOR]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ProductInput" }
+      responses:
+        "201":
+          description: Creado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ProductEnvelope" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+  /productos/{productId}:
+    parameters:
+      - $ref: "#/components/parameters/ProductId"
+    get:
+      tags: [Productos]
+      summary: Consulta producto
+      x-cloudshop-roles: [ADMINISTRADOR, OPERADOR, CLIENTE]
+      responses:
+        "200":
+          description: Producto
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ProductEnvelope" }
+        "404": { $ref: "#/components/responses/NotFound" }
+    put:
+      tags: [Productos]
+      summary: Actualiza producto
+      x-cloudshop-roles: [ADMINISTRADOR]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ProductInput" }
+      responses:
+        "200":
+          description: Actualizado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ProductEnvelope" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    delete:
+      tags: [Productos]
+      summary: Elimina lógicamente producto
+      x-cloudshop-roles: [ADMINISTRADOR]
+      responses:
+        "200":
+          description: Eliminado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ProductEnvelope" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+  /productos/{productId}/inventario:
+    parameters:
+      - $ref: "#/components/parameters/ProductId"
+    patch:
+      tags: [Productos]
+      summary: Actualiza inventario
+      x-cloudshop-roles: [ADMINISTRADOR, OPERADOR]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [inventory]
+              properties:
+                inventory: { type: integer, minimum: 0, maximum: 1000000 }
+      responses:
+        "200":
+          description: Actualizado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ProductEnvelope" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+  /tiendas:
+    get:
+      tags: [Tiendas]
+      summary: Lista tiendas
+      x-cloudshop-roles: [ADMINISTRADOR, OPERADOR, CLIENTE]
+      responses:
+        "200":
+          description: Tiendas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: "#/components/schemas/Store" }
+    post:
+      tags: [Tiendas]
+      summary: Crea tienda
+      x-cloudshop-roles: [ADMINISTRADOR]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/StoreInput" }
+      responses:
+        "201":
+          description: Creada
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/StoreEnvelope" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+  /tiendas/{storeId}:
+    parameters:
+      - $ref: "#/components/parameters/StoreId"
+    get:
+      tags: [Tiendas]
+      summary: Consulta tienda
+      x-cloudshop-roles: [ADMINISTRADOR, OPERADOR, CLIENTE]
+      responses:
+        "200":
+          description: Tienda
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/StoreEnvelope" }
+        "404": { $ref: "#/components/responses/NotFound" }
+    put:
+      tags: [Tiendas]
+      summary: Actualiza tienda
+      x-cloudshop-roles: [ADMINISTRADOR]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/StoreInput" }
+      responses:
+        "200":
+          description: Actualizada
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/StoreEnvelope" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    delete:
+      tags: [Tiendas]
+      summary: Desactiva tienda
+      x-cloudshop-roles: [ADMINISTRADOR]
+      responses:
+        "200":
+          description: Inactiva
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/StoreEnvelope" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+  /tiendas/{storeId}/productos:
+    parameters:
+      - $ref: "#/components/parameters/StoreId"
+    get:
+      tags: [Productos]
+      summary: Lista productos de tienda
+      x-cloudshop-roles: [ADMINISTRADOR, OPERADOR, CLIENTE]
+      responses:
+        "200":
+          description: Productos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: "#/components/schemas/Product" }
+  /carritos/mio:
+    get:
+      tags: [Carritos]
+      summary: Consulta carrito propio
+      x-cloudshop-roles: [CLIENTE]
+      responses:
+        "200":
+          description: Carrito
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CartEnvelope" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+    delete:
+      tags: [Carritos]
+      summary: Vacía carrito propio
+      x-cloudshop-roles: [CLIENTE]
+      responses:
+        "204": { description: Vacío }
+        "403": { $ref: "#/components/responses/Forbidden" }
+  /carritos/mio/items:
+    post:
+      tags: [Carritos]
+      summary: Agrega producto
+      x-cloudshop-roles: [CLIENTE]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CartItemInput" }
+      responses:
+        "200":
+          description: Carrito
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CartEnvelope" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+  /carritos/mio/items/{productId}:
+    parameters:
+      - $ref: "#/components/parameters/ProductId"
+    patch:
+      tags: [Carritos]
+      summary: Cambia cantidad
+      x-cloudshop-roles: [CLIENTE]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [quantity]
+              properties:
+                quantity: { type: integer, minimum: 1, maximum: 99 }
+      responses:
+        "200":
+          description: Carrito
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CartEnvelope" }
+    delete:
+      tags: [Carritos]
+      summary: Elimina item
+      x-cloudshop-roles: [CLIENTE]
+      responses:
+        "200":
+          description: Carrito
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/CartEnvelope" }
+  /pedidos:
+    get:
+      tags: [Pedidos]
+      summary: Lista operativa
+      x-cloudshop-roles: [OPERADOR]
+      responses:
+        "200":
+          description: Pedidos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: "#/components/schemas/Order" }
+    post:
+      tags: [Pedidos]
+      summary: Checkout
+      x-cloudshop-roles: [CLIENTE]
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      responses:
+        "201":
+          description: Pedido creado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/OrderEnvelope" }
+        "409": { $ref: "#/components/responses/Conflict" }
+  /pedidos/mios:
+    get:
+      tags: [Pedidos]
+      summary: Lista pedidos propios
+      x-cloudshop-roles: [CLIENTE]
+      responses:
+        "200":
+          description: Pedidos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: "#/components/schemas/Order" }
+  /pedidos/{orderId}:
+    parameters:
+      - $ref: "#/components/parameters/OrderId"
+    get:
+      tags: [Pedidos]
+      summary: Consulta pedido (Operador o propietario)
+      x-cloudshop-roles: [OPERADOR, CLIENTE]
+      responses:
+        "200":
+          description: Pedido
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/OrderEnvelope" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+  /pedidos/{orderId}/estado:
+    parameters:
+      - $ref: "#/components/parameters/OrderId"
+      - $ref: "#/components/parameters/IdempotencyKey"
+    patch:
+      tags: [Pedidos]
+      summary: Avanza estado
+      x-cloudshop-roles: [OPERADOR]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [status]
+              properties:
+                status: { $ref: "#/components/schemas/OrderStatus" }
+      responses:
+        "200":
+          description: Pedido
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/OrderEnvelope" }
+        "409": { $ref: "#/components/responses/Conflict" }
+  /pedidos/{orderId}/cancelacion:
+    parameters:
+      - $ref: "#/components/parameters/OrderId"
+      - $ref: "#/components/parameters/IdempotencyKey"
+    post:
+      tags: [Pedidos]
+      summary: Cancela y compensa inventario
+      x-cloudshop-roles: [OPERADOR, CLIENTE]
+      responses:
+        "200":
+          description: Pedido cancelado
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/OrderEnvelope" }
+        "403": { $ref: "#/components/responses/Forbidden" }
+        "409": { $ref: "#/components/responses/Conflict" }
+  /reportes/ventas/totales:
+    get: { $ref: "#/components/pathItems/AdminReport" }
+  /reportes/ventas/tiendas:
+    get: { $ref: "#/components/pathItems/AdminReport" }
+  /reportes/productos/mas-vendidos:
+    get: { $ref: "#/components/pathItems/AdminReport" }
+  /reportes/productos/sin-stock:
+    get: { $ref: "#/components/pathItems/AdminReport" }
+  /reportes/clientes/mayores-compras:
+    get: { $ref: "#/components/pathItems/AdminReport" }
+  /reportes/pedidos/estados:
+    get: { $ref: "#/components/pathItems/AdminReport" }
+components:
+  securitySchemes:
+    sigv4:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: AWS Signature Version 4 con credenciales temporales del Identity Pool.
+  pathItems:
+    AdminReport:
+      tags: [Reportes]
+      summary: Métrica ejecutiva
+      x-cloudshop-roles: [ADMINISTRADOR]
+      responses:
+        "200":
+          description: Resultado agregado
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data: {}
+        "403": { $ref: "#/components/responses/Forbidden" }
+  parameters:
+    UserId:
+      name: userId
+      in: path
+      required: true
+      schema: { type: string, minLength: 1 }
+    ProductId:
+      name: productId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    StoreId:
+      name: storeId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    OrderId:
+      name: orderId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema: { type: string, format: uuid }
+  responses:
+    Forbidden:
+      description: Autenticado sin permiso o propiedad
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+    NotFound:
+      description: No encontrado
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+    Conflict:
+      description: Conflicto de dominio
+      content:
+        application/json:
+          schema: { $ref: "#/components/schemas/ErrorEnvelope" }
+    UserList:
+      description: Usuarios
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              data:
+                type: array
+                items: { $ref: "#/components/schemas/User" }
+  schemas:
+    Role:
+      type: string
+      enum: [ADMINISTRADOR, OPERADOR, CLIENTE]
+    User:
+      type: object
+      required: [userId, name, email, role, status, createdAt]
+      properties:
+        userId: { type: string }
+        name: { type: string }
+        email: { type: string, format: email }
+        role: { $ref: "#/components/schemas/Role" }
+        status: { type: string, enum: [ACTIVE, INACTIVE] }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+    UpdateUser:
+      type: object
+      additionalProperties: false
+      required: [name]
+      properties:
+        name: { type: string, minLength: 1, maxLength: 160 }
+    UserEnvelope:
+      type: object
+      properties:
+        data: { $ref: "#/components/schemas/User" }
+    ProductInput:
+      type: object
+      additionalProperties: false
+      required: [code, name, description, category, price, inventory, storeId]
+      properties:
+        code: { type: string, minLength: 1, maxLength: 64 }
+        name: { type: string, minLength: 1, maxLength: 160 }
+        description: { type: string, minLength: 1, maxLength: 2000 }
+        category: { type: string, minLength: 1, maxLength: 100 }
+        price: { type: number, exclusiveMinimum: 0 }
+        inventory: { type: integer, minimum: 0, maximum: 1000000 }
+        storeId: { type: string, format: uuid }
+    Product:
+      allOf:
+        - $ref: "#/components/schemas/ProductInput"
+        - type: object
+          required: [productId, status, createdAt, updatedAt]
+          properties:
+            productId: { type: string, format: uuid }
+            status: { type: string, enum: [ACTIVE, DELETED] }
+            createdAt: { type: string, format: date-time }
+            updatedAt: { type: string, format: date-time }
+    ProductEnvelope:
+      type: object
+      properties:
+        data: { $ref: "#/components/schemas/Product" }
+    StoreInput:
+      type: object
+      additionalProperties: false
+      required: [name, description]
+      properties:
+        name: { type: string, minLength: 1, maxLength: 160 }
+        description: { type: string, minLength: 1, maxLength: 1000 }
+    Store:
+      allOf:
+        - $ref: "#/components/schemas/StoreInput"
+        - type: object
+          required: [storeId, status, createdAt, updatedAt]
+          properties:
+            storeId: { type: string, format: uuid }
+            status: { type: string, enum: [ACTIVE, INACTIVE] }
+            createdAt: { type: string, format: date-time }
+            updatedAt: { type: string, format: date-time }
+    StoreEnvelope:
+      type: object
+      properties:
+        data: { $ref: "#/components/schemas/Store" }
+    CartItemInput:
+      type: object
+      additionalProperties: false
+      required: [productId, quantity]
+      properties:
+        productId: { type: string, format: uuid }
+        quantity: { type: integer, minimum: 1, maximum: 99 }
+    Cart:
+      type: object
+      required: [customerId, items, updatedAt]
+      properties:
+        customerId: { type: string }
+        items:
+          type: array
+          maxItems: 20
+          items: { $ref: "#/components/schemas/CartItemInput" }
+        updatedAt: { type: string, format: date-time }
+    CartEnvelope:
+      type: object
+      properties:
+        data: { $ref: "#/components/schemas/Cart" }
+    OrderStatus:
+      type: string
+      enum: [PENDIENTE, CONFIRMADO, EN_PREPARACION, ENVIADO, ENTREGADO, CANCELADO]
+    OrderItem:
+      type: object
+      required: [productId, storeId, name, unitPrice, quantity, subtotal]
+      properties:
+        productId: { type: string, format: uuid }
+        storeId: { type: string, format: uuid }
+        name: { type: string }
+        unitPrice: { type: number }
+        quantity: { type: integer }
+        subtotal: { type: number }
+    Order:
+      type: object
+      required: [orderId, customerId, status, items, total, correlationId, createdAt]
+      properties:
+        orderId: { type: string, format: uuid }
+        customerId: { type: string }
+        status: { $ref: "#/components/schemas/OrderStatus" }
+        items:
+          type: array
+          items: { $ref: "#/components/schemas/OrderItem" }
+        total: { type: number }
+        correlationId: { type: string, format: uuid }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+    OrderEnvelope:
+      type: object
+      properties:
+        data: { $ref: "#/components/schemas/Order" }
+    ErrorEnvelope:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message, correlationId]
+          properties:
+            code: { type: string }
+            message: { type: string }
+            correlationId: { type: string, format: uuid }

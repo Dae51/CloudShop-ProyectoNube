@@ -13,3 +13,8 @@ moved {
   from = module.productos.aws_api_gateway_stage.products
   to   = aws_api_gateway_stage.cloudshop
 }
+
+moved {
+  from = module.usuarios.aws_dynamodb_table.users
+  to   = module.autenticacion.aws_dynamodb_table.users
+}

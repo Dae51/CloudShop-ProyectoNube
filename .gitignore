@@ -8,3 +8,8 @@ Modulos/Productos/productos_lambda.zip
 *.tfstate.backup
 *.tfvars
 .env
+.terraform-build/
+**/__pycache__/
+**/*_lambda.zip
+**/post_confirmation.zip
+**/common_layer.zip

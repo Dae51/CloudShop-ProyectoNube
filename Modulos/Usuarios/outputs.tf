@@ -1,22 +1,37 @@
+output "lambda_function_name" {
+  value = aws_lambda_function.usuarios_lambda.function_name
+}
+
+output "api_role_policy_arns" {
+  value = { for role, policy in aws_iam_policy.api : role => policy.arn }
+}
+
 output "route_configuration_hash" {
-  description = "Huella de la ruta de Usuarios usada por el deployment compartido"
+  description = "Huella de rutas de Usuarios para el deployment compartido"
   value = sha1(jsonencode({
-    resource = {
-      id        = aws_api_gateway_resource.users.id
-      path_part = aws_api_gateway_resource.users.path_part
+    resources = {
+      usuarios = aws_api_gateway_resource.usuarios.id
+      user     = aws_api_gateway_resource.user.id
+      role     = aws_api_gateway_resource.role.id
     }
-    method = {
-      id            = aws_api_gateway_method.get_users.id
-      http_method   = aws_api_gateway_method.get_users.http_method
-      authorization = aws_api_gateway_method.get_users.authorization
-      resource_id   = aws_api_gateway_method.get_users.resource_id
+    methods = {
+      for key, method in aws_api_gateway_method.usuarios : key => {
+        id            = method.id
+        http_method   = method.http_method
+        authorization = method.authorization
+        resource_id   = method.resource_id
+      }
     }
-    integration = {
-      id                      = aws_api_gateway_integration.get_users.id
-      type                    = aws_api_gateway_integration.get_users.type
-      integration_http_method = aws_api_gateway_integration.get_users.integration_http_method
-      uri                     = aws_api_gateway_integration.get_users.uri
+    integrations = {
+      for key, integration in aws_api_gateway_integration.usuarios : key => {
+        id                      = integration.id
+        type                    = integration.type
+        integration_http_method = integration.integration_http_method
+        uri                     = integration.uri
+      }
     }
-    lambda_permission = aws_lambda_permission.api_gateway.source_arn
+    cors = {
+      for key, integration in aws_api_gateway_integration.options : key => integration.id
+    }
   }))
 }

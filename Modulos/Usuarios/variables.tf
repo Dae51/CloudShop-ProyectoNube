@@ -1,19 +1,56 @@
+variable "name_prefix" {
+  type = string
+}
+
 variable "rest_api_id" {
-  description = "ID de la API Gateway REST compartida"
-  type        = string
+  type = string
 }
 
 variable "root_resource_id" {
-  description = "ID del recurso raíz de la API compartida"
-  type        = string
+  type = string
 }
 
 variable "execution_arn" {
-  description = "ARN de ejecución de la API compartida"
-  type        = string
+  type = string
 }
 
 variable "stage_name" {
-  description = "Stage compartido de API Gateway"
-  type        = string
+  type = string
+}
+
+variable "users_table_name" {
+  type = string
+}
+
+variable "users_table_arn" {
+  type = string
+}
+
+variable "audit_table_name" {
+  type = string
+}
+
+variable "audit_table_arn" {
+  type = string
+}
+
+variable "user_pool_id" {
+  type = string
+}
+
+variable "user_pool_arn" {
+  type = string
+}
+
+variable "common_layer_arn" {
+  type = string
+}
+
+variable "log_retention_days" {
+  type = number
+}
+
+variable "common_tags" {
+  type    = map(string)
+  default = {}
 }

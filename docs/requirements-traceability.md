@@ -18,10 +18,10 @@ corresponde a Phase 0; PASS exige evidencia reproducible proporcional al requisi
 | PLAT-11 | CloudWatch | 2 log groups | Terraform | PARTIAL | Sin métricas/dashboard | Dashboard real |
 | PLAT-12 | SES | Ninguna | Búsqueda Terraform | FAIL | Correo ausente | MessageId real |
 | PLAT-13 | Terraform único | Recursos existentes en Terraform | `.tf` raíz/módulos | PARTIAL | Plataforma incompleta/backend roto | Plan/apply completo |
-| USR-01 | Registrar usuarios | Rama Lambda inalcanzable y acepta rol | `Usuarios/lambda` | FAIL | Sin ruta; escalamiento | Registro CLIENTE + auditoría |
-| USR-02 | Consultar usuarios | `GET /users` público | `Usuarios/main.tf` | PARTIAL | Ruta/nombre/seguridad | Admin 200, otros 403 |
-| USR-03 | Actualizar usuarios | Stub inalcanzable | `Usuarios/lambda` | FAIL | Sin persistencia | Update real |
-| USR-04 | Desactivar usuarios | Stub inalcanzable | `Usuarios/lambda` | FAIL | Sin persistencia | Soft delete |
+| USR-01 | Registrar usuarios | Cognito post-confirmation fuerza CLIENTE y audita | `test_post_confirmation.py` PASS | PARTIAL | Falta spike AWS | Registro CLIENTE + auditoría real |
+| USR-02 | Consultar usuarios | Lista admin y perfil propio protegidos | `test_users.py` PASS | PARTIAL | Falta integración AWS | Admin 200, otros 403 |
+| USR-03 | Actualizar usuarios | Nombre propio/admin con transacción | `test_users.py` PASS | PARTIAL | Falta integración AWS | PUT firmado |
+| USR-04 | Desactivar usuarios | Admin, Cognito disable y compensación | Handler/contrato | PARTIAL | Falta prueba AWS | Soft delete real |
 | USR-05 | ADMINISTRADOR | Alias en Productos | `ROLE_ALIASES` | PARTIAL | Sin identidad/rol asumible | Login y policy |
 | USR-06 | OPERADOR | Alias en Productos | `ROLE_ALIASES` | PARTIAL | Sin identidad/rol asumible | Login y policy |
 | USR-07 | CLIENTE | Alias en Productos | `ROLE_ALIASES` | PARTIAL | Sin default de registro | Registro y login |
@@ -61,7 +61,7 @@ corresponde a Phase 0; PASS exige evidencia reproducible proporcional al requisi
 | DSH-04 | Agotados | Ninguna | Sin Reportes | FAIL | Métrica ausente | Datos reales |
 | DSH-05 | Mejores clientes | Ninguna | Sin Reportes | FAIL | Métrica ausente | Datos reales |
 | DSH-06 | Pedidos por estado | Ninguna | Sin Reportes | FAIL | Métrica ausente | Datos reales |
-| SEC-01 | Autenticación por endpoint | Productos IAM; Usuarios NONE | Métodos API | FAIL | Un endpoint público e identidad ausente | No auth rechazado |
+| SEC-01 | Autenticación por endpoint | Usuarios y Productos usan AWS_IAM; Cognito/Identity Pool declarados | Terraform validate PASS | PARTIAL | Dominios y spike AWS faltan | No auth rechazado |
 | SEC-02 | Validación de rol | Productos revalida | `get_identity` | PARTIAL | Usuarios/dominios faltan | Matriz por rol |
 | SEC-03 | Validación de permiso | Set por rol en Productos | `PERMISSIONS` | PARTIAL | Cobertura parcial | Negativos por acción |
 | SEC-04 | Admin gestiona/reporta | Solo Productos | Policies Productos | PARTIAL | Usuarios/tiendas/reportes | Suite admin |
@@ -74,7 +74,7 @@ corresponde a Phase 0; PASS exige evidencia reproducible proporcional al requisi
 | EVT-03 | Flujo registra auditoría | Solo mutaciones Productos | ProductAudit | FAIL | Pedido ausente | Correlation común |
 | EVT-04 | Flujo envía correo | Ninguna | Sin SES | FAIL | Consumidor ausente | SES MessageId |
 | EVT-05 | Idempotencia | Condición optimistic lock Producto | TransactWrite | PARTIAL | Sin order/event idempotency | Duplicados |
-| AUD-01 | Creación usuarios | Ninguna | Usuarios no audita | FAIL | Auditoría ausente | Registro |
+| AUD-01 | Creación usuarios | Post-confirmation transaccional | Test unitario PASS | PARTIAL | Falta evidencia AWS | Registro real |
 | AUD-02 | Eliminación productos | Sí local | Test PASS | PARTIAL | Sin evidencia AWS/correlation | Registro AWS |
 | AUD-03 | Creación pedidos | Ninguna | Sin Pedidos | FAIL | Auditoría ausente | Checkout |
 | AUD-04 | Cancelación pedidos | Ninguna | Sin Pedidos | FAIL | Auditoría ausente | Cancelación |
@@ -97,7 +97,7 @@ corresponde a Phase 0; PASS exige evidencia reproducible proporcional al requisi
 | IAC-10 | EventBridge | Ninguno | Búsqueda | FAIL | Recurso ausente | Plan/evento |
 | IAC-11 | CloudWatch | Log groups | módulos | PARTIAL | Dashboard/alarmas | Plan/dashboard |
 | IAC-12 | SES | Ninguno | Búsqueda | FAIL | Identidad/config ausente | Plan/MessageId |
-| IAC-13 | Variables/outputs sin hardcoding | Stage variable; muchos nombres fijos | raíz/módulos | FAIL | Región/backend/nombres rígidos | Entorno limpio |
+| IAC-13 | Variables/outputs sin hardcoding | Proyecto, entorno, región, retención y outputs Cognito parametrizados | Terraform validate PASS | PARTIAL | Backend y módulos restantes | Entorno limpio |
 | TST-01 | 403 sin permiso | Lambda unit test | Operador DELETE PASS | PARTIAL | No API real | SigV4 403 |
 | TST-02 | Pedido completo | Ninguna | Sin Pedido | FAIL | Flujo completo ausente | E2E AWS |
 | TST-03 | Métricas CloudWatch | Ninguna | Sin dashboard | FAIL | Evidencia ausente | Captura + query |
@@ -107,7 +107,7 @@ corresponde a Phase 0; PASS exige evidencia reproducible proporcional al requisi
 | DEL-03 | Documento técnico | README mínimo | `README.md` | FAIL | Documento ausente | Revisión |
 | DEL-04 | Arquitectura | Solo PDF externo conceptual | PDF oficial | FAIL | Arquitectura real ausente | Diagrama/ADR |
 | DEL-05 | Diseño APIs | Rutas en README Productos | README módulo | PARTIAL | OpenAPI ausente | Lint contrato |
-| DEL-06 | Diseño BD | Inferible en Terraform | tablas parciales | FAIL | Documento/patrones ausentes | Revisión |
+| DEL-06 | Diseño BD | Documento de tablas, índices, acceso y condiciones | `docs/database-design.md` | PARTIAL | Implementación/AWS incompletos | Revisión contra state |
 | DEL-07 | Diseño seguridad | README Productos parcial | README módulo | PARTIAL | Modelo global ausente | Threat review |
 | DEL-08 | Evidencia despliegue | Ninguna; backend inexistente | AWS read-only | BLOCKED | Sin apply seguro | TST-04 |
 | DEL-09 | Guía exposición | Ninguna | Búsqueda repo | FAIL | Guía ausente | Ensayo técnico |
@@ -117,8 +117,8 @@ corresponde a Phase 0; PASS exige evidencia reproducible proporcional al requisi
 | Estado | Cantidad |
 |---|---:|
 | PASS | 0 |
-| PARTIAL | 49 |
-| FAIL | 55 |
+| PARTIAL | 56 |
+| FAIL | 48 |
 | BLOCKED | 2 |
 | NOT VERIFIED | 0 |
 | Total | 106 |
