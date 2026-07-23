@@ -117,9 +117,9 @@ corresponde a Phase 0; PASS exige evidencia reproducible proporcional al requisi
 | Estado | Cantidad |
 |---|---:|
 | PASS | 0 |
-| PARTIAL | 42 |
-| FAIL | 60 |
-| BLOCKED | 4 |
+| PARTIAL | 49 |
+| FAIL | 55 |
+| BLOCKED | 2 |
 | NOT VERIFIED | 0 |
 | Total | 106 |
 
