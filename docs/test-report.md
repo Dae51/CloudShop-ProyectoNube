@@ -9,8 +9,9 @@ BLOCKED porque no hubo despliegue.
 
 | Suite | Comando | Resultado |
 |---|---|---|
-| Backend global | `python -m unittest discover -s tests -v` | PASS, 40/40 |
-| Productos heredado | `python -m unittest discover -s Modulos/Productos/tests -v` | PASS, 9/9 |
+| Backend global | `python -m unittest discover -s tests -v` | PASS, 44/44 antes del residual final |
+| Backend residual | common + post-confirmation + eventos | PASS, 16/16 tras el residual |
+| Productos heredado | `python -m unittest discover -s Modulos/Productos/tests -v` | PASS, 12/12 |
 | Frontend | `npm test` en `Modulos/Frontend/app` | PASS, 8/8 |
 | Build frontend | `npm run build` | PASS, 670 módulos |
 | Dependencias frontend | `npm install` | PASS, 0 vulnerabilidades |
@@ -19,7 +20,7 @@ BLOCKED porque no hubo despliegue.
 | Terraform bootstrap | `terraform -chdir=bootstrap validate -no-color` | PASS |
 | Plan bootstrap | `terraform -chdir=bootstrap plan` | PASS estático: 5 add, 0 change, 0 destroy |
 | Plan root real | `terraform plan` con backend S3 | BLOCKED: backend no existe |
-| Plan root aislado | copia `/tmp`, backend local | PARTIAL: 367 add, 0 change, 0 destroy; sin state |
+| Plan root aislado | copia `/tmp`, backend local | PARTIAL histórico: 367/0/0; regenerar tras fixer |
 
 El plan aislado sirve para detectar errores de configuración y acciones destructivas,
 pero no demuestra drift, ownership ni despliegue.
@@ -33,11 +34,14 @@ pero no demuestra drift, ownership ni despliegue.
 - Producto exige tienda activa.
 - Stock insuficiente y forma atómica del checkout.
 - Idempotencia de checkout, transiciones, cancelación, relay y notificación.
+- Replay de cancelación no filtra pedidos entre clientes.
+- Checkout rechaza tienda inactiva sin efectos y un conflicto reproduce al ganador.
 - Lease concurrente y liberación de claim ante fallo temporal SES.
 - Cancelación repone inventario exactamente una vez.
 - Máquina de estados rechaza saltos/terminales.
 - Outbox tolera publicación repetida.
 - SES sin configuración no se marca como enviado.
+- Roles aliases fallan cerrados y Productos valida límites/campos extra de OpenAPI.
 - Seis métricas del dashboard y exclusividad ADMINISTRADOR.
 - OpenAPI usa solo roles oficiales y 34 operaciones.
 - Cliente frontend firma SigV4, conserva errores y no usa fallback demo.

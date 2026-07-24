@@ -32,9 +32,23 @@ No se usa `execute-api:*`, `Action="*"` ni `Resource="*"`.
 - Post-confirmation asigna y persiste `CLIENTE`.
 - Cambiar rol requiere `PATCH /usuarios/{userId}/rol`, rol ADMINISTRADOR y auditoría.
 - El administrador no puede cambiar su propio rol ni desactivarse.
-- El bootstrap inicial de confianza no puede resolverse mediante auto-registro; debe
-  ser ejecutado una vez por un operador AWS autorizado y quedar documentado. Hasta
-  que exista esa identidad real, las pruebas administrativas permanecen BLOCKED.
+- El bootstrap inicial se ejecuta una sola vez por un operador AWS autorizado:
+
+```bash
+python scripts/bootstrap_admin.py \
+  --profile "$AWS_PROFILE" \
+  --region "REGION_CONFIRMADA" \
+  --expected-account "CUENTA_CONFIRMADA" \
+  --user-pool-id "$(terraform output -raw cognito_user_pool_id)" \
+  --users-table "$(terraform output -raw users_table_name)" \
+  --audit-table "$(terraform output -raw audit_table_name)" \
+  --username "USUARIO_COGNITO_CONFIRMADO"
+```
+
+El script valida cuenta y estado CLIENTE activo, rechaza un segundo administrador,
+sincroniza Cognito/Users, registra `BOOTSTRAP_ADMIN_ROLE` junto al cambio DynamoDB y
+compensa los grupos Cognito si falla la transacción. Hasta que exista el despliegue
+real, la ejecución de este procedimiento permanece BLOCKED.
 
 ## Controles de aplicación
 

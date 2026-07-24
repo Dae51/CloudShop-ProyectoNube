@@ -75,7 +75,7 @@ lo contrario se genera uno.
 Campos obligatorios:
 
 - `productId`: UUID generado.
-- `code`: texto 1..64, único a nivel lógico.
+- `code`: texto 1..64.
 - `name`: texto 1..160.
 - `description`: texto 1..2000.
 - `category`: texto 1..100.
@@ -160,11 +160,16 @@ Eventos:
   "occurredAt": "2026-07-23T18:00:00Z",
   "correlationId": "uuid",
   "actorId": "cognito-sub",
+  "customerUserId": "cognito-sub-propietario",
   "orderId": "uuid",
   "customerId": "cognito-identity-id",
   "total": "125.50"
 }
 ```
+
+`customerUserId` identifica al propietario que recibe la notificación; `actorId`
+identifica a quien ejecutó la acción. El consumidor v1 acepta `actorId` como fallback
+para eventos anteriores que no incluyan el campo nuevo.
 
 No se publican tokens, email ni dirección en EventBridge/logs.
 

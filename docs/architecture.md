@@ -74,7 +74,8 @@ sequenceDiagram
   participant E as EventBridge
   participant N as Notificaciones
   participant S as SES
-  participant Q as SQS DLQ
+  participant QR as SQS Relay DLQ
+  participant QN as SQS Notificación DLQ
 
   C->>O: POST /pedidos + Idempotency-Key
   O->>D: TransactWriteItems
@@ -84,12 +85,13 @@ sequenceDiagram
   D-->>R: DynamoDB Stream
   R->>E: PutEvents(OrderCreated)
   R->>D: PENDING → PUBLISHED condicional
+  R-->>QR: fallo agotado del stream
   E->>N: evento (retry)
   N->>D: claim idempotente por eventId
   N->>S: SendEmail
   S-->>N: MessageId
   N->>D: SENT + MessageId
-  E-->>Q: fallo agotado
+  E-->>QN: fallo agotado de notificación
 ```
 
 No existe una falsa barrera de fan-out. Pedido, stock, auditoría y outbox son atómicos;
@@ -101,12 +103,15 @@ SES y antes de guardar `MessageId` puede duplicar correo, limitación documentad
 - Stock nunca baja de cero por condición `inventory >= quantity` dentro de la
   transacción.
 - La versión del carrito evita checkout sobre contenido modificado.
-- El token transaccional se deriva de operación + idempotency key para evitar colisión
-  entre checkout, cambio de estado y cancelación.
+- Cada comando escribe una clave idempotente con condición dentro de la misma
+  transacción; un competidor pierde la condición y lee el resultado ganador.
+- Checkout valida la tienda `ACTIVE` tanto con lectura consistente como con
+  `ConditionCheck` dentro de la transacción.
 - Cancelar repone inventario una sola vez con `inventoryRestored`.
 - El relay puede publicar duplicado si falla después de `PutEvents`; el consumidor usa
   `eventId`.
-- EventBridge reintenta y deriva fallos agotados a SQS.
+- El mapping de Streams reintenta, divide lotes y conserva agotados en su SQS DLQ.
+- EventBridge reintenta y deriva fallos de notificación a una SQS DLQ independiente.
 - Correlation ID se persiste en pedido, auditoría, outbox, evento y logs.
 
 ## Asociaciones AWS válidas
@@ -116,7 +121,8 @@ SES y antes de guardar `MessageId` puede duplicar correo, limitación documentad
 - `aws_wafv2_web_acl_association → aws_api_gateway_stage.arn`, scope `REGIONAL`.
 - User Pool groups → IAM role ARNs → Identity Pool roles attachment.
 - DynamoDB Stream Outbox → Lambda Relay → EventBridge rule → Lambda Notificaciones.
-- EventBridge target → SQS DLQ mediante resource policy.
+- DynamoDB Stream mapping → SQS relay DLQ mediante IAM mínimo.
+- EventBridge target → SQS notification DLQ mediante resource policy.
 
 ## Decisiones y límites
 

@@ -22,7 +22,7 @@ incluyen `cloudshop-{environment}`.
 - Crear/actualizar producto hace `GetItem` consistente y exige tienda `ACTIVE`.
 - Carrito: `customerId` proviene de identidad firmada; `version` permite optimistic
   locking.
-- Checkout: una transacción contiene `ConditionCheck`/`Update` por producto,
+- Checkout: una transacción contiene `ConditionCheck` por tienda, `Update` por producto,
   `Put Orders`, `Put Audit`, `Put Outbox` y `Put Idempotency`.
 - Stock: `SET inventory = inventory - :quantity` con
   `status = ACTIVE AND inventory >= :quantity`.
@@ -30,16 +30,19 @@ incluyen `cloudshop-{environment}`.
   items, cambia estado y registra auditoría/outbox en una transacción.
 - Outbox relay: `status` pasa `PENDING -> PUBLISHED` con condición. Publicación y marca
   no son atómicas; consumidores toleran duplicados.
-- Consumidor: `Put Idempotency` condicional por `consumer#eventId`.
+- Consumidor: claim condicional `PROCESSING/SENT/FAILED/BLOCKED_CONFIGURATION` por
+  `MAIL#eventId`.
 
 El máximo de 20 items mantiene la transacción por debajo del límite de 100 acciones:
-20 updates de stock + pedido + auditoría + outbox + idempotencia.
+hasta 20 checks de tienda + 20 updates de stock + pedido + auditoría + outbox +
+idempotencia + borrado de carrito.
 
 ## Paginación
 
-Listas aceptan `limit` 1..100 y `nextToken` opaco base64url. Nunca se expone
-`LastEvaluatedKey` sin codificar. Reportes académicos pueden usar Scan paginado para un
-dataset pequeño; el documento técnico registra que producción real requeriría
+Usuarios acepta `limit` 1..100 y `nextToken` opaco base64url; Reportes recorre todas
+las páginas internamente. Las listas simples de Productos, Tiendas y Pedidos todavía
+devuelven una página DynamoDB y se mantienen PARTIAL para volúmenes grandes. Los
+reportes académicos usan Scan para un dataset pequeño; producción real requeriría
 agregados materializados por eventos.
 
 ## Retención y datos sensibles

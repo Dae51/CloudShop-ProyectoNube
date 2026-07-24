@@ -14,9 +14,9 @@ servicios AWS reales atribuibles a esta iteración.
 | Backend anterior | bucket `cloudshop-terraform-esen2026` devolvió 404 |
 | Región del backend anterior | `us-east-2`, discrepante con provider |
 | Identidades SES | 0 |
-| Build/tests/validate | PASS |
+| Build/tests/validate | PASS; root revalidado tras fixer |
 | Plan bootstrap | 5 create, 0 change, 0 destroy |
-| Plan root aislado | 367 create, 0 change, 0 destroy; sin state remoto |
+| Plan root aislado | histórico: 367 create, 0 change, 0 destroy; debe regenerarse tras fixer |
 | Presupuesto WAF | no informado |
 | Entorno/cuenta del curso | no confirmados inequívocamente |
 | Apply | no ejecutado |
@@ -66,8 +66,8 @@ terraform apply cloudshop.tfplan
 - Confirmar por correo la identidad SES creada por Terraform.
 - Si la cuenta SES está en sandbox, verificar también el destinatario o solicitar
   production access.
-- Establecer el primer ADMINISTRADOR mediante el procedimiento de confianza acordado
-  con el docente; los siguientes roles se asignan en la app protegida.
+- Ejecutar una vez `scripts/bootstrap_admin.py` según `docs/security-design.md`; los
+  siguientes roles se asignan en la app protegida.
 - Confirmar presupuesto WAF y restricciones docentes sobre Cognito.
 
 Estas acciones no autorizan crear infraestructura manualmente.
