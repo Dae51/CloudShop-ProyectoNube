@@ -14,6 +14,7 @@ from botocore.exceptions import ClientError
 
 PRODUCTS_TABLE = os.environ.get("PRODUCTS_TABLE", "Products")
 AUDIT_TABLE = os.environ.get("AUDIT_TABLE", "ProductAudit")
+STORES_TABLE = os.environ.get("STORES_TABLE", "Stores")
 STORE_INDEX = os.environ.get("STORE_INDEX", "StoreIdCreatedAtIndex")
 
 LOGGER = logging.getLogger()
@@ -133,13 +134,14 @@ def role_from_iam_arn(user_arn):
     if not user_arn:
         return None
     match = re.search(r"(?:assumed-role|role)/([^/]+)", user_arn, re.IGNORECASE)
-    role_name = match.group(1) if match else user_arn.rsplit("/", 1)[-1]
-    tokens = re.split(r"[^A-Za-z]+", role_name.upper())
-    for token in reversed(tokens):
-        role = normalize_role(token)
-        if role:
-            return role
-    return None
+    if not match:
+        return None
+    tokens = [
+        token
+        for token in re.split(r"[^A-Za-z]+", match.group(1).upper())
+        if token
+    ]
+    return normalize_role(tokens[-1]) if tokens else None
 
 
 def get_identity(event):
@@ -277,6 +279,20 @@ def get_product(product_id, include_deleted=False):
     return product
 
 
+def require_active_store(store_id):
+    result = get_dynamodb_client().get_item(
+        TableName=STORES_TABLE,
+        Key={"storeId": {"S": store_id}},
+        ConsistentRead=True,
+    )
+    if "Item" not in result:
+        raise ApiError(400, "INVALID_STORE", "La tienda propietaria no existe")
+    store = deserialize_item(result["Item"])
+    if store.get("status") != "ACTIVE":
+        raise ApiError(409, "INACTIVE_STORE", "La tienda propietaria está inactiva")
+    return store
+
+
 def build_audit(identity, action, product_id, result="EXITOSO"):
     correlation = identity.get("correlation_id") or str(uuid.uuid4())
     timestamp = utc_now()
@@ -338,6 +354,7 @@ def write_failed_audit(identity, action, product_id):
 
 def create_product(event, identity):
     body = validate_product(parse_body(event))
+    require_active_store(body["storeId"])
     timestamp = utc_now()
     product = {
         "productId": str(uuid.uuid4()),
@@ -407,6 +424,7 @@ def update_product(event, identity):
     if not product_id:
         raise ApiError(400, "INVALID_INPUT", "productId es obligatorio")
     values = validate_product(parse_body(event))
+    require_active_store(values["storeId"])
     current = get_product(product_id)
     updated = {**current, **values, "updatedAt": utc_now()}
     audit = build_audit(identity, "UPDATE", product_id)

@@ -1,5 +1,7 @@
 output "stores_table_name" { value = aws_dynamodb_table.stores.name }
 output "stores_table_arn" { value = aws_dynamodb_table.stores.arn }
+output "stores_resource_id" { value = aws_api_gateway_resource.stores.id }
+output "store_resource_id" { value = aws_api_gateway_resource.store.id }
 output "lambda_function_name" { value = aws_lambda_function.lambda.function_name }
 output "api_role_policy_arns" {
   value = { for role, policy in aws_iam_policy.api : role => policy.arn }

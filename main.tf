@@ -38,10 +38,18 @@ module "usuarios" {
 module "productos" {
   source = "./Modulos/Productos"
 
-  rest_api_id      = aws_api_gateway_rest_api.cloudshop.id
-  root_resource_id = aws_api_gateway_rest_api.cloudshop.root_resource_id
-  execution_arn    = aws_api_gateway_rest_api.cloudshop.execution_arn
-  stage_name       = var.api_stage_name
+  name_prefix         = local.name_prefix
+  products_table_name = "${local.name_prefix}-products"
+  audit_table_name    = "${local.name_prefix}-product-audit"
+  rest_api_id         = aws_api_gateway_rest_api.cloudshop.id
+  root_resource_id    = aws_api_gateway_rest_api.cloudshop.root_resource_id
+  execution_arn       = aws_api_gateway_rest_api.cloudshop.execution_arn
+  stage_name          = var.api_stage_name
+  store_resource_id   = module.tiendas.store_resource_id
+  stores_table_name   = module.tiendas.stores_table_name
+  stores_table_arn    = module.tiendas.stores_table_arn
+  log_retention_days  = var.log_retention_days
+  common_tags         = local.common_tags
 }
 
 module "tiendas" {
@@ -49,10 +57,9 @@ module "tiendas" {
 
   name_prefix        = local.name_prefix
   rest_api_id        = aws_api_gateway_rest_api.cloudshop.id
+  root_resource_id   = aws_api_gateway_rest_api.cloudshop.root_resource_id
   execution_arn      = aws_api_gateway_rest_api.cloudshop.execution_arn
   stage_name         = var.api_stage_name
-  stores_resource_id = module.productos.stores_resource_id
-  store_resource_id  = module.productos.store_resource_id
   audit_table_name   = module.autenticacion.audit_table_name
   audit_table_arn    = module.autenticacion.audit_table_arn
   common_layer_arn   = aws_lambda_layer_version.common.arn

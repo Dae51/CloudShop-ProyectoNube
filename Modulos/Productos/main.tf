@@ -1,5 +1,5 @@
 locals {
-  lambda_function_name = "productos-lambda"
+  lambda_function_name = "${var.name_prefix}-productos"
   store_index_name     = "StoreIdCreatedAtIndex"
 
   routes = {
@@ -83,9 +83,7 @@ resource "aws_dynamodb_table" "products" {
     enabled = true
   }
 
-  tags = {
-    Module = "Productos"
-  }
+  tags = merge(var.common_tags, { Module = "Productos" })
 }
 
 resource "aws_dynamodb_table" "product_audit" {
@@ -106,13 +104,11 @@ resource "aws_dynamodb_table" "product_audit" {
     enabled = true
   }
 
-  tags = {
-    Module = "Productos"
-  }
+  tags = merge(var.common_tags, { Module = "Productos" })
 }
 
 resource "aws_iam_role" "products_lambda" {
-  name = "productos-lambda-role"
+  name = "${local.lambda_function_name}-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -124,10 +120,12 @@ resource "aws_iam_role" "products_lambda" {
       }
     }]
   })
+
+  tags = var.common_tags
 }
 
 resource "aws_iam_policy" "products_lambda" {
-  name        = "productos-lambda-policy"
+  name        = "${local.lambda_function_name}-policy"
   description = "Acceso mínimo del servicio de productos a DynamoDB y CloudWatch Logs"
 
   policy = jsonencode({
@@ -149,6 +147,12 @@ resource "aws_iam_policy" "products_lambda" {
         Resource = "${aws_dynamodb_table.products.arn}/index/${local.store_index_name}"
       },
       {
+        Sid      = "ValidateOwningStore"
+        Effect   = "Allow"
+        Action   = "dynamodb:GetItem"
+        Resource = var.stores_table_arn
+      },
+      {
         Sid    = "WriteProductsAndAudit"
         Effect = "Allow"
         Action = "dynamodb:PutItem"
@@ -168,6 +172,8 @@ resource "aws_iam_policy" "products_lambda" {
       }
     ]
   })
+
+  tags = var.common_tags
 }
 
 resource "aws_iam_role_policy_attachment" "products_lambda" {
@@ -179,9 +185,7 @@ resource "aws_cloudwatch_log_group" "products_lambda" {
   name              = "/aws/lambda/${local.lambda_function_name}"
   retention_in_days = var.log_retention_days
 
-  tags = {
-    Module = "Productos"
-  }
+  tags = merge(var.common_tags, { Module = "Productos" })
 }
 
 data "archive_file" "products_lambda" {
@@ -204,6 +208,7 @@ resource "aws_lambda_function" "products" {
     variables = {
       PRODUCTS_TABLE = aws_dynamodb_table.products.name
       AUDIT_TABLE    = aws_dynamodb_table.product_audit.name
+      STORES_TABLE   = var.stores_table_name
       STORE_INDEX    = local.store_index_name
     }
   }
@@ -213,9 +218,7 @@ resource "aws_lambda_function" "products" {
     aws_iam_role_policy_attachment.products_lambda
   ]
 
-  tags = {
-    Module = "Productos"
-  }
+  tags = merge(var.common_tags, { Module = "Productos" })
 }
 
 resource "aws_api_gateway_resource" "productos" {
@@ -236,21 +239,9 @@ resource "aws_api_gateway_resource" "inventario" {
   path_part   = "inventario"
 }
 
-resource "aws_api_gateway_resource" "tiendas" {
-  rest_api_id = var.rest_api_id
-  parent_id   = var.root_resource_id
-  path_part   = "tiendas"
-}
-
-resource "aws_api_gateway_resource" "store" {
-  rest_api_id = var.rest_api_id
-  parent_id   = aws_api_gateway_resource.tiendas.id
-  path_part   = "{storeId}"
-}
-
 resource "aws_api_gateway_resource" "store_products" {
   rest_api_id = var.rest_api_id
-  parent_id   = aws_api_gateway_resource.store.id
+  parent_id   = var.store_resource_id
   path_part   = "productos"
 }
 

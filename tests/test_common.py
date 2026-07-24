@@ -55,6 +55,21 @@ class CommonRuntimeTests(unittest.TestCase):
 
         self.assertIsNone(identity["role"])
 
+    def test_assumed_role_requires_official_role_as_final_name_token(self):
+        event = {
+            "requestContext": {
+                "identity": {
+                    "userArn": (
+                        "arn:aws:sts::123456789012:"
+                        "assumed-role/cloudshop-dev-administrador-falso/session"
+                    ),
+                    "caller": "caller",
+                }
+            }
+        }
+
+        self.assertIsNone(common.identity_from_event(event)["role"])
+
     def test_require_role_returns_403(self):
         event = {
             "requestContext": {

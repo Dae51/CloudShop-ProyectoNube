@@ -18,3 +18,13 @@ moved {
   from = module.usuarios.aws_dynamodb_table.users
   to   = module.autenticacion.aws_dynamodb_table.users
 }
+
+moved {
+  from = module.productos.aws_api_gateway_resource.tiendas
+  to   = module.tiendas.aws_api_gateway_resource.stores
+}
+
+moved {
+  from = module.productos.aws_api_gateway_resource.store
+  to   = module.tiendas.aws_api_gateway_resource.store
+}

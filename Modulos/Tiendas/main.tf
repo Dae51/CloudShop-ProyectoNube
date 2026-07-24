@@ -1,15 +1,15 @@
 locals {
   lambda_name = "${var.name_prefix}-tiendas"
   routes = {
-    create = { method = "POST", resource_id = var.stores_resource_id, source_path = "tiendas" }
-    list   = { method = "GET", resource_id = var.stores_resource_id, source_path = "tiendas" }
-    get    = { method = "GET", resource_id = var.store_resource_id, source_path = "tiendas/*" }
-    update = { method = "PUT", resource_id = var.store_resource_id, source_path = "tiendas/*" }
-    delete = { method = "DELETE", resource_id = var.store_resource_id, source_path = "tiendas/*" }
+    create = { method = "POST", resource_id = aws_api_gateway_resource.stores.id, source_path = "tiendas" }
+    list   = { method = "GET", resource_id = aws_api_gateway_resource.stores.id, source_path = "tiendas" }
+    get    = { method = "GET", resource_id = aws_api_gateway_resource.store.id, source_path = "tiendas/*" }
+    update = { method = "PUT", resource_id = aws_api_gateway_resource.store.id, source_path = "tiendas/*" }
+    delete = { method = "DELETE", resource_id = aws_api_gateway_resource.store.id, source_path = "tiendas/*" }
   }
   cors_resources = {
-    stores = var.stores_resource_id
-    store  = var.store_resource_id
+    stores = aws_api_gateway_resource.stores.id
+    store  = aws_api_gateway_resource.store.id
   }
 }
 
@@ -92,6 +92,18 @@ resource "aws_lambda_function" "lambda" {
 
   depends_on = [aws_cloudwatch_log_group.lambda, aws_iam_role_policy.lambda]
   tags       = merge(var.common_tags, { Module = "Tiendas" })
+}
+
+resource "aws_api_gateway_resource" "stores" {
+  rest_api_id = var.rest_api_id
+  parent_id   = var.root_resource_id
+  path_part   = "tiendas"
+}
+
+resource "aws_api_gateway_resource" "store" {
+  rest_api_id = var.rest_api_id
+  parent_id   = aws_api_gateway_resource.stores.id
+  path_part   = "{storeId}"
 }
 
 resource "aws_api_gateway_method" "route" {

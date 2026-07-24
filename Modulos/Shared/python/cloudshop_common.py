@@ -133,11 +133,8 @@ def role_from_iam_arn(user_arn):
     if not match:
         return None
     role_name = match.group(1)
-    for token in reversed(re.split(r"[^A-Za-z]+", role_name.upper())):
-        role = normalize_role(token)
-        if role:
-            return role
-    return None
+    tokens = [token for token in re.split(r"[^A-Za-z]+", role_name.upper()) if token]
+    return normalize_role(tokens[-1]) if tokens else None
 
 
 def _subject_from_provider(provider):

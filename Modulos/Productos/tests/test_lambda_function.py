@@ -14,11 +14,27 @@ class FakeDynamoDBClient:
     def __init__(self):
         self.products = {}
         self.audits = []
+        self.stores = {
+            "store-1": app.serialize_item(
+                {"storeId": "store-1", "name": "Principal", "status": "ACTIVE"}
+            ),
+            "store-inactive": app.serialize_item(
+                {
+                    "storeId": "store-inactive",
+                    "name": "Cerrada",
+                    "status": "INACTIVE",
+                }
+            ),
+        }
 
     def seed_product(self, product):
         self.products[product["productId"]] = app.serialize_item(product)
 
     def get_item(self, TableName, Key, **kwargs):
+        if TableName == app.STORES_TABLE:
+            store_id = Key["storeId"]["S"]
+            item = self.stores.get(store_id)
+            return {"Item": item} if item else {}
         product_id = Key["productId"]["S"]
         item = self.products.get(product_id)
         return {"Item": item} if item else {}
@@ -123,6 +139,16 @@ class ProductLambdaTests(unittest.TestCase):
 
         self.assertEqual(403, result["statusCode"])
         self.assertEqual("FORBIDDEN", self.body(result)["error"]["code"])
+
+    def test_product_requires_active_owning_store(self):
+        payload = self.product_payload()
+        payload["storeId"] = "store-inactive"
+        event = self.event("POST", "/productos", "Administrador", payload)
+
+        result = app.lambda_handler(event, Context())
+
+        self.assertEqual(409, result["statusCode"])
+        self.assertEqual("INACTIVE_STORE", self.body(result)["error"]["code"])
 
     def test_cliente_can_list_products(self):
         event = self.event("GET", "/productos", "Cliente")

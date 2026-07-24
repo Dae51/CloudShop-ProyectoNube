@@ -27,14 +27,9 @@ output "api_role_policy_arns" {
   }
 }
 
-output "stores_resource_id" {
-  description = "ID compartido de /tiendas"
-  value       = aws_api_gateway_resource.tiendas.id
-}
-
 output "store_resource_id" {
   description = "ID compartido de /tiendas/{storeId}"
-  value       = aws_api_gateway_resource.store.id
+  value       = var.store_resource_id
 }
 
 output "routes_summary" {
@@ -57,8 +52,7 @@ output "route_configuration_hash" {
       productos      = aws_api_gateway_resource.productos.id
       product        = aws_api_gateway_resource.product.id
       inventario     = aws_api_gateway_resource.inventario.id
-      tiendas        = aws_api_gateway_resource.tiendas.id
-      store          = aws_api_gateway_resource.store.id
+      store          = var.store_resource_id
       store_products = aws_api_gateway_resource.store_products.id
     }
     methods = {
