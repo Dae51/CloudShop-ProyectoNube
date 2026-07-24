@@ -91,6 +91,8 @@ def response(status_code, body):
         "headers": {
             "Content-Type": "application/json",
             "Cache-Control": "no-store",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Expose-Headers": "X-Correlation-Id",
         },
         "body": json.dumps(body, ensure_ascii=False, default=json_default),
     }
@@ -276,14 +278,22 @@ def get_product(product_id, include_deleted=False):
 
 
 def build_audit(identity, action, product_id, result="EXITOSO"):
+    correlation = identity.get("correlation_id") or str(uuid.uuid4())
+    timestamp = utc_now()
     return {
         "auditId": str(uuid.uuid4()),
         "usuario": identity["user_id"],
+        "actorId": identity["user_id"],
         "accion": AUDIT_ACTIONS[action],
+        "action": AUDIT_ACTIONS[action],
         "resourceType": "PRODUCT",
         "resourceId": product_id,
-        "fecha": utc_now(),
+        "resourceKey": f"PRODUCT#{product_id}",
+        "fecha": timestamp,
+        "occurredAt": timestamp,
         "resultado": result,
+        "result": result,
+        "correlationId": correlation,
     }
 
 
@@ -446,11 +456,25 @@ HANDLERS = {
 
 def lambda_handler(event, context):
     request_id = getattr(context, "aws_request_id", None)
+    headers = event.get("headers") or {}
+    supplied_correlation = next(
+        (
+            value
+            for key, value in headers.items()
+            if str(key).lower() == "x-correlation-id"
+        ),
+        None,
+    )
+    try:
+        correlation = str(uuid.UUID(str(supplied_correlation)))
+    except (ValueError, TypeError, AttributeError):
+        correlation = str(uuid.uuid4())
     action = None
     identity = {"authenticated": False, "role": None, "user_id": "UNKNOWN"}
     product_id = (event.get("pathParameters") or {}).get("productId")
     try:
         identity = get_identity(event)
+        identity["correlation_id"] = correlation
         if not identity["authenticated"] or identity["role"] not in PERMISSIONS:
             raise ApiError(403, "FORBIDDEN", "Autenticación o rol inválido")
         action = route_action(event)
@@ -461,11 +485,14 @@ def lambda_handler(event, context):
             "info",
             "product_request",
             requestId=request_id,
+            correlationId=correlation,
             action=action,
             role=identity["role"],
             usuario=identity["user_id"],
         )
-        return HANDLERS[action](event, identity)
+        result = HANDLERS[action](event, identity)
+        result["headers"]["X-Correlation-Id"] = correlation
+        return result
     except ApiError as exc:
         if action in AUDIT_ACTIONS:
             write_failed_audit(identity, action, product_id)
@@ -477,7 +504,19 @@ def lambda_handler(event, context):
             statusCode=exc.status_code,
             errorCode=exc.code,
         )
-        return error_response(exc.status_code, exc.code, exc.message)
+        result = error_response(exc.status_code, exc.code, exc.message)
+        result["headers"]["X-Correlation-Id"] = correlation
+        result["body"] = json.dumps(
+            {
+                "error": {
+                    "code": exc.code,
+                    "message": exc.message,
+                    "correlationId": correlation,
+                }
+            },
+            ensure_ascii=False,
+        )
+        return result
     except ClientError as exc:
         error_code = exc.response.get("Error", {}).get("Code", "DYNAMODB_ERROR")
         if action in AUDIT_ACTIONS:
@@ -490,10 +529,15 @@ def lambda_handler(event, context):
             errorCode=error_code,
         )
         if error_code in {"ConditionalCheckFailedException", "TransactionCanceledException"}:
-            return error_response(409, "CONCURRENT_MODIFICATION", "El producto fue modificado; intente nuevamente")
-        return error_response(500, "INTERNAL_ERROR", "Error interno del servidor")
+            result = error_response(409, "CONCURRENT_MODIFICATION", "El producto fue modificado; intente nuevamente")
+        else:
+            result = error_response(500, "INTERNAL_ERROR", "Error interno del servidor")
+        result["headers"]["X-Correlation-Id"] = correlation
+        return result
     except Exception:
         if action in AUDIT_ACTIONS:
             write_failed_audit(identity, action, product_id)
         log_event("exception", "product_unexpected_error", requestId=request_id, action=action)
-        return error_response(500, "INTERNAL_ERROR", "Error interno del servidor")
+        result = error_response(500, "INTERNAL_ERROR", "Error interno del servidor")
+        result["headers"]["X-Correlation-Id"] = correlation
+        return result

@@ -43,3 +43,59 @@ module "productos" {
   execution_arn    = aws_api_gateway_rest_api.cloudshop.execution_arn
   stage_name       = var.api_stage_name
 }
+
+module "tiendas" {
+  source = "./Modulos/Tiendas"
+
+  name_prefix        = local.name_prefix
+  rest_api_id        = aws_api_gateway_rest_api.cloudshop.id
+  execution_arn      = aws_api_gateway_rest_api.cloudshop.execution_arn
+  stage_name         = var.api_stage_name
+  stores_resource_id = module.productos.stores_resource_id
+  store_resource_id  = module.productos.store_resource_id
+  audit_table_name   = module.autenticacion.audit_table_name
+  audit_table_arn    = module.autenticacion.audit_table_arn
+  common_layer_arn   = aws_lambda_layer_version.common.arn
+  log_retention_days = var.log_retention_days
+  common_tags        = local.common_tags
+}
+
+module "carritos" {
+  source = "./Modulos/Carritos"
+
+  name_prefix         = local.name_prefix
+  rest_api_id         = aws_api_gateway_rest_api.cloudshop.id
+  root_resource_id    = aws_api_gateway_rest_api.cloudshop.root_resource_id
+  execution_arn       = aws_api_gateway_rest_api.cloudshop.execution_arn
+  stage_name          = var.api_stage_name
+  products_table_name = module.productos.products_table_name
+  products_table_arn  = module.productos.products_table_arn
+  common_layer_arn    = aws_lambda_layer_version.common.arn
+  log_retention_days  = var.log_retention_days
+  common_tags         = local.common_tags
+}
+
+module "pedidos" {
+  source = "./Modulos/Pedidos"
+
+  name_prefix            = local.name_prefix
+  rest_api_id            = aws_api_gateway_rest_api.cloudshop.id
+  root_resource_id       = aws_api_gateway_rest_api.cloudshop.root_resource_id
+  execution_arn          = aws_api_gateway_rest_api.cloudshop.execution_arn
+  stage_name             = var.api_stage_name
+  products_table_name    = module.productos.products_table_name
+  products_table_arn     = module.productos.products_table_arn
+  carts_table_name       = module.carritos.carts_table_name
+  carts_table_arn        = module.carritos.carts_table_arn
+  users_table_name       = module.autenticacion.users_table_name
+  users_table_arn        = module.autenticacion.users_table_arn
+  audit_table_name       = module.autenticacion.audit_table_name
+  audit_table_arn        = module.autenticacion.audit_table_arn
+  idempotency_table_name = module.autenticacion.idempotency_table_name
+  idempotency_table_arn  = module.autenticacion.idempotency_table_arn
+  common_layer_arn       = aws_lambda_layer_version.common.arn
+  log_retention_days     = var.log_retention_days
+  ses_sender_email       = var.ses_sender_email
+  ses_override_recipient = var.ses_demo_recipient
+  common_tags            = local.common_tags
+}

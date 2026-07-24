@@ -42,3 +42,25 @@ variable "log_retention_days" {
     error_message = "Seleccione un período de retención soportado."
   }
 }
+
+variable "ses_sender_email" {
+  description = "Identidad SES remitente; vacío deja envío real deshabilitado"
+  type        = string
+  default     = ""
+
+  validation {
+    condition     = var.ses_sender_email == "" || can(regex("^[^@[:space:]]+@[^@[:space:]]+\\.[^@[:space:]]+$", var.ses_sender_email))
+    error_message = "ses_sender_email debe ser vacío o un email válido."
+  }
+}
+
+variable "ses_demo_recipient" {
+  description = "Destinatario verificado de demo en sandbox SES; vacío usa email del usuario"
+  type        = string
+  default     = ""
+
+  validation {
+    condition     = var.ses_demo_recipient == "" || can(regex("^[^@[:space:]]+@[^@[:space:]]+\\.[^@[:space:]]+$", var.ses_demo_recipient))
+    error_message = "ses_demo_recipient debe ser vacío o un email válido."
+  }
+}

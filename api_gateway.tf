@@ -18,6 +18,9 @@ resource "aws_api_gateway_deployment" "cloudshop" {
     redeployment = sha1(jsonencode({
       usuarios  = module.usuarios.route_configuration_hash
       productos = module.productos.route_configuration_hash
+      tiendas   = module.tiendas.route_configuration_hash
+      carritos  = module.carritos.route_configuration_hash
+      pedidos   = module.pedidos.route_configuration_hash
     }))
   }
 
@@ -27,7 +30,10 @@ resource "aws_api_gateway_deployment" "cloudshop" {
 
   depends_on = [
     module.usuarios,
-    module.productos
+    module.productos,
+    module.tiendas,
+    module.carritos,
+    module.pedidos
   ]
 }
 

@@ -32,3 +32,30 @@ output "productos_role_policy_arns" {
   description = "Políticas de invocación de Productos por rol"
   value       = module.productos.api_role_policy_arns
 }
+
+output "cognito_user_pool_id" {
+  description = "User Pool del frontend"
+  value       = module.autenticacion.user_pool_id
+}
+
+output "cognito_user_pool_client_id" {
+  description = "App client público"
+  value       = module.autenticacion.user_pool_client_id
+}
+
+output "cognito_identity_pool_id" {
+  description = "Identity Pool para credenciales SigV4"
+  value       = module.autenticacion.identity_pool_id
+}
+
+output "orders_table_name" {
+  value = module.pedidos.orders_table_name
+}
+
+output "event_bus_name" {
+  value = module.pedidos.event_bus_name
+}
+
+output "event_dlq_url" {
+  value = module.pedidos.event_dlq_url
+}

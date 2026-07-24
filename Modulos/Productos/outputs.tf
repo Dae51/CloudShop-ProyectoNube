@@ -3,6 +3,11 @@ output "products_table_name" {
   value       = aws_dynamodb_table.products.name
 }
 
+output "products_table_arn" {
+  description = "ARN de la tabla de productos"
+  value       = aws_dynamodb_table.products.arn
+}
+
 output "lambda_function_name" {
   description = "Nombre de la Lambda de Productos"
   value       = aws_lambda_function.products.function_name
@@ -20,6 +25,16 @@ output "api_role_policy_arns" {
     operador      = aws_iam_policy.products_api_operador.arn
     cliente       = aws_iam_policy.products_api_cliente.arn
   }
+}
+
+output "stores_resource_id" {
+  description = "ID compartido de /tiendas"
+  value       = aws_api_gateway_resource.tiendas.id
+}
+
+output "store_resource_id" {
+  description = "ID compartido de /tiendas/{storeId}"
+  value       = aws_api_gateway_resource.store.id
 }
 
 output "routes_summary" {
@@ -64,6 +79,9 @@ output "route_configuration_hash" {
     }
     lambda_permissions = {
       for key, permission in aws_lambda_permission.api_gateway : key => permission.source_arn
+    }
+    cors = {
+      for key, integration in aws_api_gateway_integration.options : key => integration.id
     }
   }))
 }
