@@ -158,7 +158,7 @@ resource "aws_iam_role_policy" "notification" {
       },
       {
         Effect   = "Allow"
-        Action   = ["dynamodb:PutItem", "dynamodb:UpdateItem"]
+        Action   = "dynamodb:UpdateItem"
         Resource = var.idempotency_table_arn
       },
       {

@@ -1,6 +1,7 @@
 import importlib.util
 import os
 import sys
+import time
 import unittest
 from pathlib import Path
 
@@ -75,11 +76,33 @@ class FakeNotificationDynamo:
         value = self.idempotency.get(Key["idempotencyKey"]["S"])
         return {"Item": value} if value else {}
 
-    def put_item(self, Item, **kwargs):
-        self.idempotency[Item["idempotencyKey"]["S"]] = Item
-
     def update_item(self, Key, ExpressionAttributeValues, **kwargs):
         key = Key["idempotencyKey"]["S"]
+        update_expression = kwargs.get("UpdateExpression", "")
+        if update_expression.startswith("SET #status = :failed"):
+            self.idempotency[key]["status"] = ExpressionAttributeValues[":failed"]
+            self.idempotency[key].pop("leaseUntil", None)
+            return
+        if update_expression.startswith("SET #status = :processing"):
+            existing = self.idempotency.get(key)
+            if existing:
+                status = existing["status"]["S"]
+                lease = int(existing.get("leaseUntil", {"N": "0"})["N"])
+                if status == "SENT" or status == "PROCESSING" and lease >= int(
+                    ExpressionAttributeValues[":now"]["N"]
+                ):
+                    raise ClientError(
+                        {"Error": {"Code": "ConditionalCheckFailedException"}},
+                        "UpdateItem",
+                    )
+            self.idempotency[key] = {
+                "idempotencyKey": {"S": key},
+                "status": ExpressionAttributeValues[":processing"],
+                "leaseUntil": ExpressionAttributeValues[":lease"],
+                "createdAt": ExpressionAttributeValues[":created"],
+                "expiresAt": ExpressionAttributeValues[":expires"],
+            }
+            return
         self.idempotency[key].update(
             {
                 "status": ExpressionAttributeValues[":sent"],
@@ -90,11 +113,14 @@ class FakeNotificationDynamo:
 
 
 class FakeSes:
-    def __init__(self):
+    def __init__(self, fail=False):
         self.requests = []
+        self.fail = fail
 
     def send_email(self, **kwargs):
         self.requests.append(kwargs)
+        if self.fail:
+            raise RuntimeError("SES temporal")
         return {"MessageId": "ses-message-1"}
 
 
@@ -188,6 +214,38 @@ class OrderEventTests(unittest.TestCase):
             notification.SES_SENDER = original
 
         self.assertEqual("skipped_unconfigured", result["status"])
+
+    def test_concurrent_notification_is_retried_without_second_send(self):
+        dynamo = FakeNotificationDynamo()
+        dynamo.idempotency["MAIL#event-1"] = {
+            "idempotencyKey": {"S": "MAIL#event-1"},
+            "status": {"S": "PROCESSING"},
+            "leaseUntil": {"N": str(int(time.time()) + 60)},
+        }
+        ses = FakeSes()
+        notification._dynamodb = dynamo
+        notification._ses = ses
+
+        with self.assertRaisesRegex(RuntimeError, "siendo procesada"):
+            notification.lambda_handler({"detail": self.payload()}, Context())
+
+        self.assertEqual([], ses.requests)
+
+    def test_temporary_ses_failure_releases_claim_for_retry(self):
+        dynamo = FakeNotificationDynamo()
+        notification._dynamodb = dynamo
+        notification._ses = FakeSes(fail=True)
+
+        with self.assertRaisesRegex(RuntimeError, "SES temporal"):
+            notification.lambda_handler({"detail": self.payload()}, Context())
+
+        self.assertEqual(
+            "FAILED",
+            dynamo.idempotency["MAIL#event-1"]["status"]["S"],
+        )
+        notification._ses = FakeSes()
+        result = notification.lambda_handler({"detail": self.payload()}, Context())
+        self.assertEqual("sent", result["status"])
 
 
 if __name__ == "__main__":

@@ -29,20 +29,67 @@ def clients():
     return _dynamodb, _ses
 
 
+def claim_event(dynamodb, key, detail):
+    now = int(time.time())
+    try:
+        dynamodb.update_item(
+            TableName=IDEMPOTENCY_TABLE,
+            Key={"idempotencyKey": {"S": key}},
+            UpdateExpression=(
+                "SET #status = :processing, leaseUntil = :lease, "
+                "createdAt = if_not_exists(createdAt, :created), "
+                "expiresAt = :expires"
+            ),
+            ConditionExpression=(
+                "attribute_not_exists(idempotencyKey) "
+                "OR #status IN (:pending, :failed) "
+                "OR (#status = :processing AND leaseUntil < :now)"
+            ),
+            ExpressionAttributeNames={"#status": "status"},
+            ExpressionAttributeValues={
+                ":processing": {"S": "PROCESSING"},
+                ":pending": {"S": "PENDING"},
+                ":failed": {"S": "FAILED"},
+                ":now": {"N": str(now)},
+                ":lease": {"N": str(now + 60)},
+                ":created": {"S": detail["occurredAt"]},
+                ":expires": {"N": str(now + 30 * 24 * 3600)},
+            },
+        )
+        return True
+    except ClientError as exc:
+        if exc.response.get("Error", {}).get("Code") != "ConditionalCheckFailedException":
+            raise
+        existing = dynamodb.get_item(
+            TableName=IDEMPOTENCY_TABLE,
+            Key={"idempotencyKey": {"S": key}},
+            ConsistentRead=True,
+        ).get("Item")
+        if existing and existing.get("status", {}).get("S") == "SENT":
+            return False
+        raise RuntimeError("Notificación ya está siendo procesada") from exc
+
+
+def mark_failed(dynamodb, key):
+    dynamodb.update_item(
+        TableName=IDEMPOTENCY_TABLE,
+        Key={"idempotencyKey": {"S": key}},
+        UpdateExpression="SET #status = :failed REMOVE leaseUntil",
+        ConditionExpression="#status = :processing",
+        ExpressionAttributeNames={"#status": "status"},
+        ExpressionAttributeValues={
+            ":failed": {"S": "FAILED"},
+            ":processing": {"S": "PROCESSING"},
+        },
+    )
+
+
 def lambda_handler(event, context):
     detail = event["detail"]
     event_id = detail["eventId"]
     key = f"MAIL#{event_id}"
     correlation = detail["correlationId"]
     dynamodb, ses = clients()
-
-    existing = dynamodb.get_item(
-        TableName=IDEMPOTENCY_TABLE,
-        Key={"idempotencyKey": {"S": key}},
-        ConsistentRead=True,
-    ).get("Item")
-    if existing and existing.get("status", {}).get("S") == "SENT":
-        return {"status": "duplicate", "eventId": event_id}
 
     if not SES_SENDER:
         LOGGER.warning(
@@ -56,30 +103,18 @@ def lambda_handler(event, context):
         )
         return {"status": "skipped_unconfigured", "eventId": event_id}
 
+    if not claim_event(dynamodb, key, detail):
+        return {"status": "duplicate", "eventId": event_id}
+
     user = dynamodb.get_item(
         TableName=USERS_TABLE,
         Key={"userId": {"S": detail["actorId"]}},
         ConsistentRead=True,
     ).get("Item")
     if not user:
+        mark_failed(dynamodb, key)
         raise RuntimeError("Usuario del pedido no encontrado")
     recipient = SES_OVERRIDE_RECIPIENT or DESERIALIZER.deserialize(user["email"])
-
-    if not existing:
-        try:
-            dynamodb.put_item(
-                TableName=IDEMPOTENCY_TABLE,
-                Item={
-                    "idempotencyKey": {"S": key},
-                    "status": {"S": "PENDING"},
-                    "createdAt": {"S": detail["occurredAt"]},
-                    "expiresAt": {"N": str(int(time.time()) + 30 * 24 * 3600)},
-                },
-                ConditionExpression="attribute_not_exists(idempotencyKey)",
-            )
-        except ClientError as exc:
-            if exc.response.get("Error", {}).get("Code") != "ConditionalCheckFailedException":
-                raise
 
     subject = (
         f"CloudShop: pedido {detail['orderId']} "
@@ -106,11 +141,15 @@ def lambda_handler(event, context):
     }
     if SES_CONFIGURATION_SET:
         request["ConfigurationSetName"] = SES_CONFIGURATION_SET
-    sent = ses.send_email(**request)
+    try:
+        sent = ses.send_email(**request)
+    except Exception:
+        mark_failed(dynamodb, key)
+        raise
     dynamodb.update_item(
         TableName=IDEMPOTENCY_TABLE,
         Key={"idempotencyKey": {"S": key}},
-        UpdateExpression="SET #status = :sent, messageId = :message",
+        UpdateExpression="SET #status = :sent, messageId = :message REMOVE leaseUntil",
         ExpressionAttributeNames={"#status": "status"},
         ExpressionAttributeValues={
             ":sent": {"S": "SENT"},
