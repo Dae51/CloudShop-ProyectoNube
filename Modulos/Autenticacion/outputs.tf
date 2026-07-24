@@ -51,3 +51,7 @@ output "idempotency_table_name" {
 output "idempotency_table_arn" {
   value = aws_dynamodb_table.idempotency.arn
 }
+
+output "post_confirmation_lambda_name" {
+  value = aws_lambda_function.post_confirmation.function_name
+}

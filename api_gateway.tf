@@ -21,6 +21,7 @@ resource "aws_api_gateway_deployment" "cloudshop" {
       tiendas   = module.tiendas.route_configuration_hash
       carritos  = module.carritos.route_configuration_hash
       pedidos   = module.pedidos.route_configuration_hash
+      reportes  = module.reportes.route_configuration_hash
     }))
   }
 
@@ -33,7 +34,8 @@ resource "aws_api_gateway_deployment" "cloudshop" {
     module.productos,
     module.tiendas,
     module.carritos,
-    module.pedidos
+    module.pedidos,
+    module.reportes
   ]
 }
 

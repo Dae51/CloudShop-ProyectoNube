@@ -452,17 +452,17 @@ paths:
               schema: { $ref: "#/components/schemas/OrderEnvelope" }
         "403": { $ref: "#/components/responses/Forbidden" }
         "409": { $ref: "#/components/responses/Conflict" }
-  /reportes/ventas/totales:
+  /reportes/ventas/total:
     get: { $ref: "#/components/pathItems/AdminReport" }
-  /reportes/ventas/tiendas:
+  /reportes/ventas/por-tienda:
     get: { $ref: "#/components/pathItems/AdminReport" }
   /reportes/productos/mas-vendidos:
     get: { $ref: "#/components/pathItems/AdminReport" }
-  /reportes/productos/sin-stock:
+  /reportes/productos/agotados:
     get: { $ref: "#/components/pathItems/AdminReport" }
-  /reportes/clientes/mayores-compras:
+  /reportes/clientes/mas-compras:
     get: { $ref: "#/components/pathItems/AdminReport" }
-  /reportes/pedidos/estados:
+  /reportes/pedidos/por-estado:
     get: { $ref: "#/components/pathItems/AdminReport" }
 components:
   securitySchemes:

@@ -32,3 +32,10 @@ resource "aws_iam_role_policy_attachment" "pedidos_identity" {
   role       = module.autenticacion.role_names[each.key]
   policy_arn = each.value
 }
+
+resource "aws_iam_role_policy_attachment" "reportes_identity" {
+  for_each = module.reportes.api_role_policy_arns
+
+  role       = module.autenticacion.role_names[each.key]
+  policy_arn = each.value
+}

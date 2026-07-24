@@ -60,6 +60,21 @@ output "event_dlq_url" {
   value = module.pedidos.event_dlq_url
 }
 
+output "reportes_lambda_name" {
+  description = "Lambda del dashboard ejecutivo"
+  value       = module.reportes.lambda_function_name
+}
+
+output "cloudwatch_dashboard_name" {
+  description = "Dashboard operativo con métricas requeridas"
+  value       = aws_cloudwatch_dashboard.cloudshop.dashboard_name
+}
+
+output "waf_web_acl_arn" {
+  description = "WAF regional asociado directamente al stage de API Gateway"
+  value       = aws_wafv2_web_acl.api.arn
+}
+
 output "frontend_url" {
   description = "URL HTTPS de CloudFront"
   value       = module.frontend.url

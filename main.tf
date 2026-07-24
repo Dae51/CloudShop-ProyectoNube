@@ -100,6 +100,23 @@ module "pedidos" {
   common_tags            = local.common_tags
 }
 
+module "reportes" {
+  source = "./Modulos/Reportes"
+
+  name_prefix         = local.name_prefix
+  rest_api_id         = aws_api_gateway_rest_api.cloudshop.id
+  root_resource_id    = aws_api_gateway_rest_api.cloudshop.root_resource_id
+  execution_arn       = aws_api_gateway_rest_api.cloudshop.execution_arn
+  stage_name          = var.api_stage_name
+  orders_table_name   = module.pedidos.orders_table_name
+  orders_table_arn    = module.pedidos.orders_table_arn
+  products_table_name = module.productos.products_table_name
+  products_table_arn  = module.productos.products_table_arn
+  common_layer_arn    = aws_lambda_layer_version.common.arn
+  log_retention_days  = var.log_retention_days
+  common_tags         = local.common_tags
+}
+
 module "frontend" {
   source = "./Modulos/Frontend"
 

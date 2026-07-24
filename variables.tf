@@ -64,3 +64,14 @@ variable "ses_demo_recipient" {
     error_message = "ses_demo_recipient debe ser vacío o un email válido."
   }
 }
+
+variable "waf_rate_limit" {
+  description = "Máximo de solicitudes por IP en una ventana de cinco minutos"
+  type        = number
+  default     = 500
+
+  validation {
+    condition     = var.waf_rate_limit >= 100 && var.waf_rate_limit <= 2000000000
+    error_message = "waf_rate_limit debe estar entre 100 y 2,000,000,000."
+  }
+}
