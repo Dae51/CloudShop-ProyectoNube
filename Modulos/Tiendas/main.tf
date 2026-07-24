@@ -59,11 +59,25 @@ resource "aws_iam_role_policy" "lambda" {
     Version = "2012-10-17"
     Statement = [
       {
+        Sid      = "ReadStores"
         Effect   = "Allow"
-        Action   = ["dynamodb:GetItem", "dynamodb:Scan", "dynamodb:PutItem"]
-        Resource = [aws_dynamodb_table.stores.arn, var.audit_table_arn]
+        Action   = ["dynamodb:GetItem", "dynamodb:Scan"]
+        Resource = aws_dynamodb_table.stores.arn
       },
       {
+        Sid      = "WriteStores"
+        Effect   = "Allow"
+        Action   = "dynamodb:PutItem"
+        Resource = aws_dynamodb_table.stores.arn
+      },
+      {
+        Sid      = "WriteAudit"
+        Effect   = "Allow"
+        Action   = "dynamodb:PutItem"
+        Resource = var.audit_table_arn
+      },
+      {
+        Sid      = "WriteLogs"
         Effect   = "Allow"
         Action   = ["logs:CreateLogStream", "logs:PutLogEvents"]
         Resource = "${aws_cloudwatch_log_group.lambda.arn}:*"

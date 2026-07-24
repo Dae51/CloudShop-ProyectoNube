@@ -142,18 +142,41 @@ export function AuthProvider({ children }) {
     setStatus("anonymous");
   }, [pool]);
 
+  const getValidCognitoSession = useCallback(async () => {
+    const user = pool.getCurrentUser();
+    if (!user) throw new Error("Sesión no disponible");
+    const currentSession = await asPromise((resolve, reject) =>
+      user.getSession((error, nextSession) =>
+        error ? reject(error) : resolve(nextSession)
+      )
+    );
+    if (!currentSession?.isValid()) throw new Error("La sesión expiró");
+    return currentSession;
+  }, [pool]);
+
   const getCredentials = useCallback(async () => {
-    if (!session?.idToken) throw new Error("Sesión no disponible");
+    const currentSession = await getValidCognitoSession();
+    const currentToken = currentSession.getIdToken().getJwtToken();
+    if (currentToken !== session?.idToken) {
+      applySession(currentSession);
+    }
     if (!credentialsRef.current) {
       const providerName = `cognito-idp.${config.region}.amazonaws.com/${config.userPoolId}`;
       credentialsRef.current = fromCognitoIdentityPool({
         client: new CognitoIdentityClient({ region: config.region }),
         identityPoolId: config.identityPoolId,
-        logins: { [providerName]: session.idToken }
+        logins: { [providerName]: currentToken }
       });
     }
     return credentialsRef.current();
-  }, [config.identityPoolId, config.region, config.userPoolId, session]);
+  }, [
+    applySession,
+    config.identityPoolId,
+    config.region,
+    config.userPoolId,
+    getValidCognitoSession,
+    session?.idToken
+  ]);
 
   const value = useMemo(
     () => ({

@@ -92,6 +92,8 @@ module "pedidos" {
   stage_name             = var.api_stage_name
   products_table_name    = module.productos.products_table_name
   products_table_arn     = module.productos.products_table_arn
+  stores_table_name      = module.tiendas.stores_table_name
+  stores_table_arn       = module.tiendas.stores_table_arn
   carts_table_name       = module.carritos.carts_table_name
   carts_table_arn        = module.carritos.carts_table_arn
   users_table_name       = module.autenticacion.users_table_name

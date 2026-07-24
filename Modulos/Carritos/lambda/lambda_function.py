@@ -228,10 +228,26 @@ def lambda_handler(event, context):
         )
         return result
     except ApiError as exc:
+        log_event(
+            "warning",
+            "cart_request_rejected",
+            correlation,
+            action=action,
+            statusCode=exc.status_code,
+            errorCode=exc.code,
+        )
         return error_response(exc, correlation)
     except ClientError as exc:
         code = exc.response.get("Error", {}).get("Code", "AWS_ERROR")
         status = 409 if code == "ConditionalCheckFailedException" else 500
+        log_event(
+            "error",
+            "cart_dependency_error",
+            correlation,
+            action=action,
+            statusCode=status,
+            errorCode=code,
+        )
         return error_response(
             ApiError(
                 status,
@@ -243,7 +259,14 @@ def lambda_handler(event, context):
             correlation,
         )
     except Exception:
-        log_event("exception", "cart_unexpected_error", correlation, action=action)
+        log_event(
+            "exception",
+            "cart_unexpected_error",
+            correlation,
+            action=action,
+            statusCode=500,
+            errorCode="INTERNAL_ERROR",
+        )
         return error_response(
             ApiError(500, "INTERNAL_ERROR", "Error interno del servidor"),
             correlation,

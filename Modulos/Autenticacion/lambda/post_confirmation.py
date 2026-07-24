@@ -36,7 +36,7 @@ def clients():
     return _dynamodb, _cognito
 
 
-def lambda_handler(event, context):
+def _handle(event, context):
     attributes = event["request"]["userAttributes"]
     user_id = attributes["sub"]
     timestamp = utc_now()
@@ -111,3 +111,21 @@ def lambda_handler(event, context):
         )
     )
     return event
+
+
+def lambda_handler(event, context):
+    correlation_id = getattr(context, "aws_request_id", None) or str(uuid.uuid4())
+    try:
+        return _handle(event, context)
+    except Exception as exc:
+        LOGGER.exception(
+            json.dumps(
+                {
+                    "event": "user_post_confirmation_failed",
+                    "correlationId": correlation_id,
+                    "statusCode": 500,
+                    "errorCode": type(exc).__name__,
+                }
+            )
+        )
+        raise

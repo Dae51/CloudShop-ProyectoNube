@@ -127,27 +127,67 @@ resource "aws_iam_role_policy" "orders" {
     Version = "2012-10-17"
     Statement = [
       {
-        Effect = "Allow"
-        Action = ["dynamodb:GetItem", "dynamodb:Scan", "dynamodb:Query", "dynamodb:PutItem"]
-        Resource = [
-          aws_dynamodb_table.orders.arn,
-          "${aws_dynamodb_table.orders.arn}/index/*",
-          var.carts_table_arn,
-          var.products_table_arn,
-          var.audit_table_arn,
-          aws_dynamodb_table.outbox.arn,
-          var.idempotency_table_arn
-        ]
+        Sid      = "ReadOrders"
+        Effect   = "Allow"
+        Action   = ["dynamodb:GetItem", "dynamodb:Scan"]
+        Resource = aws_dynamodb_table.orders.arn
       },
       {
-        Effect = "Allow"
-        Action = ["dynamodb:UpdateItem", "dynamodb:DeleteItem"]
-        Resource = [
-          var.products_table_arn,
-          var.carts_table_arn
-        ]
+        Sid      = "QueryOrdersIndexes"
+        Effect   = "Allow"
+        Action   = "dynamodb:Query"
+        Resource = "${aws_dynamodb_table.orders.arn}/index/*"
       },
       {
+        Sid      = "ReadCart"
+        Effect   = "Allow"
+        Action   = "dynamodb:GetItem"
+        Resource = var.carts_table_arn
+      },
+      {
+        Sid      = "ReadProducts"
+        Effect   = "Allow"
+        Action   = "dynamodb:GetItem"
+        Resource = var.products_table_arn
+      },
+      {
+        Sid      = "ValidateStores"
+        Effect   = "Allow"
+        Action   = ["dynamodb:GetItem", "dynamodb:ConditionCheckItem"]
+        Resource = var.stores_table_arn
+      },
+      {
+        Sid      = "ReadIdempotency"
+        Effect   = "Allow"
+        Action   = "dynamodb:GetItem"
+        Resource = var.idempotency_table_arn
+      },
+      {
+        Sid      = "WriteOrders"
+        Effect   = "Allow"
+        Action   = "dynamodb:PutItem"
+        Resource = aws_dynamodb_table.orders.arn
+      },
+      {
+        Sid      = "UpdateInventory"
+        Effect   = "Allow"
+        Action   = "dynamodb:UpdateItem"
+        Resource = var.products_table_arn
+      },
+      {
+        Sid      = "ClearCart"
+        Effect   = "Allow"
+        Action   = "dynamodb:DeleteItem"
+        Resource = var.carts_table_arn
+      },
+      {
+        Sid      = "WriteAuditOutboxAndIdempotency"
+        Effect   = "Allow"
+        Action   = "dynamodb:PutItem"
+        Resource = [var.audit_table_arn, aws_dynamodb_table.outbox.arn, var.idempotency_table_arn]
+      },
+      {
+        Sid      = "WriteLogs"
         Effect   = "Allow"
         Action   = ["logs:CreateLogStream", "logs:PutLogEvents"]
         Resource = "${aws_cloudwatch_log_group.orders.arn}:*"
@@ -171,6 +211,7 @@ resource "aws_lambda_function" "orders" {
       ORDERS_TABLE      = aws_dynamodb_table.orders.name
       CARTS_TABLE       = var.carts_table_name
       PRODUCTS_TABLE    = var.products_table_name
+      STORES_TABLE      = var.stores_table_name
       AUDIT_TABLE       = var.audit_table_name
       OUTBOX_TABLE      = aws_dynamodb_table.outbox.name
       IDEMPOTENCY_TABLE = var.idempotency_table_name

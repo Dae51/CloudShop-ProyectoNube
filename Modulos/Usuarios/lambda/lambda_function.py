@@ -353,11 +353,19 @@ def lambda_handler(event, context):
             "user_dependency_error",
             correlation,
             action=action,
+            statusCode=status,
             errorCode=code,
         )
         return error_response(error, correlation)
     except Exception:
-        log_event("exception", "user_unexpected_error", correlation, action=action)
+        log_event(
+            "exception",
+            "user_unexpected_error",
+            correlation,
+            action=action,
+            statusCode=500,
+            errorCode="INTERNAL_ERROR",
+        )
         return error_response(
             ApiError(500, "INTERNAL_ERROR", "Error interno del servidor"),
             correlation,

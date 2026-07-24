@@ -158,16 +158,16 @@ resource "aws_iam_role_policy" "post_confirmation_base" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid    = "CreateUserAndAudit"
-        Effect = "Allow"
-        Action = [
-          "dynamodb:GetItem",
-          "dynamodb:PutItem"
-        ]
-        Resource = [
-          aws_dynamodb_table.users.arn,
-          aws_dynamodb_table.audit.arn
-        ]
+        Sid      = "ReadExistingUser"
+        Effect   = "Allow"
+        Action   = "dynamodb:GetItem"
+        Resource = aws_dynamodb_table.users.arn
+      },
+      {
+        Sid      = "CreateUserAndAudit"
+        Effect   = "Allow"
+        Action   = "dynamodb:PutItem"
+        Resource = [aws_dynamodb_table.users.arn, aws_dynamodb_table.audit.arn]
       },
       {
         Sid    = "WriteLogs"

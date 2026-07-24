@@ -70,6 +70,29 @@ class CommonRuntimeTests(unittest.TestCase):
 
         self.assertIsNone(common.identity_from_event(event)["role"])
 
+    def test_non_official_role_aliases_are_rejected(self):
+        for alias in ("ADMIN", "OPERATOR", "CLIENT"):
+            event = {
+                "requestContext": {
+                    "identity": {
+                        "userArn": (
+                            "arn:aws:sts::123456789012:"
+                            f"assumed-role/cloudshop-dev-{alias.lower()}/session"
+                        ),
+                        "caller": "caller",
+                    }
+                }
+            }
+            self.assertIsNone(common.identity_from_event(event)["role"])
+
+    def test_multiple_role_claims_fail_closed(self):
+        for value in (
+            ["ADMINISTRADOR", "CLIENTE"],
+            '["ADMINISTRADOR", "CLIENTE"]',
+            "ADMINISTRADOR,CLIENTE",
+        ):
+            self.assertIsNone(common.normalize_role(value))
+
     def test_require_role_returns_403(self):
         event = {
             "requestContext": {

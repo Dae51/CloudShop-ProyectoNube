@@ -69,9 +69,11 @@ class FakeNotificationDynamo:
     def __init__(self):
         self.idempotency = {}
         self.updates = []
+        self.user_lookups = []
 
     def get_item(self, TableName, Key, **kwargs):
         if TableName == "users":
+            self.user_lookups.append(Key["userId"]["S"])
             return {"Item": {"email": {"S": "user@example.com"}}}
         value = self.idempotency.get(Key["idempotencyKey"]["S"])
         return {"Item": value} if value else {}
@@ -81,6 +83,10 @@ class FakeNotificationDynamo:
         update_expression = kwargs.get("UpdateExpression", "")
         if update_expression.startswith("SET #status = :failed"):
             self.idempotency[key]["status"] = ExpressionAttributeValues[":failed"]
+            self.idempotency[key].pop("leaseUntil", None)
+            return
+        if update_expression.startswith("SET #status = :blocked"):
+            self.idempotency[key]["status"] = ExpressionAttributeValues[":blocked"]
             self.idempotency[key].pop("leaseUntil", None)
             return
         if update_expression.startswith("SET #status = :processing"):
@@ -134,6 +140,7 @@ class OrderEventTests(unittest.TestCase):
             "occurredAt": "2026-07-24T00:00:00Z",
             "correlationId": "correlation-1",
             "actorId": "sub-1",
+            "customerUserId": "customer-sub-1",
             "orderId": "order-1",
             "customerId": "identity-1",
             "status": "PENDIENTE",
@@ -199,6 +206,7 @@ class OrderEventTests(unittest.TestCase):
             ses.requests[0]["Destination"]["ToAddresses"],
         )
         self.assertEqual("ses-message-1", first["messageId"])
+        self.assertEqual(["customer-sub-1"], dynamo.user_lookups)
 
     def test_unconfigured_ses_is_not_reported_as_sent(self):
         original = notification.SES_SENDER
@@ -206,14 +214,18 @@ class OrderEventTests(unittest.TestCase):
         notification._dynamodb = FakeNotificationDynamo()
         notification._ses = FakeSes()
         try:
-            result = notification.lambda_handler(
-                {"detail": self.payload()},
-                Context(),
-            )
+            with self.assertRaisesRegex(RuntimeError, "retenido para redrive"):
+                notification.lambda_handler(
+                    {"detail": self.payload()},
+                    Context(),
+                )
         finally:
             notification.SES_SENDER = original
 
-        self.assertEqual("skipped_unconfigured", result["status"])
+        self.assertEqual(
+            "BLOCKED_CONFIGURATION",
+            notification._dynamodb.idempotency["MAIL#event-1"]["status"]["S"],
+        )
 
     def test_concurrent_notification_is_retried_without_second_send(self):
         dynamo = FakeNotificationDynamo()

@@ -73,18 +73,25 @@ resource "aws_iam_role_policy" "usuarios_lambda" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid    = "ManageUsersAndAudit"
+        Sid    = "ReadUsers"
         Effect = "Allow"
         Action = [
           "dynamodb:GetItem",
-          "dynamodb:Scan",
-          "dynamodb:UpdateItem",
-          "dynamodb:PutItem"
+          "dynamodb:Scan"
         ]
-        Resource = [
-          var.users_table_arn,
-          var.audit_table_arn
-        ]
+        Resource = var.users_table_arn
+      },
+      {
+        Sid      = "UpdateUsers"
+        Effect   = "Allow"
+        Action   = "dynamodb:UpdateItem"
+        Resource = var.users_table_arn
+      },
+      {
+        Sid      = "WriteAudit"
+        Effect   = "Allow"
+        Action   = "dynamodb:PutItem"
+        Resource = var.audit_table_arn
       },
       {
         Sid    = "ManageCognitoUsers"

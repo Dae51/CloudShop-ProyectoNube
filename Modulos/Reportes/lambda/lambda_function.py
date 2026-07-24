@@ -195,7 +195,14 @@ def lambda_handler(event, context):
         )
         return error_response(exc, correlation)
     except Exception:
-        log_event("exception", "report_unexpected_error", correlation, action=action)
+        log_event(
+            "exception",
+            "report_unexpected_error",
+            correlation,
+            action=action,
+            statusCode=500,
+            errorCode="INTERNAL_ERROR",
+        )
         return error_response(
             ApiError(500, "INTERNAL_ERROR", "Error interno del servidor"),
             correlation,

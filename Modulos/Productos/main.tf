@@ -153,13 +153,16 @@ resource "aws_iam_policy" "products_lambda" {
         Resource = var.stores_table_arn
       },
       {
-        Sid    = "WriteProductsAndAudit"
-        Effect = "Allow"
-        Action = "dynamodb:PutItem"
-        Resource = [
-          aws_dynamodb_table.products.arn,
-          aws_dynamodb_table.product_audit.arn
-        ]
+        Sid      = "WriteProducts"
+        Effect   = "Allow"
+        Action   = "dynamodb:PutItem"
+        Resource = aws_dynamodb_table.products.arn
+      },
+      {
+        Sid      = "WriteProductAudit"
+        Effect   = "Allow"
+        Action   = "dynamodb:PutItem"
+        Resource = aws_dynamodb_table.product_audit.arn
       },
       {
         Sid    = "WriteLambdaLogs"
@@ -330,7 +333,7 @@ resource "aws_api_gateway_integration_response" "options" {
 }
 
 resource "aws_iam_policy" "products_api_administrador" {
-  name        = "productos-api-administrador"
+  name        = "${var.name_prefix}-productos-api-administrador"
   description = "Permite administración completa de productos"
 
   policy = jsonencode({
@@ -352,7 +355,7 @@ resource "aws_iam_policy" "products_api_administrador" {
 }
 
 resource "aws_iam_policy" "products_api_operador" {
-  name        = "productos-api-operador"
+  name        = "${var.name_prefix}-productos-api-operador"
   description = "Permite consultar productos y administrar inventario"
 
   policy = jsonencode({
@@ -371,7 +374,7 @@ resource "aws_iam_policy" "products_api_operador" {
 }
 
 resource "aws_iam_policy" "products_api_cliente" {
-  name        = "productos-api-cliente"
+  name        = "${var.name_prefix}-productos-api-cliente"
   description = "Permite consultar productos"
 
   policy = jsonencode({

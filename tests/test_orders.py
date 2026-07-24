@@ -14,6 +14,7 @@ for key, value in {
     "ORDERS_TABLE": "orders",
     "CARTS_TABLE": "carts",
     "PRODUCTS_TABLE": "products",
+    "STORES_TABLE": "stores",
     "AUDIT_TABLE": "audit",
     "OUTBOX_TABLE": "outbox",
     "IDEMPOTENCY_TABLE": "idempotency",
@@ -63,6 +64,15 @@ class FakeDynamo:
                     }
                 )
             },
+            "stores": {
+                "store-1": serialize(
+                    {
+                        "storeId": "store-1",
+                        "name": "Principal",
+                        "status": "ACTIVE",
+                    }
+                )
+            },
             "audit": {},
             "outbox": {},
             "idempotency": {},
@@ -86,9 +96,11 @@ class FakeDynamo:
         ]
         return {"Items": items}
 
-    def transact_write_items(self, TransactItems, ClientRequestToken):
-        self.tokens.append(ClientRequestToken)
+    def transact_write_items(self, TransactItems, **kwargs):
+        self.tokens.append(kwargs.get("ClientRequestToken"))
         for operation in TransactItems:
+            if "ConditionCheck" in operation:
+                continue
             if "Update" in operation:
                 update = operation["Update"]
                 product_id = update["Key"]["productId"]["S"]
@@ -202,6 +214,22 @@ class OrderLambdaTests(unittest.TestCase):
         )
         self.assertEqual({}, self.dynamo.tables["orders"])
 
+    def test_checkout_rejects_inactive_store_without_side_effects(self):
+        store = deserialize(self.dynamo.tables["stores"]["store-1"])
+        store["status"] = "INACTIVE"
+        self.dynamo.tables["stores"]["store-1"] = serialize(store)
+
+        result = self.checkout()
+
+        self.assertEqual(409, result["statusCode"])
+        self.assertEqual("INACTIVE_STORE", json.loads(result["body"])["error"]["code"])
+        self.assertEqual(
+            5,
+            deserialize(self.dynamo.tables["products"]["product-1"])["inventory"],
+        )
+        self.assertIn("identity-1", self.dynamo.tables["carts"])
+        self.assertEqual({}, self.dynamo.tables["orders"])
+
     def test_state_machine_rejects_skips_and_terminal_transitions(self):
         self.assertTrue(app.transition_allowed("PENDIENTE", "CONFIRMADO"))
         self.assertTrue(app.transition_allowed("ENVIADO", "ENTREGADO"))
@@ -242,7 +270,6 @@ class OrderLambdaTests(unittest.TestCase):
             5,
             deserialize(self.dynamo.tables["products"]["product-1"])["inventory"],
         )
-
         replayed = app.lambda_handler(
             self.event(
                 "POST",
@@ -257,6 +284,53 @@ class OrderLambdaTests(unittest.TestCase):
             5,
             deserialize(self.dynamo.tables["products"]["product-1"])["inventory"],
         )
+
+    def test_cancel_replay_does_not_leak_order_to_another_client(self):
+        order = json.loads(self.checkout()["body"])["data"]
+        owner_result = app.lambda_handler(
+            self.event(
+                "POST",
+                "/pedidos/{orderId}/cancelacion",
+                order_id=order["orderId"],
+                key=self.CANCEL_KEY,
+            ),
+            Context(),
+        )
+        attacker_result = app.lambda_handler(
+            self.event(
+                "POST",
+                "/pedidos/{orderId}/cancelacion",
+                identity="identity-2",
+                order_id=order["orderId"],
+                key=self.CANCEL_KEY,
+            ),
+            Context(),
+        )
+
+        self.assertEqual(200, owner_result["statusCode"])
+        self.assertEqual(403, attacker_result["statusCode"])
+
+    def test_transaction_conflict_replays_winner_without_client_token(self):
+        original = self.dynamo.transact_write_items
+
+        def concurrent_winner(TransactItems, **kwargs):
+            self.assertNotIn("ClientRequestToken", kwargs)
+            original(TransactItems)
+            raise app.ClientError(
+                {"Error": {"Code": "TransactionCanceledException"}},
+                "TransactWriteItems",
+            )
+
+        self.dynamo.transact_write_items = concurrent_winner
+        result = self.checkout()
+
+        self.assertEqual(200, result["statusCode"])
+        self.assertEqual("true", result["headers"]["Idempotent-Replayed"])
+        self.assertEqual(
+            3,
+            deserialize(self.dynamo.tables["products"]["product-1"])["inventory"],
+        )
+        self.assertEqual(1, len(self.dynamo.tables["orders"]))
 
     def test_client_cannot_read_another_customers_order(self):
         order = json.loads(self.checkout()["body"])["data"]

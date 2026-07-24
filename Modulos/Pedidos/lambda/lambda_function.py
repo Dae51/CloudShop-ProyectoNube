@@ -23,6 +23,7 @@ from cloudshop_common import (
 ORDERS_TABLE = os.environ["ORDERS_TABLE"]
 CARTS_TABLE = os.environ["CARTS_TABLE"]
 PRODUCTS_TABLE = os.environ["PRODUCTS_TABLE"]
+STORES_TABLE = os.environ["STORES_TABLE"]
 AUDIT_TABLE = os.environ["AUDIT_TABLE"]
 OUTBOX_TABLE = os.environ["OUTBOX_TABLE"]
 IDEMPOTENCY_TABLE = os.environ["IDEMPOTENCY_TABLE"]
@@ -127,6 +128,7 @@ def domain_event(event_type, order, identity, correlation):
         "occurredAt": timestamp,
         "correlationId": correlation,
         "actorId": identity["actor_id"],
+        "customerUserId": order.get("customerUserId") or order["actorId"],
         "orderId": order["orderId"],
         "customerId": order["customerId"],
         "status": order["status"],
@@ -171,6 +173,13 @@ def product_for_checkout(product_id, quantity):
         raise ApiError(404, "PRODUCT_NOT_FOUND", "Un producto del carrito no existe")
     if int(product.get("inventory", 0)) < quantity:
         raise ApiError(409, "INSUFFICIENT_STOCK", "Inventario insuficiente")
+    store = get_item(STORES_TABLE, "storeId", product["storeId"])
+    if not store or store.get("status") != "ACTIVE":
+        raise ApiError(
+            409,
+            "INACTIVE_STORE",
+            "La tienda propietaria de un producto está inactiva",
+        )
     return product
 
 
@@ -214,6 +223,7 @@ def checkout(event, identity, correlation):
         "orderId": order_id,
         "customerId": identity["customer_id"],
         "actorId": identity["actor_id"],
+        "customerUserId": identity["actor_id"],
         "status": "PENDIENTE",
         "items": order_items,
         "total": total,
@@ -225,7 +235,21 @@ def checkout(event, identity, correlation):
     }
     _, outbox = domain_event("OrderCreated", order, identity, correlation)
     transaction = []
+    checked_stores = set()
     for item in order_items:
+        if item["storeId"] not in checked_stores:
+            transaction.append(
+                {
+                    "ConditionCheck": {
+                        "TableName": STORES_TABLE,
+                        "Key": {"storeId": {"S": item["storeId"]}},
+                        "ConditionExpression": "#status = :active",
+                        "ExpressionAttributeNames": {"#status": "status"},
+                        "ExpressionAttributeValues": {":active": {"S": "ACTIVE"}},
+                    }
+                }
+            )
+            checked_stores.add(item["storeId"])
         transaction.append(
             {
                 "Update": {
@@ -285,7 +309,6 @@ def checkout(event, identity, correlation):
     try:
         client().transact_write_items(
             TransactItems=transaction,
-            ClientRequestToken=transaction_token(scope, key),
         )
     except ClientError as exc:
         if exc.response.get("Error", {}).get("Code") == "TransactionCanceledException":
@@ -355,8 +378,9 @@ def update_status(event, identity, correlation):
         raise ApiError(409, "INVALID_TRANSITION", "Transición de estado no permitida")
     updated = {**order, "status": target, "updatedAt": utc_now()}
     _, outbox = domain_event("OrderStatusChanged", updated, identity, correlation)
-    client().transact_write_items(
-        TransactItems=[
+    try:
+        client().transact_write_items(
+            TransactItems=[
             {
                 "Put": {
                     "TableName": ORDERS_TABLE,
@@ -387,9 +411,14 @@ def update_status(event, identity, correlation):
                     "ConditionExpression": "attribute_not_exists(idempotencyKey)",
                 }
             },
-        ],
-        ClientRequestToken=transaction_token(scope, key),
-    )
+            ]
+        )
+    except ClientError as exc:
+        if exc.response.get("Error", {}).get("Code") == "TransactionCanceledException":
+            previous = replay(scope, key)
+            if previous:
+                return response(200, {"data": previous}, correlation)
+        raise
     return response(200, {"data": updated}, correlation)
 
 
@@ -397,12 +426,12 @@ def cancel_order(event, identity, correlation):
     order_id = order_id_from(event)
     key = idempotency_key(event)
     scope = f"CANCEL#{order_id}"
-    previous = replay(scope, key)
-    if previous:
-        return response(200, {"data": previous}, correlation)
     order = get_order(order_id)
     if identity["role"] == "CLIENTE" and order["customerId"] != identity["customer_id"]:
         raise ApiError(403, "FORBIDDEN", "Solo puede cancelar sus pedidos")
+    previous = replay(scope, key)
+    if previous:
+        return response(200, {"data": previous}, correlation)
     if order["status"] not in CANCELLABLE or order.get("inventoryRestored"):
         raise ApiError(409, "INVALID_TRANSITION", "El pedido no se puede cancelar")
     updated = {
@@ -461,10 +490,14 @@ def cancel_order(event, identity, correlation):
             },
         ]
     )
-    client().transact_write_items(
-        TransactItems=transaction,
-        ClientRequestToken=transaction_token(scope, key),
-    )
+    try:
+        client().transact_write_items(TransactItems=transaction)
+    except ClientError as exc:
+        if exc.response.get("Error", {}).get("Code") == "TransactionCanceledException":
+            previous = replay(scope, key)
+            if previous:
+                return response(200, {"data": previous}, correlation)
+        raise
     return response(200, {"data": updated}, correlation)
 
 
@@ -515,6 +548,14 @@ def lambda_handler(event, context):
     except ClientError as exc:
         code = exc.response.get("Error", {}).get("Code", "AWS_ERROR")
         status = 409 if code in {"TransactionCanceledException", "ConditionalCheckFailedException"} else 500
+        log_event(
+            "error",
+            "order_aws_error",
+            correlation,
+            action=action,
+            statusCode=status,
+            errorCode=code,
+        )
         return error_response(
             ApiError(
                 status,
@@ -526,7 +567,14 @@ def lambda_handler(event, context):
             correlation,
         )
     except Exception:
-        log_event("exception", "order_unexpected_error", correlation, action=action)
+        log_event(
+            "exception",
+            "order_unexpected_error",
+            correlation,
+            action=action,
+            statusCode=500,
+            errorCode="INTERNAL_ERROR",
+        )
         return error_response(
             ApiError(500, "INTERNAL_ERROR", "Error interno del servidor"),
             correlation,

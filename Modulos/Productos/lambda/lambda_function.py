@@ -24,14 +24,7 @@ SERIALIZER = TypeSerializer()
 DESERIALIZER = TypeDeserializer()
 _dynamodb_client = None
 
-ROLE_ALIASES = {
-    "ADMIN": "ADMINISTRADOR",
-    "ADMINISTRADOR": "ADMINISTRADOR",
-    "OPERATOR": "OPERADOR",
-    "OPERADOR": "OPERADOR",
-    "CLIENT": "CLIENTE",
-    "CLIENTE": "CLIENTE",
-}
+ROLES = frozenset({"ADMINISTRADOR", "OPERADOR", "CLIENTE"})
 
 PERMISSIONS = {
     "ADMINISTRADOR": {
@@ -112,22 +105,24 @@ def deserialize_item(item):
 
 
 def normalize_role(raw_role):
-    if isinstance(raw_role, list):
-        raw_role = raw_role[0] if raw_role else None
     if not raw_role:
         return None
+    values = raw_role if isinstance(raw_role, list) else [raw_role]
     if isinstance(raw_role, str) and raw_role.startswith("["):
         try:
-            groups = json.loads(raw_role)
-            raw_role = groups[0] if groups else None
+            parsed = json.loads(raw_role)
+            values = parsed if isinstance(parsed, list) else [parsed]
         except json.JSONDecodeError:
-            pass
-    if not raw_role:
+            return None
+    elif isinstance(raw_role, str) and "," in raw_role:
+        values = raw_role.split(",")
+    normalized_values = [
+        str(value).strip().upper() for value in values if str(value).strip()
+    ]
+    if len(normalized_values) != 1:
         return None
-    normalized = str(raw_role).strip().upper()
-    if "," in normalized:
-        normalized = normalized.split(",", 1)[0].strip()
-    return ROLE_ALIASES.get(normalized)
+    normalized = normalized_values[0]
+    return normalized if normalized in ROLES else None
 
 
 def role_from_iam_arn(user_arn):
@@ -219,15 +214,22 @@ def parse_body(event):
     return body
 
 
-def required_text(body, field):
+def required_text(body, field, maximum):
     value = body.get(field)
     if not isinstance(value, str) or not value.strip():
         raise ApiError(400, "INVALID_INPUT", f"{field} es obligatorio")
-    return value.strip()
+    value = value.strip()
+    if len(value) > maximum:
+        raise ApiError(
+            400,
+            "INVALID_INPUT",
+            f"{field} no puede exceder {maximum} caracteres",
+        )
+    return value
 
 
 def parse_price(value):
-    if isinstance(value, bool):
+    if isinstance(value, bool) or not isinstance(value, (int, float, Decimal)):
         raise ApiError(400, "INVALID_INPUT", "price debe ser un número mayor que 0")
     try:
         price = Decimal(str(value))
@@ -235,17 +237,24 @@ def parse_price(value):
         raise ApiError(400, "INVALID_INPUT", "price debe ser un número mayor que 0") from exc
     if not price.is_finite() or price <= 0:
         raise ApiError(400, "INVALID_INPUT", "price debe ser un número mayor que 0")
+    if price.as_tuple().exponent < -2:
+        raise ApiError(400, "INVALID_INPUT", "price admite como máximo dos decimales")
     return price
 
 
 def parse_inventory(value):
-    if isinstance(value, bool):
+    if isinstance(value, bool) or not isinstance(value, int):
         raise ApiError(400, "INVALID_INPUT", "inventory debe ser un entero mayor o igual que 0")
     try:
         inventory = int(value)
     except (TypeError, ValueError) as exc:
         raise ApiError(400, "INVALID_INPUT", "inventory debe ser un entero mayor o igual que 0") from exc
-    if inventory < 0 or isinstance(value, float) and not value.is_integer():
+    if (
+        inventory < 0
+        or inventory > 1_000_000
+        or isinstance(value, float)
+        and not value.is_integer()
+    ):
         raise ApiError(400, "INVALID_INPUT", "inventory debe ser un entero mayor o igual que 0")
     if isinstance(value, str) and str(inventory) != value.strip():
         raise ApiError(400, "INVALID_INPUT", "inventory debe ser un entero mayor o igual que 0")
@@ -253,14 +262,29 @@ def parse_inventory(value):
 
 
 def validate_product(body):
+    allowed = {
+        "code",
+        "name",
+        "description",
+        "category",
+        "price",
+        "inventory",
+        "storeId",
+    }
+    if set(body) != allowed:
+        raise ApiError(
+            400,
+            "INVALID_INPUT",
+            "El producto debe contener únicamente todos los campos obligatorios",
+        )
     return {
-        "code": required_text(body, "code"),
-        "name": required_text(body, "name"),
-        "description": required_text(body, "description"),
-        "category": required_text(body, "category"),
+        "code": required_text(body, "code", 64),
+        "name": required_text(body, "name", 160),
+        "description": required_text(body, "description", 2000),
+        "category": required_text(body, "category", 100),
         "price": parse_price(body.get("price")),
         "inventory": parse_inventory(body.get("inventory")),
-        "storeId": required_text(body, "storeId"),
+        "storeId": required_text(body, "storeId", 128),
     }
 
 
@@ -543,7 +567,12 @@ def lambda_handler(event, context):
             "exception",
             "product_dynamodb_error",
             requestId=request_id,
+            correlationId=correlation,
             action=action,
+            statusCode=409
+            if error_code
+            in {"ConditionalCheckFailedException", "TransactionCanceledException"}
+            else 500,
             errorCode=error_code,
         )
         if error_code in {"ConditionalCheckFailedException", "TransactionCanceledException"}:
@@ -551,11 +580,51 @@ def lambda_handler(event, context):
         else:
             result = error_response(500, "INTERNAL_ERROR", "Error interno del servidor")
         result["headers"]["X-Correlation-Id"] = correlation
+        result["body"] = json.dumps(
+            {
+                "error": {
+                    "code": "CONCURRENT_MODIFICATION"
+                    if error_code
+                    in {
+                        "ConditionalCheckFailedException",
+                        "TransactionCanceledException",
+                    }
+                    else "INTERNAL_ERROR",
+                    "message": "El producto fue modificado; intente nuevamente"
+                    if error_code
+                    in {
+                        "ConditionalCheckFailedException",
+                        "TransactionCanceledException",
+                    }
+                    else "Error interno del servidor",
+                    "correlationId": correlation,
+                }
+            },
+            ensure_ascii=False,
+        )
         return result
     except Exception:
         if action in AUDIT_ACTIONS:
             write_failed_audit(identity, action, product_id)
-        log_event("exception", "product_unexpected_error", requestId=request_id, action=action)
+        log_event(
+            "exception",
+            "product_unexpected_error",
+            requestId=request_id,
+            correlationId=correlation,
+            action=action,
+            statusCode=500,
+            errorCode="INTERNAL_ERROR",
+        )
         result = error_response(500, "INTERNAL_ERROR", "Error interno del servidor")
         result["headers"]["X-Correlation-Id"] = correlation
+        result["body"] = json.dumps(
+            {
+                "error": {
+                    "code": "INTERNAL_ERROR",
+                    "message": "Error interno del servidor",
+                    "correlationId": correlation,
+                }
+            },
+            ensure_ascii=False,
+        )
         return result

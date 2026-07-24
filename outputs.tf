@@ -48,6 +48,16 @@ output "cognito_identity_pool_id" {
   value       = module.autenticacion.identity_pool_id
 }
 
+output "users_table_name" {
+  description = "Tabla de usuarios para operaciones administrativas auditadas"
+  value       = module.autenticacion.users_table_name
+}
+
+output "audit_table_name" {
+  description = "Tabla central de auditoría"
+  value       = module.autenticacion.audit_table_name
+}
+
 output "orders_table_name" {
   value = module.pedidos.orders_table_name
 }
@@ -58,6 +68,11 @@ output "event_bus_name" {
 
 output "event_dlq_url" {
   value = module.pedidos.event_dlq_url
+}
+
+output "relay_failure_dlq_url" {
+  description = "DLQ de registros de DynamoDB Streams agotados por el relay"
+  value       = module.pedidos.relay_failure_dlq_url
 }
 
 output "reportes_lambda_name" {

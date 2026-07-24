@@ -8,14 +8,6 @@ from decimal import Decimal
 
 
 ROLES = frozenset({"ADMINISTRADOR", "OPERADOR", "CLIENTE"})
-ROLE_ALIASES = {
-    "ADMIN": "ADMINISTRADOR",
-    "ADMINISTRADOR": "ADMINISTRADOR",
-    "OPERATOR": "OPERADOR",
-    "OPERADOR": "OPERADOR",
-    "CLIENT": "CLIENTE",
-    "CLIENTE": "CLIENTE",
-}
 CORRELATION_HEADER = "X-Correlation-Id"
 LOGGER = logging.getLogger()
 LOGGER.setLevel(logging.INFO)
@@ -108,22 +100,24 @@ def error_response(error, correlation):
 
 
 def normalize_role(raw_role):
-    if isinstance(raw_role, list):
-        raw_role = raw_role[0] if raw_role else None
     if not raw_role:
         return None
+    values = raw_role if isinstance(raw_role, list) else [raw_role]
     if isinstance(raw_role, str) and raw_role.startswith("["):
         try:
-            groups = json.loads(raw_role)
-            raw_role = groups[0] if groups else None
+            parsed = json.loads(raw_role)
+            values = parsed if isinstance(parsed, list) else [parsed]
         except json.JSONDecodeError:
-            pass
-    if not raw_role:
+            return None
+    elif isinstance(raw_role, str) and "," in raw_role:
+        values = raw_role.split(",")
+    normalized_values = [
+        str(value).strip().upper() for value in values if str(value).strip()
+    ]
+    if len(normalized_values) != 1:
         return None
-    normalized = str(raw_role).strip().upper()
-    if "," in normalized:
-        normalized = normalized.split(",", 1)[0].strip()
-    return ROLE_ALIASES.get(normalized)
+    normalized = normalized_values[0]
+    return normalized if normalized in ROLES else None
 
 
 def role_from_iam_arn(user_arn):

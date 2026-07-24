@@ -57,6 +57,11 @@ resource "aws_iam_role_policy" "relay" {
         Effect   = "Allow"
         Action   = ["logs:CreateLogStream", "logs:PutLogEvents"]
         Resource = "${aws_cloudwatch_log_group.relay.arn}:*"
+      },
+      {
+        Effect   = "Allow"
+        Action   = "sqs:SendMessage"
+        Resource = aws_sqs_queue.relay_failure_dlq.arn
       }
     ]
   })
@@ -90,6 +95,19 @@ resource "aws_lambda_event_source_mapping" "outbox" {
   maximum_retry_attempts             = 3
   bisect_batch_on_function_error     = true
   function_response_types            = ["ReportBatchItemFailures"]
+
+  destination_config {
+    on_failure {
+      destination_arn = aws_sqs_queue.relay_failure_dlq.arn
+    }
+  }
+}
+
+resource "aws_sqs_queue" "relay_failure_dlq" {
+  name                      = "${var.name_prefix}-outbox-relay-dlq"
+  message_retention_seconds = 1209600
+  sqs_managed_sse_enabled   = true
+  tags                      = merge(var.common_tags, { Module = "Eventos" })
 }
 
 resource "aws_sqs_queue" "event_dlq" {

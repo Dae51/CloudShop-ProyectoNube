@@ -150,6 +150,46 @@ class ProductLambdaTests(unittest.TestCase):
         self.assertEqual(409, result["statusCode"])
         self.assertEqual("INACTIVE_STORE", self.body(result)["error"]["code"])
 
+    def test_product_rejects_fields_outside_openapi_contract(self):
+        payload = self.product_payload()
+        payload["unexpected"] = True
+        result = app.lambda_handler(
+            self.event("POST", "/productos", "Administrador", payload),
+            Context(),
+        )
+        self.assertEqual(400, result["statusCode"])
+        self.assertEqual("INVALID_INPUT", self.body(result)["error"]["code"])
+
+    def test_product_rejects_limits_and_excess_price_precision(self):
+        for field, value in (
+            ("code", "x" * 65),
+            ("name", "x" * 161),
+            ("description", "x" * 2001),
+            ("category", "x" * 101),
+            ("inventory", 1_000_001),
+            ("price", 10.001),
+        ):
+            with self.subTest(field=field):
+                payload = self.product_payload()
+                payload[field] = value
+                result = app.lambda_handler(
+                    self.event("POST", "/productos", "Administrador", payload),
+                    Context(),
+                )
+                self.assertEqual(400, result["statusCode"])
+
+    def test_product_rejects_numeric_strings_and_multiple_roles(self):
+        for field, value in (("price", "10.50"), ("inventory", "8")):
+            with self.subTest(field=field):
+                payload = self.product_payload()
+                payload[field] = value
+                result = app.lambda_handler(
+                    self.event("POST", "/productos", "Administrador", payload),
+                    Context(),
+                )
+                self.assertEqual(400, result["statusCode"])
+        self.assertIsNone(app.normalize_role(["ADMINISTRADOR", "CLIENTE"]))
+
     def test_cliente_can_list_products(self):
         event = self.event("GET", "/productos", "Cliente")
 

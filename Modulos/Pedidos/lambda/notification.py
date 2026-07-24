@@ -42,7 +42,7 @@ def claim_event(dynamodb, key, detail):
             ),
             ConditionExpression=(
                 "attribute_not_exists(idempotencyKey) "
-                "OR #status IN (:pending, :failed) "
+                "OR #status IN (:pending, :failed, :blocked) "
                 "OR (#status = :processing AND leaseUntil < :now)"
             ),
             ExpressionAttributeNames={"#status": "status"},
@@ -50,6 +50,7 @@ def claim_event(dynamodb, key, detail):
                 ":processing": {"S": "PROCESSING"},
                 ":pending": {"S": "PENDING"},
                 ":failed": {"S": "FAILED"},
+                ":blocked": {"S": "BLOCKED_CONFIGURATION"},
                 ":now": {"N": str(now)},
                 ":lease": {"N": str(now + 60)},
                 ":created": {"S": detail["occurredAt"]},
@@ -84,31 +85,48 @@ def mark_failed(dynamodb, key):
     )
 
 
-def lambda_handler(event, context):
+def mark_configuration_blocked(dynamodb, key):
+    dynamodb.update_item(
+        TableName=IDEMPOTENCY_TABLE,
+        Key={"idempotencyKey": {"S": key}},
+        UpdateExpression="SET #status = :blocked REMOVE leaseUntil",
+        ConditionExpression="#status = :processing",
+        ExpressionAttributeNames={"#status": "status"},
+        ExpressionAttributeValues={
+            ":blocked": {"S": "BLOCKED_CONFIGURATION"},
+            ":processing": {"S": "PROCESSING"},
+        },
+    )
+
+
+def _handle(event, context):
     detail = event["detail"]
     event_id = detail["eventId"]
     key = f"MAIL#{event_id}"
     correlation = detail["correlationId"]
     dynamodb, ses = clients()
 
+    if not claim_event(dynamodb, key, detail):
+        return {"status": "duplicate", "eventId": event_id}
+
     if not SES_SENDER:
+        mark_configuration_blocked(dynamodb, key)
         LOGGER.warning(
             json.dumps(
                 {
                     "event": "email_skipped_unconfigured",
                     "eventId": event_id,
                     "correlationId": correlation,
+                    "statusCode": 503,
+                    "errorCode": "SES_NOT_CONFIGURED",
                 }
             )
         )
-        return {"status": "skipped_unconfigured", "eventId": event_id}
-
-    if not claim_event(dynamodb, key, detail):
-        return {"status": "duplicate", "eventId": event_id}
+        raise RuntimeError("SES no está configurado; evento retenido para redrive")
 
     user = dynamodb.get_item(
         TableName=USERS_TABLE,
-        Key={"userId": {"S": detail["actorId"]}},
+        Key={"userId": {"S": detail.get("customerUserId") or detail["actorId"]}},
         ConsistentRead=True,
     ).get("Item")
     if not user:
@@ -168,3 +186,23 @@ def lambda_handler(event, context):
         )
     )
     return {"status": "sent", "eventId": event_id, "messageId": sent["MessageId"]}
+
+
+def lambda_handler(event, context):
+    detail = event.get("detail") or {}
+    correlation = detail.get("correlationId", "UNKNOWN")
+    try:
+        return _handle(event, context)
+    except Exception as exc:
+        LOGGER.exception(
+            json.dumps(
+                {
+                    "event": "notification_failed",
+                    "eventId": detail.get("eventId", "UNKNOWN"),
+                    "correlationId": correlation,
+                    "statusCode": 500,
+                    "errorCode": type(exc).__name__,
+                }
+            )
+        )
+        raise

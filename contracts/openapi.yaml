@@ -573,9 +573,9 @@ components:
         name: { type: string, minLength: 1, maxLength: 160 }
         description: { type: string, minLength: 1, maxLength: 2000 }
         category: { type: string, minLength: 1, maxLength: 100 }
-        price: { type: number, exclusiveMinimum: 0 }
+        price: { type: number, exclusiveMinimum: 0, multipleOf: 0.01 }
         inventory: { type: integer, minimum: 0, maximum: 1000000 }
-        storeId: { type: string, format: uuid }
+        storeId: { type: string, minLength: 1, maxLength: 128 }
     Product:
       allOf:
         - $ref: "#/components/schemas/ProductInput"
