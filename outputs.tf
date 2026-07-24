@@ -59,3 +59,18 @@ output "event_bus_name" {
 output "event_dlq_url" {
   value = module.pedidos.event_dlq_url
 }
+
+output "frontend_url" {
+  description = "URL HTTPS de CloudFront"
+  value       = module.frontend.url
+}
+
+output "frontend_bucket_name" {
+  description = "Bucket privado del frontend"
+  value       = module.frontend.bucket_name
+}
+
+output "frontend_distribution_id" {
+  description = "Distribución CloudFront"
+  value       = module.frontend.distribution_id
+}

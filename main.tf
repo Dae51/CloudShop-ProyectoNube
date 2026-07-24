@@ -99,3 +99,16 @@ module "pedidos" {
   ses_override_recipient = var.ses_demo_recipient
   common_tags            = local.common_tags
 }
+
+module "frontend" {
+  source = "./Modulos/Frontend"
+
+  name_prefix         = local.name_prefix
+  aws_region          = var.aws_region
+  api_url             = aws_api_gateway_stage.cloudshop.invoke_url
+  user_pool_id        = module.autenticacion.user_pool_id
+  user_pool_client_id = module.autenticacion.user_pool_client_id
+  identity_pool_id    = module.autenticacion.identity_pool_id
+  build_directory     = abspath("${path.root}/Modulos/Frontend/app/dist")
+  common_tags         = local.common_tags
+}
