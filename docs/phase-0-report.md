@@ -1,5 +1,8 @@
 # Reporte Phase 0
 
+> Este reporte conserva la línea base inicial. No describe el estado final del
+> repositorio; consulte `docs/technical-document.md`.
+
 ## Estado
 
 **NOT READY FOR SUBMISSION.** La base de Productos tiene buenas validaciones,
@@ -95,4 +98,3 @@ Ninguna para implementación, pruebas locales o documentación. Para apply son
 bloqueantes y actualmente no resueltas: cuenta/perfil autorizado del curso, región
 acordada, estrategia de state, presupuesto WAF, identidad/remitente SES, destinatario
 SES de demo y cualquier restricción docente sobre Cognito.
-

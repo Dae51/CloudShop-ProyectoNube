@@ -1,5 +1,8 @@
 # Auditoría del estado actual
 
+> Fotografía histórica de Phase 0. El estado posterior a la implementación está en
+> `docs/technical-document.md`, `docs/test-report.md` y la matriz de trazabilidad.
+
 Fecha de corte: 2026-07-23  
 Rama: `refactor-shared-api-gateway` (`f5dd4e7`)  
 Cuenta AWS observada: `190239490282` (`lab-user`)  
@@ -176,4 +179,3 @@ Fuentes: [AWS WAF Pricing](https://aws.amazon.com/waf/pricing/),
 - Preguntas estrictamente bloqueantes para trabajo local: ninguna.
 - Dependencias que bloquean solo despliegue: cuenta/entorno, backend, presupuesto WAF,
   identidad y destinatario SES.
-

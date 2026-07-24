@@ -8,16 +8,18 @@ incluyen `cloudshop-{environment}`.
 |---|---|---|---|
 | Users | `userId` | GSI `EmailIndex(email)` | perfil por sub, email único lógico, lista admin |
 | Stores | `storeId` | — | CRUD y activos |
-| Products | `productId` | GSI `StoreIdCreatedAtIndex(storeId, createdAt)`; GSI `CodeIndex(code)` | detalle, catálogo, por tienda, código |
+| Products | `productId` | GSI `StoreIdCreatedAtIndex(storeId, createdAt)` | detalle, catálogo y por tienda |
 | Carts | `customerId` | — | carrito propio completo |
 | Orders | `orderId` | GSI `CustomerCreatedAtIndex(customerId, createdAt)`; GSI `StatusCreatedAtIndex(status, createdAt)` | detalle, propios, cola operador |
 | Audit | `auditId` | GSI `ResourceOccurredAtIndex(resourceKey, occurredAt)`; GSI `CorrelationIndex(correlationId, occurredAt)` | traza por recurso/correlación |
 | Outbox | `eventId` | GSI `StatusOccurredAtIndex(status, occurredAt)` + Streams | relay y recuperación |
 | Idempotency | `idempotencyKey` | TTL `expiresAt` | checkout, cancelación y consumidores |
+| ProductAudit | `auditId` | — | compatibilidad de auditoría heredada de productos |
 
 ## Operaciones condicionales
 
 - Producto/tienda: `updatedAt = :expected` evita lost updates.
+- Crear/actualizar producto hace `GetItem` consistente y exige tienda `ACTIVE`.
 - Carrito: `customerId` proviene de identidad firmada; `version` permite optimistic
   locking.
 - Checkout: una transacción contiene `ConditionCheck`/`Update` por producto,

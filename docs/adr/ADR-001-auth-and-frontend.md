@@ -1,6 +1,6 @@
 # ADR-001: Autenticación y arquitectura de frontend
 
-- Estado: Aceptado para implementación y sujeto al spike de Phase 2
+- Estado: Implementado localmente; spike AWS BLOCKED
 - Fecha: 2026-07-23
 - Decisores: equipo CloudShop
 
@@ -120,9 +120,12 @@ la SPA sobre un spike fallido.
 
 ## Consecuencias
 
-- Terraform añadirá providers regional y `us-east-1` para WAF de CloudFront.
-- La SPA incluirá un cliente Cognito/credenciales y un signer SigV4 centralizado.
-- Las policies de los tres roles se compondrán desde todos los dominios.
-- La autorización de API seguirá siendo una combinación de IAM (ruta) y dominio
+- Terraform implementa S3 privado + CloudFront OAC. WAF se asocia al stage regional de
+  API Gateway, donde protege la superficie de negocio; no se reproduce la cadena
+  conceptual CloudFront → S3 → WAF → API.
+- La SPA incluye un cliente Cognito/credenciales y un signer SigV4 centralizado.
+- Las policies de los tres roles se componen desde todos los dominios.
+- La autorización de API es una combinación de IAM (ruta) y dominio
   (rol, permiso y propiedad).
-
+- Tests y build pasan, pero el spike real continúa BLOCKED porque no existe backend
+  remoto ni despliegue autorizado.

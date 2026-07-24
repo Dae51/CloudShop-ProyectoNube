@@ -1,41 +1,42 @@
 # Matriz de trazabilidad de requisitos
 
-Estados permitidos: PASS, PARTIAL, FAIL, BLOCKED, NOT VERIFIED. Esta fotografía
-corresponde a Phase 0; PASS exige evidencia reproducible proporcional al requisito.
+Estados permitidos: PASS, PARTIAL, FAIL, BLOCKED, NOT VERIFIED. Corte actual:
+2026-07-24. PASS exige evidencia reproducible proporcional al requisito; un recurso
+solo planificado permanece PARTIAL.
 
 | ID | Requisito | Implementación encontrada | Evidencia | Estado | Brecha | Prueba necesaria |
 |---|---|---|---|---|---|---|
-| PLAT-01 | S3 frontend | Ninguna | Sin `aws_s3_bucket` | FAIL | Hosting ausente | Build y acceso vía CloudFront |
-| PLAT-02 | CloudFront | Ninguna | Sin distribución | FAIL | CDN ausente | URL y headers |
-| PLAT-03 | IAM | Roles/policies Lambda y Productos | Terraform módulos | PARTIAL | Cobertura incompleta | Plan + policy simulation |
-| PLAT-04 | IAM Roles | 2 roles Lambda | `Usuarios/main.tf`, `Productos/main.tf` | PARTIAL | Sin roles de usuarios | STS por rol |
-| PLAT-05 | IAM Policies | 5 policies | Terraform | PARTIAL | Dominios faltantes | Análisis mínimo privilegio |
-| PLAT-06 | WAF | Ninguna | Sin `aws_wafv2_web_acl` | FAIL | WAF ausente | Asociación real |
-| PLAT-07 | API Gateway | Una REST API, 8 rutas | `api_gateway.tf` | PARTIAL | API incompleta | Smoke por ruta |
-| PLAT-08 | Múltiples Lambda | 2 Lambdas | Terraform | PARTIAL | Servicios vacíos | Invocaciones reales |
-| PLAT-09 | Múltiples DynamoDB | 3 tablas | Terraform | PARTIAL | Esquema incompleto | CRUD/consistencia AWS |
+| PLAT-01 | S3 frontend | Bucket privado, cifrado y versionado | `Modulos/Frontend/main.tf`; plan estático | PARTIAL | Falta bucket real | Acceso solo CloudFront |
+| PLAT-02 | CloudFront | Distribución OAC, TLS, caché y headers | módulo Frontend; build PASS | PARTIAL | Falta URL real | URL y headers |
+| PLAT-03 | IAM | Roles/policies por Lambda y usuario | Terraform validate + secret scan | PARTIAL | Falta AWS/Analyzer | Plan remoto + simulation |
+| PLAT-04 | IAM Roles | 3 roles de identidad + 9 de Lambda | módulos Terraform | PARTIAL | Falta STS real | ARN asumido por rol |
+| PLAT-05 | IAM Policies | Policies de ejecución e invocación acotadas | sin `Action/Resource="*"` | PARTIAL | Falta simulación AWS | Access Analyzer |
+| PLAT-06 | WAF | Web ACL regional y asociación al stage | `observability.tf`; validate PASS | PARTIAL | Falta asociación real | GetWebACLForResource |
+| PLAT-07 | API Gateway | REST regional con 34 operaciones | OpenAPI/route hashes | PARTIAL | Falta smoke AWS | Smoke por ruta |
+| PLAT-08 | Múltiples Lambda | 9 Lambdas declaradas | plan estático/outputs | PARTIAL | Sin invocación real | Logs/invoke |
+| PLAT-09 | Múltiples DynamoDB | 9 tablas declaradas | plan estático/diseño BD | PARTIAL | Sin persistencia AWS | CRUD/consistencia AWS |
 | PLAT-10 | EventBridge | Bus, outbox relay, regla, retry y DLQ declarados | Terraform validate PASS | PARTIAL | Falta evidencia AWS | Evento y targets reales |
-| PLAT-11 | CloudWatch | 2 log groups | Terraform | PARTIAL | Sin métricas/dashboard | Dashboard real |
+| PLAT-11 | CloudWatch | Logs, filtros, métricas, dashboard y alarmas | `observability.tf`; validate PASS | PARTIAL | Falta series AWS | Dashboard real |
 | PLAT-12 | SES | Configuration Set, identidad opcional y consumidor idempotente | `test_order_events.py` PASS | PARTIAL | Identidad/destinatario y MessageId AWS | MessageId real |
-| PLAT-13 | Terraform único | Recursos existentes en Terraform | `.tf` raíz/módulos | PARTIAL | Plataforma incompleta/backend roto | Plan/apply completo |
+| PLAT-13 | Terraform único | Stack + bootstrap de state declarados | validate; planes 5/0/0 y 367/0/0 | PARTIAL | Falta backend/apply remoto | Plan/apply completo |
 | USR-01 | Registrar usuarios | Cognito post-confirmation fuerza CLIENTE y audita | `test_post_confirmation.py` PASS | PARTIAL | Falta spike AWS | Registro CLIENTE + auditoría real |
 | USR-02 | Consultar usuarios | Lista admin y perfil propio protegidos | `test_users.py` PASS | PARTIAL | Falta integración AWS | Admin 200, otros 403 |
 | USR-03 | Actualizar usuarios | Nombre propio/admin con transacción | `test_users.py` PASS | PARTIAL | Falta integración AWS | PUT firmado |
 | USR-04 | Desactivar usuarios | Admin, Cognito disable y compensación | Handler/contrato | PARTIAL | Falta prueba AWS | Soft delete real |
-| USR-05 | ADMINISTRADOR | Alias en Productos | `ROLE_ALIASES` | PARTIAL | Sin identidad/rol asumible | Login y policy |
-| USR-06 | OPERADOR | Alias en Productos | `ROLE_ALIASES` | PARTIAL | Sin identidad/rol asumible | Login y policy |
-| USR-07 | CLIENTE | Alias en Productos | `ROLE_ALIASES` | PARTIAL | Sin default de registro | Registro y login |
+| USR-05 | ADMINISTRADOR | Grupo, role IAM, UI y flujo de rol | Terraform/frontend/tests | PARTIAL | Falta identidad inicial AWS | Login y policy |
+| USR-06 | OPERADOR | Grupo, role IAM y UI operativa | Terraform/frontend/tests | PARTIAL | Falta identidad AWS | Login y policy |
+| USR-07 | CLIENTE | Registro default, role IAM y UI | post-confirmation test PASS | PARTIAL | Falta registro AWS | Registro y login |
 | PRD-01 | Crear producto | Handler + transacción | Productos Lambda/test | PARTIAL | Sin integración AWS | POST firmado |
 | PRD-02 | Actualizar producto | Handler + transacción | Productos Lambda | PARTIAL | Sin integración AWS | PUT firmado |
 | PRD-03 | Eliminar producto | Soft delete + auditoría | Test unitario | PARTIAL | Sin TST-01 AWS | DELETE admin/no admin |
-| PRD-04 | Consultar productos | Lista/detalle/tienda | Productos Lambda | PARTIAL | Paginación/frontend | GET firmado |
+| PRD-04 | Consultar productos | Lista/detalle/tienda y UI | Lambda/frontend | PARTIAL | Falta GET AWS | GET firmado |
 | PRD-05 | Campo código | Validado | `validate_product` | PARTIAL | Sin contrato AWS | Schema + persistencia |
 | PRD-06 | Campo nombre | Validado | `validate_product` | PARTIAL | Sin contrato AWS | Schema + persistencia |
 | PRD-07 | Campo descripción | Validado | `validate_product` | PARTIAL | Sin contrato AWS | Schema + persistencia |
 | PRD-08 | Campo categoría | Validado | `validate_product` | PARTIAL | Sin contrato AWS | Schema + persistencia |
 | PRD-09 | Campo precio | Decimal positivo | `parse_price` | PARTIAL | Sin límites de negocio | Casos frontera |
 | PRD-10 | Inventario disponible | Entero >= 0 | `parse_inventory` | PARTIAL | Sin checkout concurrente | Concurrencia |
-| PRD-11 | Tienda propietaria | `storeId` obligatorio + GSI | Tabla Products | PARTIAL | No valida tienda activa | FK lógica |
+| PRD-11 | Tienda propietaria | `storeId`, GSI y validación de tienda ACTIVE | test tienda inactiva PASS | PARTIAL | Falta integración AWS | FK lógica real |
 | STR-01 | Crear tienda | Handler ADMINISTRADOR y auditoría transaccional | `test_stores.py` PASS | PARTIAL | Falta POST AWS | POST admin |
 | STR-02 | Actualizar tienda | Handler con control optimista | Terraform/handler | PARTIAL | Falta PUT AWS | PUT admin |
 | STR-03 | Consultar tienda | Lista/detalle para roles oficiales | `test_stores.py` PASS | PARTIAL | Falta GET AWS | GET autenticado |
@@ -55,20 +56,20 @@ corresponde a Phase 0; PASS exige evidencia reproducible proporcional al requisi
 | ORD-08 | ENVIADO | Transición permitida | Handler/test | PARTIAL | Falta AWS | State machine E2E |
 | ORD-09 | ENTREGADO | Terminal implementado | Handler/test | PARTIAL | Falta AWS | State machine E2E |
 | ORD-10 | CANCELADO | Terminal y compensación implementados | Handler/test | PARTIAL | Falta AWS | State machine E2E |
-| DSH-01 | Total ventas | Ninguna | Sin Reportes | FAIL | Métrica ausente | Datos reales |
-| DSH-02 | Ventas por tienda | Ninguna | Sin Reportes | FAIL | Métrica ausente | Datos reales |
-| DSH-03 | Más vendidos | Ninguna | Sin Reportes | FAIL | Métrica ausente | Datos reales |
-| DSH-04 | Agotados | Ninguna | Sin Reportes | FAIL | Métrica ausente | Datos reales |
-| DSH-05 | Mejores clientes | Ninguna | Sin Reportes | FAIL | Métrica ausente | Datos reales |
-| DSH-06 | Pedidos por estado | Ninguna | Sin Reportes | FAIL | Métrica ausente | Datos reales |
-| SEC-01 | Autenticación por endpoint | Usuarios y Productos usan AWS_IAM; Cognito/Identity Pool declarados | Terraform validate PASS | PARTIAL | Dominios y spike AWS faltan | No auth rechazado |
-| SEC-02 | Validación de rol | Productos revalida | `get_identity` | PARTIAL | Usuarios/dominios faltan | Matriz por rol |
-| SEC-03 | Validación de permiso | Set por rol en Productos | `PERMISSIONS` | PARTIAL | Cobertura parcial | Negativos por acción |
-| SEC-04 | Admin gestiona/reporta | Solo Productos | Policies Productos | PARTIAL | Usuarios/tiendas/reportes | Suite admin |
-| SEC-05 | Operador inventario/pedidos | Inventario solamente | Policy/handler | PARTIAL | Pedidos ausentes | Suite operador |
+| DSH-01 | Total ventas | Suma ENTREGADO + contador | Reportes/UI/test PASS | PARTIAL | Falta dato AWS | Datos reales |
+| DSH-02 | Ventas por tienda | Agregado por storeId | Reportes/UI/test PASS | PARTIAL | Falta dato AWS | Datos reales |
+| DSH-03 | Más vendidos | Top 10 unidades ENTREGADO | Reportes/UI/test PASS | PARTIAL | Falta dato AWS | Datos reales |
+| DSH-04 | Agotados | Productos ACTIVE con inventario 0 | Reportes/UI/test PASS | PARTIAL | Falta dato AWS | Datos reales |
+| DSH-05 | Mejores clientes | Top por pedidos/gasto ENTREGADO | Reportes/UI/test PASS | PARTIAL | Falta dato AWS | Datos reales |
+| DSH-06 | Pedidos por estado | Seis estados, incluye ceros | Reportes/UI/test PASS | PARTIAL | Falta dato AWS | Datos reales |
+| SEC-01 | Autenticación por endpoint | 34 operaciones AWS_IAM; OPTIONS excepción | OpenAPI/Terraform validate | PARTIAL | Falta spike AWS | No auth rechazado |
+| SEC-02 | Validación de rol | Runtime común + Producto fail-closed | tests matriz/ARN PASS | PARTIAL | Falta roles AWS | Matriz por rol |
+| SEC-03 | Validación de permiso | Policies de ruta + guards dominio | tests negativos PASS | PARTIAL | Falta IAM simulation | Negativos por acción |
+| SEC-04 | Admin gestiona/reporta | Usuarios, tiendas, productos, dashboard | UI/Lambda/policies | PARTIAL | Falta E2E admin | Suite admin |
+| SEC-05 | Operador inventario/pedidos | UI/Lambda/policies completas | tests estados/403 | PARTIAL | Falta E2E operador | Suite operador |
 | SEC-06 | Cliente compra/pedidos propios | Policies de carrito/pedido y ownership en Lambda | Tests de Cart/Orders PASS | PARTIAL | Falta prueba AWS con dos clientes | Dos clientes |
 | SEC-07 | DELETE producto 403 no autorizado | Unitario a Operador | 8 tests PASS | PARTIAL | Falta API Gateway real | TST-01 AWS |
-| SEC-08 | IAM mínimo privilegio | Policies de Productos acotadas | Terraform | PARTIAL | Sistema incompleto/sin simulación | IAM Access Analyzer |
+| SEC-08 | IAM mínimo privilegio | Acciones/ARN acotados por módulo | source scan + validate | PARTIAL | Sin Analyzer AWS | IAM Access Analyzer |
 | EVT-01 | Pedido produce evento | Transacción crea outbox; Streams relay a EventBridge | Tests relay PASS | PARTIAL | Falta evento AWS | Evento trazable |
 | EVT-02 | Inventario no negativo | Update condicional dentro de TransactWriteItems | Tests stock/cancel PASS | PARTIAL | Falta concurrencia AWS | Stock concurrente |
 | EVT-03 | Flujo registra auditoría | Pedido/auditoría/outbox/inventario atómicos | `test_orders.py` PASS | PARTIAL | Falta registro AWS | Correlation común |
@@ -79,49 +80,49 @@ corresponde a Phase 0; PASS exige evidencia reproducible proporcional al requisi
 | AUD-03 | Creación pedidos | Auditoría en transacción de checkout | `test_orders.py` PASS | PARTIAL | Falta DynamoDB AWS | Checkout |
 | AUD-04 | Cancelación pedidos | Auditoría y compensación en transacción | `test_orders.py` PASS | PARTIAL | Falta DynamoDB AWS | Cancelación |
 | AUD-05 | Inventario | Sí local | Test PASS | PARTIAL | Sin evidencia AWS/correlation | Update/checkout |
-| AUD-06 | Actor, acción, fecha, resultado, correlación | Todos menos correlación | `build_audit` | PARTIAL | Falta correlationId | Schema/test |
-| MON-01 | Logs Lambda estructurados | Productos JSON; Usuarios no | `log_event` | PARTIAL | Cobertura/correlación | Logs Insights |
-| MON-02 | Métricas API Gateway | Ninguna explícita | Stage sin settings | FAIL | Métricas/logs ausentes | CloudWatch |
-| MON-03 | Errores auth visibles | Log Lambda solo si invocada | Productos | PARTIAL | 4XX Gateway no instrumentado | Métrica 4XX |
-| MON-04 | Errores app visibles | Logs Productos | Handler | PARTIAL | Sin alarmas/UI | Filtro/alarma |
-| MON-05 | Latencia promedio | Ninguna | Sin dashboard | FAIL | Widget ausente | Dashboard |
-| IAC-01 | Toda infraestructura Terraform | Solo parcial | `.tf` | PARTIAL | Servicios ausentes | Inventario/state |
-| IAC-02 | Bucket S3 | Ninguno | Búsqueda | FAIL | Recurso ausente | Plan |
-| IAC-03 | CloudFront | Ninguno | Búsqueda | FAIL | Recurso ausente | Plan |
-| IAC-04 | WAF | Ninguno | Búsqueda | FAIL | Recurso ausente | Plan/asociación |
-| IAC-05 | API Gateway | Sí | `api_gateway.tf` | PARTIAL | Config incompleta | Plan/smoke |
-| IAC-06 | Múltiples Lambdas | 2 | módulos | PARTIAL | Flujos faltantes | Plan/invoke |
-| IAC-07 | Múltiples tablas | 3 | módulos | PARTIAL | Dominios faltantes | Plan/data |
-| IAC-08 | IAM Roles | 2 Lambda | módulos | PARTIAL | Roles usuario/evento | Plan/STS |
-| IAC-09 | IAM Policies | 5 | módulos | PARTIAL | Cobertura incompleta | Plan/simulate |
+| AUD-06 | Actor, acción, fecha, resultado, correlación | Schema común y compatibilidad Productos | handlers/tests | PARTIAL | Falta consulta AWS | Schema/data real |
+| MON-01 | Logs Lambda estructurados | JSON y correlation en dominios | runtime/handlers | PARTIAL | Falta Logs Insights | Logs reales |
+| MON-02 | Métricas API Gateway | `metrics_enabled` y widget Count/4XX/5XX | observability validate | PARTIAL | Falta series AWS | CloudWatch |
+| MON-03 | Errores auth visibles | API 4XX + filtro 401 + alarma pico | observability.tf | PARTIAL | Falta evento AWS | Métrica 4XX |
+| MON-04 | Errores app visibles | filtros, Lambda Errors y alarmas | observability.tf | PARTIAL | Falta evento AWS | Filtro/alarma |
+| MON-05 | Latencia promedio | Widgets Latency/IntegrationLatency | dashboard Terraform | PARTIAL | Falta serie AWS | Dashboard |
+| IAC-01 | Toda infraestructura Terraform | Stack y bootstrap completos | 367 recursos planificados | PARTIAL | Falta apply/state | Inventario remoto |
+| IAC-02 | Bucket S3 | Frontend + bootstrap declarados | planes estáticos | PARTIAL | Falta AWS | Plan remoto |
+| IAC-03 | CloudFront | Distribución OAC declarada | validate/build | PARTIAL | Falta AWS | URL |
+| IAC-04 | WAF | Web ACL + asociación stage | validate | PARTIAL | Falta AWS | Asociación |
+| IAC-05 | API Gateway | API, stage, 34 operaciones y settings | OpenAPI/validate | PARTIAL | Falta smoke | Plan/smoke |
+| IAC-06 | Múltiples Lambdas | 9 funciones | plan estático | PARTIAL | Falta AWS | Plan/invoke |
+| IAC-07 | Múltiples tablas | 9 tablas | plan estático | PARTIAL | Falta AWS | Plan/data |
+| IAC-08 | IAM Roles | 12 roles | plan estático | PARTIAL | Falta STS | Plan/STS |
+| IAC-09 | IAM Policies | 14 managed + inline | plan/source scan | PARTIAL | Falta simulation | Plan/simulate |
 | IAC-10 | EventBridge | Bus, regla, target, relay y DLQ | Terraform validate PASS | PARTIAL | Falta plan/apply | Plan/evento |
-| IAC-11 | CloudWatch | Log groups | módulos | PARTIAL | Dashboard/alarmas | Plan/dashboard |
+| IAC-11 | CloudWatch | logs/dashboard/filtros/alarmas | observability.tf | PARTIAL | Falta AWS | Plan/dashboard |
 | IAC-12 | SES | Configuration Set e identidad condicional Terraform | Terraform validate PASS | PARTIAL | Email externo no configurado | Plan/MessageId |
-| IAC-13 | Variables/outputs sin hardcoding | Proyecto, entorno, región, retención y outputs Cognito parametrizados | Terraform validate PASS | PARTIAL | Backend y módulos restantes | Entorno limpio |
+| IAC-13 | Variables/outputs sin hardcoding | proyecto/entorno/región/SES/WAF/outputs y backend parcial | validate PASS | PARTIAL | Falta init remoto | Entorno limpio |
 | TST-01 | 403 sin permiso | Lambda unit test | Operador DELETE PASS | PARTIAL | No API real | SigV4 403 |
 | TST-02 | Pedido completo | Flujo local cubre pedido, stock, outbox, auditoría y consumer | 11 tests de pedido/eventos PASS | PARTIAL | Falta ejecución AWS y MessageId real | E2E AWS |
-| TST-03 | Métricas CloudWatch | Ninguna | Sin dashboard | FAIL | Evidencia ausente | Captura + query |
-| TST-04 | Terraform completo | Validate parcial; backend no existe | comandos Phase 0 | BLOCKED | Infra/state/entorno | init/plan/apply |
-| DEL-01 | Repo Git ordenado | Rama pequeña; un untracked previo | `git status` | PARTIAL | Paquete incompleto | Clon limpio |
-| DEL-02 | Terraform completo | Parcial | validate PASS | PARTIAL | Servicios faltantes | Plan completo |
-| DEL-03 | Documento técnico | README mínimo | `README.md` | FAIL | Documento ausente | Revisión |
-| DEL-04 | Arquitectura | Solo PDF externo conceptual | PDF oficial | FAIL | Arquitectura real ausente | Diagrama/ADR |
-| DEL-05 | Diseño APIs | Rutas en README Productos | README módulo | PARTIAL | OpenAPI ausente | Lint contrato |
-| DEL-06 | Diseño BD | Documento de tablas, índices, acceso y condiciones | `docs/database-design.md` | PARTIAL | Implementación/AWS incompletos | Revisión contra state |
-| DEL-07 | Diseño seguridad | README Productos parcial | README módulo | PARTIAL | Modelo global ausente | Threat review |
+| TST-03 | Métricas CloudWatch | Dashboard/filtros/alarmas declarados | validate PASS | PARTIAL | Evidencia AWS ausente | Captura + query |
+| TST-04 | Terraform completo | validate + planes estáticos | backend 404, no apply | BLOCKED | State/entorno | init/plan/apply |
+| DEL-01 | Repo Git ordenado | Commits atómicos; un untracked ajeno preservado | `git log/status` | PARTIAL | Validar clon limpio | Clon limpio |
+| DEL-02 | Terraform completo | Stack + bootstrap | validate/planes | PARTIAL | Falta apply | Plan remoto |
+| DEL-03 | Documento técnico | Documento y README reproducibles | `docs/technical-document.md` | PASS | Ninguna local | Revisión evaluador |
+| DEL-04 | Arquitectura | Diagramas y asociaciones reales | `docs/architecture.md` | PASS | Ninguna local | Revisión evaluador |
+| DEL-05 | Diseño APIs | OpenAPI 3.1 + guía | test contrato PASS | PASS | Ninguna local | Lint/revisión |
+| DEL-06 | Diseño BD | Tablas, índices, patrones y condiciones | `docs/database-design.md` | PASS | Ninguna local | Revisión |
+| DEL-07 | Diseño seguridad | Modelo, matriz, amenazas y controles | `docs/security-design.md` | PASS | Ninguna local | Threat review |
 | DEL-08 | Evidencia despliegue | Ninguna; backend inexistente | AWS read-only | BLOCKED | Sin apply seguro | TST-04 |
-| DEL-09 | Guía exposición | Ninguna | Búsqueda repo | FAIL | Guía ausente | Ensayo técnico |
+| DEL-09 | Guía exposición | Guion + banco de preguntas | docs demo/question bank | PASS | Ensayo pendiente | Ensayo técnico |
 
-## Resumen Phase 0
+## Resumen actual
 
 | Estado | Cantidad |
 |---|---:|
-| PASS | 0 |
-| PARTIAL | 86 |
-| FAIL | 18 |
+| PASS | 6 |
+| PARTIAL | 98 |
+| FAIL | 0 |
 | BLOCKED | 2 |
 | NOT VERIFIED | 0 |
 | Total | 106 |
 
-> El conteo se recalculará automáticamente o manualmente en cada gate. Un requisito no
-> cambia a PASS por compilar, por existir en Terraform o por usar mocks.
+> Un requisito no cambia a PASS por compilar, por existir en Terraform o por usar
+> mocks. Los seis PASS corresponden únicamente a artefactos documentales reproducibles.
