@@ -814,23 +814,4 @@ git diff --staged
 
 ---
 
-## Documentación adicional
-
-| Documento | Ruta |
-|---|---|
-| Arquitectura detallada | [`docs/architecture.md`](docs/architecture.md) |
-| Diseño de seguridad | [`docs/security-design.md`](docs/security-design.md) |
-| Diseño de base de datos | [`docs/database-design.md`](docs/database-design.md) |
-| Diseño de API | [`docs/api-design.md`](docs/api-design.md) |
-| Contratos de dominio | [`docs/domain-contracts.md`](docs/domain-contracts.md) |
-| ADR-001 Autenticación | [`docs/adr/ADR-001-auth-and-frontend.md`](docs/adr/ADR-001-auth-and-frontend.md) |
-| Reporte de pruebas | [`docs/test-report.md`](docs/test-report.md) |
-| Evidencia de despliegue | [`docs/deployment-evidence.md`](docs/deployment-evidence.md) |
-| Trazabilidad de requisitos | [`docs/requirements-traceability.md`](docs/requirements-traceability.md) |
-| Auditoría independiente | [`docs/audit-report.md`](docs/audit-report.md) |
-| Handoff universitario | [`docs/HANDOFF.md`](docs/HANDOFF.md) |
-| Contrato OpenAPI | [`contracts/openapi.yaml`](contracts/openapi.yaml) |
-
----
-
 *Infraestructura gestionada con Terraform — CloudShop Enterprise © 2026*
