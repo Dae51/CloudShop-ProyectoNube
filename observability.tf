@@ -28,7 +28,7 @@ resource "aws_api_gateway_method_settings" "all" {
 
 resource "aws_wafv2_web_acl" "api" {
   name        = "${local.name_prefix}-api"
-  description = "Protección regional de API Gateway CloudShop"
+  description = "Proteccion regional de API Gateway CloudShop"
   scope       = "REGIONAL"
 
   default_action {
